@@ -291,3 +291,146 @@ public class MyListView extends ListView implements OnTouchListener,OnGestureLis
 		void onDelete(int index);
 	}
 }
+
+
+// Service 的基本用法
+public class MyService extends Service{
+
+	public static final mBinder = new MyBinder();
+
+	public void onCreate(){
+		super.onCreate();
+		//...
+	}
+
+	public int onStartCommand(Intent intent, int flags, int startId){
+		return super.onStartCommand(intent,flags,startId);
+	}
+
+	public void onDestory(){
+		super.onDestory();
+	}
+
+	public IBinder onBind(Intent intent){
+		return mBinder;
+	}
+
+	class MyBinder extends Binder{
+		public void startDownload(){
+			//...
+		}
+	}
+}
+
+public class MainActivity extends Activity implements OnClickListener{
+	private MyService.MyBinder myBinder;
+
+	private ServiceConnection connection = new ServiceConnection{
+
+		public void onServiecDisconnected(ComponentName name){
+
+		}
+
+		public void onServiceConnected(ComponentName name,IBinder service){
+			myBinder = (MyService.MyBinder) service;
+			myBinder.startDownload();
+		}
+	}
+
+	public void onClick(View v){
+
+		Intent bindIntent = new Intent(this, MyService.class);
+		bindService(bindIntent,connection,BIND_AUTO_CREATE);
+
+		unbindService(connection);
+	}
+}
+
+//通过一个MyBinder（Binder） ，建立activity和service之间的联系
+//建立连接时，需要intent 和 connection（ServiceConnection） 及flags
+//断开连接时，需要connection
+
+//这里传入BIND_AUTO_CREATE表示在Activity和Service建立关联后自动创建Service，
+//这会使得MyService中的onCreate()方法得到执行，但onStartCommand()方法不会执行。
+
+
+//前台service 提高优先级 避免被杀掉
+
+public class MyService extends Service{
+
+	public static final String TAG = "MyService";
+
+	private MyBinder mBinder = new MyBinder();
+
+	public void onCreate(){
+		super.onCreate();
+
+		Notification notification = new Notification(R.drawable.ic_launcher,"xxx
+			",System.currentTimeMillis());
+		Intent notificationIntent =  new Intent(this, MainActivity.class);
+		PendingIntent pendingIntent = PendingIntent.getActivity(this,0,notificationIntent,0);
+		notification.setLatestEventInfo(this,"title","content",pendingIntent);
+		startForeground(1,notifacation);
+	}
+}
+
+//远程Service 实现跨进程通信IPC
+<service  
+        android:name="com.example.servicetest.MyService"  
+        android:process=":remote" >  
+</service>
+// remote service 不设置的话（AIDL），不能与activity进行通信
+// AIDL Android Interface Definition Language 
+
+// 首先创建 AIDL文件
+// 定义a与s 进行通信的方法
+// 新建 MyAIDLService.aidl
+// Stub 就是 Binder的子类
+
+interface MyAIDLService{
+	int plus(int a, int b);
+	String toUpperCase(String str);
+}
+
+public class MyService extends Service{
+
+	public IBinder onBind(Intent intent){
+		return mBinder;
+	}
+
+	MyAIDLService.Stub mBinder = new Stub(){
+		public String toUpperCase(String str) throws RemoteException{
+			if(str != null){
+				return str.toUpperCase();
+			}
+			return null;
+		}
+
+		public int plus(int a, int b) throws RemoteException{
+			return a + b;
+		}
+	}
+}
+
+public class MainActivity extends Activity implements OnClickListener{
+
+	private MyAIDLService myAIDLService;
+
+	private ServiceConnection connection = new ServiceConnection(){
+
+		public void onServiceDisconnected(ComponentName name){
+
+		}
+
+		public void onServiceConnected(ComponentName name, IBinder service){
+			myAIDLService = MyAIDLService.Stub.asInterface(service);
+			try{
+				int result = myAIDLService.plus(3,5);
+				String upperStr = myAIDLService.toUpperCase("xxx");
+			}catch(){
+				//...
+			}
+		}
+	}
+}
+
