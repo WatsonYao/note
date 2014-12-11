@@ -434,3 +434,321 @@ public class MainActivity extends Activity implements OnClickListener{
 	}
 }
 
+// 在actionbar的使用中，父子之间的跳转
+
+public boolean onOptionsItemSelected(MenuItem item){
+
+	switch(item.getItemId()){
+		case android.R.id.home:
+		Intent upIntent = NavUtils.getParentActivityIntent(this);
+
+		// 如果父子在同一个Task中，则直接调用 upto 进行跳转，
+		// 如果不在同一个Task中，则需要借助builder 来创建一个新的Task
+
+
+		if(NavUtils.shouldUpRecreateTask(this,upIntent)){
+			TaskStackBuilder.create(this)
+			.addNextIntentWithParentStack(upIntent)
+			.startActivities();
+		}else{
+			upIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			NavUtils.navigateUpTo(this,upIntent);
+		}
+		return true;
+	}
+}
+
+// 使用fragment 制作类似tabhost效果
+
+public class MainActivity extends Activity implements OnClickListener{
+	private Fragment fg1;
+	private Fragment fg2;
+	private Fragment fg3;
+	private Fragment fg4;
+
+
+	private void setTabSelection(int index){
+		clearSelection();
+
+		FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+		hideFragment(transaction);
+
+		siwtch(index){
+			case 0:
+				if(messageFragment == null){
+					messageFragment = new messageFragment();
+					transaction.add(R.id.content,messageFragment);
+				}else{
+					transaction.show(messageFragment);
+				}
+				break;
+			case 1:
+				// ...
+				break;
+		}
+	}
+
+	private void hideFragment(FragmentTransaction transaction){
+		if(messageFragment != null){
+			transaction.hide(messageFragment);
+		}
+
+		// ...
+	}
+}
+
+// 平板双栏fragment的注意
+
+
+public void onActivityCreated(Bundle savedInstanceState){
+	super.onActivityCreated(savedInstanceState);
+
+	if(getActivity().findViewById(R.id.other) != null){
+		isTwoPane = true;
+	}else{
+		isTwoPane = false;
+	}
+}
+
+// Palette 图片着色分析器
+// 已经是后台线程 用 Palette.generate();
+// 主线程的话 用 Palette.generateAsync();
+// 提供一个监听器去替代
+Palette.generateAsync(bitmap, new Palette.PaletteAsyncListener{
+
+	public void onGenerated(Palette palette){
+		Palette.Swatch vibrant = palette.getVribrantSwatch();
+		if(swatch != null){
+			titleView.setBackgroundColor(vibrant.getRgb());
+			titleView.setTextColor(vibrant.getTitleTextColor());
+		}
+	}
+});
+
+if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+    getWindow().setStatusBarColor(Color.BLUE);
+}
+
+// svg 矢量图形 AnimatedVectorDrawable
+//http://blog.csdn.net/cym492224103/article/details/41677825
+
+// RecyclerView
+// 为每个条目位置提供了布局管理器
+// 为每个条目设置了操作动画
+
+
+protected void onCreate(Bundle savedInstanceState){
+	super.onCreate(savedInstanceState);
+	setContentView(R.layout.activity_main);
+
+	final RecyclerView recyclerView = (RecyclerView)findViewById(R.id.recycler_view);
+	final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+	recyclerView.setLayoutManager(layoutManager);
+
+	final SampleRecyclerAdapter sampleRecyclerAdapter = new SampleRecyclerAdapter();
+	recyclerView.setAdapter(sampleRecyclerAdapter);
+
+}
+
+public class SampleRecyclerAdapter extends 
+	RecyclerView.Adapter<SampleRecyclerAdapter.ViewHolder>{
+
+	private final  ArrayList<SampleModel> sampleData = DemoApp.getSampleData(20);
+
+	public ViewHolder onCreateViewHolder(ViewGroup parentViewGroup, int i){
+		View item = LayoutInflater.from(parentViewGroup.getContext()).inflate(
+				R.layout.list_basic_item,parentViewGroup,false);
+
+		return new ViewHolder(item);
+	}
+
+	public void onBindViewHolder(ViewHolder viewHolder,final int position){
+		final SampleModel rowData = sampleData.get(position);
+
+		viewHolder.textViewSample.setText(rowData.getSampleText());
+		viewHolder.itemView.setTag(rowData);
+	}
+
+	public int getItemCount(){
+		return sampleData.size();
+	}
+
+	public void removeData(int position){
+		sampleData.remove(position);
+		notifyItemRemove(position);
+	}
+
+	public void addItem(int positionToAdd){
+		sampleData.add(positionToAdd,new SampleModel());
+		notifyItemInserted(positionToAdd);
+	}
+
+	public static class ViewHolder extends RecyclerView.ViewHolder{
+		private final TextView textViewSample;
+
+		public ViewHolder(View itemView){
+			super(itemView);
+
+			textViewSample = (TextView)itemView.findViewById(R.id.textViewSample);
+		}
+	}
+
+}
+
+// 官方的例子
+ @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        
+        String [] myDataset = {"Android","ios","jack","tony","window","mac","1234","hehe","495948"};
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+
+        // improve performance if you know that changes in content
+        // do not change the size of the RecyclerView
+        mRecyclerView.setHasFixedSize(true);
+
+        // use a linear layout manager
+        mLayoutManager = new LinearLayoutManager(this);
+        //设置RecycleView的显示方向：（默认为垂直） 水平
+        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        // specify an adapter (see also next example)
+        mAdapter = new MyAdapter(myDataset);
+        mRecyclerView.setAdapter(mAdapter);
+    }
+// 有VIewHolder类 类里是控件
+// 通过onCreateViewHolder方法将布局id传到ViewHolder中
+// 在onBindViewHolder 中绑定数据
+
+public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
+        private String[] mDataset;
+
+        // Provide a reference to the type of views that you are using
+        // (custom viewholder)
+        public class ViewHolder extends RecyclerView.ViewHolder {
+            public TextView mTextView;
+
+            public ViewHolder(TextView v) {
+                super(v);
+                mTextView = v;
+            }
+        }
+
+        // Provide a suitable constructor (depends on the kind of dataset)
+        public MyAdapter(String[] myDataset) {
+            mDataset = myDataset;
+        }
+
+        // Create new views (invoked by the layout manager)
+        @Override
+        public MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+                int viewType) {
+            // create a new view
+            View v = LayoutInflater.from(parent.getContext()).inflate(
+                    R.layout.my_text_view, parent, false);
+            // set the view's size, margins, paddings and layout parameters
+
+            ViewHolder vh = new ViewHolder((TextView) v);
+            return vh;
+        }
+
+        // Replace the contents of a view (invoked by the layout manager)
+        @Override
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            // - get element from your dataset at this position
+            // - replace the contents of the view with that element
+            holder.mTextView.setText(mDataset[position]);
+
+        }
+
+        // Return the size of your dataset (invoked by the layout manager)
+        @Override
+        public int getItemCount() {
+            return mDataset.length;
+        }
+    }
+
+// 它的作用就是共享两个acitivity种共同的元素，在Android 5.0下支持如下效果：
+// changeBounds -  改变目标视图的布局边界
+// changeClipBounds - 裁剪目标视图边界
+// changeTransform - 改变目标视图的缩放比例和旋转角度
+// changeImageTransform - 改变目标图片的大小和缩放比例
+
+// View在UI线程去更新自己；而SurfaceView则在一个子线程中去更新自己
+// SurfaceView 的 getHolder方法，我们可以获取一个SurfaceViewHolder。
+// 通过holder可以监听view的生命周期以及获取canvas对象
+
+public class SurfaceViewTemplate extends SurfaceView implements Callback,Runnable{
+	
+	private SurfaceHolder mHolder;
+	private Canvas mCanvas;
+	private Thread t;
+	private boolean isRunning;
+
+	public SurfaceViewTemplate(Context context){
+		this(context,null);
+	}
+
+	public SurfaceViewTemplate(Context context, AttributeSet attrs){
+		super(context,attrs);
+
+		mHolder = getHolder();
+		mHolder.addCallback(this);
+
+		setFocusable(true);
+		setFocusableInTouchMode(true);
+
+		this.setKeepScreenOn(true);
+	}
+
+	public void surfaceCreated(SurfaceHolder holder){
+		isRunning = true;
+		t = new Thread(this);
+		t.start();
+	}
+
+	public void surfaceChanged(SurfaceHolder holder, int format, int width,int height){
+		//...
+	}
+
+	public void surfaceDestroyed(SurfaceHolder holder){
+		isRunning = false;
+	}
+
+	public void run(){
+		while(isRunning){
+			draw();
+		}
+	}
+
+	private void draw(){
+		try{
+			mCanvas = mHolder.lockCanvas();
+			if(mCanvas != null){
+				// ...
+			}
+		}catch(){
+
+		}finally{
+			if(mCanvas != null){
+				mHolder.unlockCanvasAndPost(mCanvas);
+			}
+		}
+	}
+}
+
+protected void onMeasure(int widthMeasureSper , int heightMeasureSpec){
+	super.onMeasure(widthMeasureSpec,heightMeasureSpec);
+
+	int width = Math.min(getMeasureWidth(),getMeasureHeight());
+
+	// ...
+
+	setMeasureDimension(width, width);
+}
+
+// touch event
