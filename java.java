@@ -968,3 +968,40 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     }
 
 }
+
+// 屏幕截图
+// 现在，Android 5.0应用可以自行捕捉屏幕，
+//首先用参数MEDIA_-PROJECTION_SERVICE调用Context.getSystemService()，
+//得到MediaProjectionManager类别实例；
+//其次，调用createScreenCaptureIntent ()得到一个Intent；再次，使用startActivityForResult()启动屏幕捕捉；
+//最后，将结果返回到getMediaProjection()上，获取捕捉数据。
+
+//RecyclerView 继续
+// RecyclerView.Adapter
+// RecyclerView.LayoutManager 数据显示布局方式
+// RecyclerView.ViewHolder
+
+public static abstract class Adapter<VH extends ViewHolder>{}{
+
+	public abstract VH onCreateViewHolder(ViewGroup parent, int viewType);
+
+	public abstract void onBindViewHolder(VH holder,int position);
+
+	public abstract int getItemCount();
+}
+
+// LinearLayoutManager
+// GridLayoutManager
+// StaggerdGridLayoutManager
+
+// 屏幕
+DisplayMetrics dm = new DisplayMetrics();
+dm = getResources().getDisplayMetrics();
+
+float density = dm.density;        // 屏幕密度（像素比例：0.75/1.0/1.5/2.0）
+int densityDPI = dm.densityDpi;
+Toast.makeText(this, "radio->" + density + ",dpi->" + densityDPI, Toast.LENGTH_LONG).show();
+
+//波纹
+//android:background="?android:attr/selectableItemBackground"波纹有边界
+//android:background="?android:attr/selectableItemBackgroundBorderless"波纹超出边界
