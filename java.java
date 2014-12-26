@@ -1005,3 +1005,32 @@ Toast.makeText(this, "radio->" + density + ",dpi->" + densityDPI, Toast.LENGTH_L
 //波纹
 //android:background="?android:attr/selectableItemBackground"波纹有边界
 //android:background="?android:attr/selectableItemBackgroundBorderless"波纹超出边界
+
+// L通知
+@Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mNotificationManager = (NotificationManager) getActivity().getSystemService(Context
+                .NOTIFICATION_SERVICE);
+    }
+    
+Notification createNotification(boolean makeHeadsUpNotification) {
+        Notification.Builder notificationBuilder = new Notification.Builder(getActivity())
+                .setSmallIcon(R.drawable.ic_launcher_notification)
+                .setPriority(Notification.PRIORITY_DEFAULT)
+                .setCategory(Notification.CATEGORY_MESSAGE)
+                .setContentTitle("Sample Notification")
+                .setContentText("This is a normal notification.");
+        if (makeHeadsUpNotification) {
+            Intent push = new Intent();
+            push.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            push.setClass(getActivity(), LNotificationActivity.class);
+
+            PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(getActivity(), 0,
+                    push, PendingIntent.FLAG_CANCEL_CURRENT);
+            notificationBuilder
+                    .setContentText("Heads-Up Notification on Android L or above.")
+                    .setFullScreenIntent(fullScreenPendingIntent, true);
+        }
+        return notificationBuilder.build();
+    }
