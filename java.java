@@ -1039,3 +1039,31 @@ Window window = activity.getWindow();
 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 window.setStatusBarColor(activity.getResources().getColor(R.color.example_color));
+
+////////////////////////////////
+//    TextSwitcher
+////////////////////////////////
+// Set the factory used to create TextViews to switch between.
+mSwitcher.setFactory(mFactory);
+private ViewFactory mFactory = new ViewFactory() {
+
+        @Override
+        public View makeView() {
+
+            // Create a new TextView
+            TextView t = new TextView(MainActivity.this);
+            t.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
+            t.setTextAppearance(MainActivity.this, android.R.style.TextAppearance_Large);
+            return t;
+        }
+};
+    
+Animation in = AnimationUtils.loadAnimation(this, android.R.anim.fade_in);
+Animation out = AnimationUtils.loadAnimation(this, android.R.anim.fade_out);
+mSwitcher.setInAnimation(in);
+mSwitcher.setOutAnimation(out);
+
+////////////////////////////////
+//    SlidingTabsColors
+////////////////////////////////
+public class SlidingTabLayout extends HorizontalScrollView 
