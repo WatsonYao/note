@@ -1215,3 +1215,123 @@ public class PreferenceActivityTest extends PreferenceActivity
         }  
     }     
 }  
+
+
+CardView
+Shadow: view.setOutline()
+Shape: view.clipToOutline()
+
+Ripples
+android:foreground="?android:attr/selectableItemBackground"
+
+public boolean onTouchEvent(MotionEvent event){
+	switch(event.getAction()){
+		case MotionEvent.ACTION_DOWN:
+			animate().setDuration(100).scaleX(1.2f).scaleY(1.2f).translationZ(20);
+			return true;
+		case MotionEvent.ACTION_CANCEL:
+		case MotionEvent.ACTION_UP:
+			animate().setDuration(100).scaleX(1).scaleY(1).translationZ(0);
+			return true;
+	}
+}
+
+<ImageButton
+
+android:background=""
+android:src=""
+
+android:elevation="4dp"
+android:stateListAnimator="@anim/button_raise" />
+
+<selector>
+<item
+	android:state_enabled="true"
+	android:state_pressed="true">
+	<objectAnimator
+		android:duration="@android:integer/config_shortAnimTime"
+		android:propertyName="translationZ"
+		android:valueFrom="@dimen/button_elevation"
+		android:valueTo="@dimen/button_press_elevation"
+		android:valueType="floatType" />
+</item>
+<item>
+	<objectAnimator
+		android:duration="@android:integer/config_shortAnimTime"
+		android:propertyName="translationZ"
+		android:valueFrom="@dimen/button_press_elevation"
+		android:valueTo="@dimen/button_elevation"
+		android:valueType="floatType"/>
+		
+</item>
+</selector>
+
+
+Theme colors
+<style name="BaseAppTheme" parent="android:Theme.Material.Light">
+	<item name="android:colorPrimary">#xxx</item>
+	<item name="android:navagationBarColor">?android:colorPrimarDark</item>
+	<item name="android:statusBarColor">?android:colorPrimaryDark</item>
+	<item name="android:windowBackground">?android:colorBackground</item>
+</style>
+
+final ImageView hero = (ImageView) findViewById(R.id.photo);
+ObjectAnimator color = ObjectAnimator.ofArgb(hero.getColorFilter(),"color",getResources().getColor(R.color.photo_tint));
+color.addUpdateListener(new ValueAnimator.AnimatorUpdatedListener(){
+	public void onAnimationUpdate(ValueAnimator valueAnimator){
+		hero.getDrawable().setColorFilter(hero.getColorFilter());
+	}
+});
+
+
+private void colorize(Bitmap photo){
+	Palette palette = Palette.generate(photo);
+	applyPalette(palette);
+}
+
+private void applyPalette(Palette palette){
+	getWindow().setBackgroundDrawable(new ColorDrawable(palette.getDarkMutedColor().getRgb()));
+	
+	titleview.setTextColor(palette.getVibrantColor().getRgb());
+	
+	descriptionView.setTextColor(palette.getLightVirantColor().getRgb());
+}
+
+// Ripple button
+<ripple android:color="?android:colorControlHightlight">
+	<item>
+		<shape android:shape="oval">
+			<solid android:color="?android:colorAccent"/>
+		</shape>
+	</item>
+</ripple>
+
+private void colorRipple(int id, int bgColor, int tintColor){
+	View buttonView = findViewById(id);
+	
+	RippleDrawable ripple = (RipperDrawable)buttonView.getBackground();
+	GradientDrawable rippleBackground = (GradientDrawable) ripple.getDrawable(0);
+	rippleBackground.setColor(bgColor);
+	ripple.setColor(ColorStateList.valueOf(tintColor));
+	
+}
+
+// Reveal
+ViewAnimationUtils.createCircularReveal();
+int cx = (button.getLeft() + buttonn.getRight()) /2;
+int cy = (button.getTop() + button.getBottom)) /2;
+
+float radius = Math.max(map.getWidth(), map.getHight()) * 2.0f;
+
+if(map.getVisibility() == View.INVISIBLE){
+	map.setViewsibilty(View.VISIBLE);
+	ViewAnimationUtils.createCircularReval(map,cx,cy,0,radius).start();
+}else{
+	ValueAnimator reveal = ViewAnimationUtils.createCircularReval(map,cx,cy,radius,0);
+	reveal.addListener(new  AnimatorListenerAdapter(){
+		public void onAnimationEnd(Animator animation){
+			map.setVisibility(View.INVISIBLE);
+		}
+	})
+	reveal.start();
+}
