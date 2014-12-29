@@ -1067,3 +1067,151 @@ mSwitcher.setOutAnimation(out);
 //    SlidingTabsColors
 ////////////////////////////////
 public class SlidingTabLayout extends HorizontalScrollView 
+
+////////////////////////////////
+//    PreferenceActivity 
+// http://blog.csdn.net/dawanganban/article/details/19082949
+////////////////////////////////
+public class MainActivity extends PreferenceActivity {  
+  
+    @Override  
+    protected void onCreate(Bundle savedInstanceState) {  
+        super.onCreate(savedInstanceState);  
+        //setContentView(R.layout.activity_main);  
+        addPreferencesFromResource(R.xml.preference);  
+    }  
+} 
+
+// <?xml version="1.0" encoding="UTF-8"?>  
+// <PreferenceScreen   
+//     xmlns:android="http://schemas.android.com/apk/res/android"   
+//     android:title="Settings">  
+//     <CheckBoxPreference   
+//         android:title="Love me?"   
+//         android:summaryOn="Yes,I love you!"  
+//         android:summaryOff="No,I am sorry."  
+//         android:defaultValue="true">  
+//     </CheckBoxPreference>  
+// </PreferenceScreen> 
+
+
+// <?xml version="1.0" encoding="UTF-8"?>  
+// <PreferenceScreen   
+//     xmlns:android="http://schemas.android.com/apk/res/android"   
+//     android:title="Settings">  
+//     <PreferenceScreen   
+//         xmlns:android="http://schemas.android.com/apk/res/android"  
+//         android:title="Emotions"  
+//         android:summary="settings about emotions">  
+//         <CheckBoxPreference    
+//             android:title="Love me?"   
+//             android:summaryOn="Yes,I love you!"  
+//             android:summaryOff="No,I am sorry."  
+//             android:defaultValue="true">  
+//         </CheckBoxPreference>  
+//         <CheckBoxPreference   
+//             android:title="Hate me?"   
+//             android:summaryOn="Yes,I hate you!"  
+//             android:summaryOff="No,you are a good person."  
+//             android:defaultValue="false">  
+//         </CheckBoxPreference>       
+//     </PreferenceScreen>  
+//     <PreferenceScreen   
+//         xmlns:android="http://schemas.android.com/apk/res/android"  
+//         android:title="Relations"  
+//         android:summary="settings about relations">  
+//         <CheckBoxPreference   
+//             android:title="Family?"   
+//             android:summaryOn="Yes,we are family!"  
+//             android:summaryOff="No,I am sorry."  
+//             android:defaultValue="true">  
+//         </CheckBoxPreference>  
+//         <CheckBoxPreference   
+//             android:title="Friends?"   
+//             android:summaryOn="Yes,we are friends!"  
+//             android:summaryOff="No,I am sorry."  
+//             android:defaultValue="false">  
+//         </CheckBoxPreference>       
+//     </PreferenceScreen>     
+// </PreferenceScreen> 
+
+<?xml version="1.0" encoding="utf-8"?>  
+<preference-headers   
+    xmlns:android="http://schemas.android.com/apk/res/android">  
+    <!-- 指定启动指定PreferenceFragment的列表项 -->  
+    <header android:fragment=  
+        "org.crazyit.app.PreferenceActivityTest$Prefs1Fragment"  
+        android:icon="@drawable/ic_settings_applications"  
+        android:title="程序选项设置"  
+        android:summary="设置应用的相关选项" />  
+    <!-- 指定启动指定PreferenceFragment的列表项 -->   
+    <header android:fragment=  
+        "org.crazyit.app.PreferenceActivityTest$Prefs2Fragment"  
+        android:icon="@drawable/ic_settings_display"  
+        android:title="界面选项设置 "  
+        android:summary="设置显示界面的相关选项">  
+        <!-- 使用extra可向Activity传入额外的数据 -->  
+        <extra android:name="website"  
+            android:value="www.crazyit.org" />  
+    </header>  
+    <!-- 使用Intent启动指定Activity的列表项 -->  
+    <header  
+        android:icon="@drawable/ic_settings_display"  
+        android:title="使用Intent"  
+        android:summary="使用Intent启动某个Activity">  
+        <intent  android:action="android.intent.action.VIEW"  
+            android:data="http://www.crazyit.org" />  
+    </header>  
+</preference-headers>  
+
+
+public void onBuildHeaders(List<Header> target)  
+{  
+    // 加载选项设置列表的布局文件  
+    loadHeadersFromResource(R.xml.preference_headers, target);  
+} 
+
+public class PreferenceActivityTest extends PreferenceActivity  
+{  
+    @Override  
+    protected void onCreate(Bundle savedInstanceState)  
+    {  
+        super.onCreate(savedInstanceState);  
+        // 该方法用于为该界面设置一个标题按钮  
+        if (hasHeaders())  
+        {  
+            Button button = new Button(this);  
+            button.setText("设置操作");  
+            // 将该按钮添加到该界面上  
+            setListFooter(button);  
+        }  
+    }  
+    // 重写该该方法，负责加载页面布局文件  
+    @Override  
+    public void onBuildHeaders(List<Header> target)  
+    {  
+        // 加载选项设置列表的布局文件  
+        loadHeadersFromResource(R.xml.preference_headers, target);  
+    }  
+  
+    public static class Prefs1Fragment extends PreferenceFragment  
+    {  
+        @Override  
+        public void onCreate(Bundle savedInstanceState)  
+        {  
+            super.onCreate(savedInstanceState);  
+            addPreferencesFromResource(R.xml.preferences);  
+        }  
+    }  
+    public static class Prefs2Fragment extends PreferenceFragment  
+    {  
+        @Override  
+        public void onCreate(Bundle savedInstanceState)  
+        {  
+            super.onCreate(savedInstanceState);  
+            addPreferencesFromResource(R.xml.display_prefs);  
+            // 获取传入该Fragment的参数  
+            String website = getArguments().getString("website");  
+        }  
+    }     
+}  
