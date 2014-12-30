@@ -1335,3 +1335,37 @@ if(map.getVisibility() == View.INVISIBLE){
 	})
 	reveal.start();
 }
+
+// ViewCompat 使用
+
+ViewCompat.setTransitionName(title, getString(R.string.transition_title));
+ViewCompat.setTransitionName(date, getString(R.string.transition_date));
+ViewCompat.setTransitionName(webView, getString(R.string.transition_body));
+
+Intent detailIntent = new Intent(FeedListActivity.this,FeedDetailActivity.class);
+detailIntent.putExtra(FeedDetailActivity.ARR_ITEM,item);
+FeedAdapter.ViewHolder viewHolder = (FeedApdater.ViewHolder)recyclerView.findViewHodlerForItemId(item.getPubDate());
+String titleName = getString(R.string.transition_titile);
+// ...
+
+Pair<View,String> titlePair = Pair.create(viewHolder.getTitleView(),titleName);
+// ...
+
+ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+	this,
+	titilePair,
+	datePair,
+	bodyPair);
+ActivityCompat.startActivity(this,detailIntent,options.toBundle());
+
+public boolean onOptionsItemSelected(MenuItem menuItem) {
+    int id = menuItem.getItemId();
+    if (id == android.R.id.home) {
+        ActivityCompat.finishAfterTransition(this);
+        return true;
+    }
+    return super.onOptionsItemSelected(menuItem);
+}
+
+
+
