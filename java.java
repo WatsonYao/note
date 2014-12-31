@@ -1367,5 +1367,47 @@ public boolean onOptionsItemSelected(MenuItem menuItem) {
     return super.onOptionsItemSelected(menuItem);
 }
 
+//  RecyclerView does provide an OnItemTouchListener
+mRecyclerView = (RecyclerView)v.findViewById(R.id.xxx);
+mRecyclerView.setLayoutManager(new LinearLayoutManger(getActivity()));
+mRecyclerView.setAdapter(new CrimeAdapter());
 
+// viewholder 传一个view进去固定控件，绑定数据与view的显示关系
+private class CrimeHolder extends ViewHolder implements View.OnClickListener{
+	private final CheckBox mSolvedCheckBox;
+	private Crime mCrime;
 
+	public CrimeHolder(View itemView){
+		super(itemView);
+		itemView.setOnClickListener(this);
+
+		mSolvedCheckBox = (CheckBox) itemView.findViewById(R.id.xxx);
+	}
+
+	public void bindCrime(Crime crime){
+		mCrime = crime;
+		mSolvedCheckBox.setChecked(crime.isSolved());
+
+		boolean isSelected = mMultiSelector.isSelected(getPositionin());
+		itemView.setActivated(isSelected);
+	}
+
+	public void onClick()
+}
+
+private class CrimeAdapter extends RecyclerView.Adapter<CrimeHolder>{
+
+	public CrimeHolder onCreateViewHolder(ViewGroup parent,int pos){
+		View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.xxx,parent,false);
+		return new CrimeHolder(view);
+	}
+
+	public void onBindViewHolder(CrimeHolder holder,int pos){
+		Crime crime = mCrimes.get(pos);
+		holder.bindCrime(crime);
+	}
+
+	public int getItemCount(){
+		return mCrimes.size();
+	}
+}
