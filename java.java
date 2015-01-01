@@ -1411,3 +1411,42 @@ private class CrimeAdapter extends RecyclerView.Adapter<CrimeHolder>{
 		return mCrimes.size();
 	}
 }
+
+//建造模式
+
+public class Director{
+
+	private Builder builder;
+	
+	public void construct(){
+		builder = new ConcreteBuilder();
+		builder.buildPart1();
+		builder.buildPart2();
+		builder.retrieveResult();
+	}
+}
+
+abstract public class Builder{
+
+	public abstract void builderPart1();
+	public abstract void builderPart2();
+
+	public abstract Product retrieveResult();
+}
+
+public class ConcreteBuilder extends Builder{
+
+	private Product product = new Product();
+
+	public Product retrieveResult(){
+		return product;
+	}
+
+	public void builderPart1(){
+
+	}
+
+	public void builderPart2(){
+		
+	}
+}
