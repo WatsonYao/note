@@ -1450,3 +1450,53 @@ public class ConcreteBuilder extends Builder{
 		
 	}
 }
+
+
+mMainToolbar = (Toolbar) this.findViewById(R.id.main_bar);
+this.setSupportActionBar(mMainToolbar);
+
+mMainListView = (ListView) this.findViewById(R.id.main_list_view);
+final View header = LayoutInflater.from(this).inflate(R.layout.layout_header,null);
+mMainListView.addHeaderView(header);
+mMainListView.setAdapter(new XXXAdapter(this));
+
+mMainListView.setOnTouchListener(new View.OnTouchListener(){
+
+	public boolean onTouch(View v, MotionEvent event){
+		final float y = event.getY();
+		float translationY = mMationToolbar.getTranslationY();
+
+		switch(event.getAction()){
+			case MotionEvent.ACTION_DOWN:
+				mStartY = y;
+				mLastY = mStartY;
+				break;
+			case MotionEvent.ACTION_MOVE:
+				float mDeltaY = y - mLastY;
+
+				float newTansY = translationY + mDeltaY;
+
+				if(newTansY <=0 && newTansY >= -mMationToolbar.getHeight()){
+					mMationToolbar.setTranslationY(newTansY);
+				}
+
+				mLastY = y;
+				mLastDeltaY = mDeltaY;
+
+				break;
+			case MotionEvent.ACTION_UP:
+				ObjectAnimator animator = null;
+				if(mLastDeltaY <0 && mMainListView.getFirstVisibilePosition() > 1){
+					ainmator = ObjectAnimator.ofFloat(mMationToolbar,"translationY",mMainToolbar.getTranslationY(),-mMationToolbar.getHeight());
+				}else{
+					animator = ObjectAnimator.ofFloat(mMationToolbar,"translationY",mMationToolbar.getTranslationY(),0);
+				}
+
+				animator.setDuration(100);
+				animator.start();
+				animator.setInterpolator(AnimationUtils.loadInterpolator(MainActivity.this, android.R.interpolator.linear));
+				break;
+		}
+		return false;
+	}
+});
