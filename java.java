@@ -1508,3 +1508,29 @@ actionBarToolBar.setNavigationIcon(R.drawable.xxx);
 actionBarToolBar.setNavigationContentDescription(getResources().getString(R.string.xxx));
 actionBarToolBar.setLogo(R.drawable.xxx);
 actionBarToolBar.setLogoDescription(getResources().getString(R.string.xxx));
+
+// 单纯的toolbar
+toolbar = (Toolbar)findViewById(R.id.xxx);
+toolbar.setLogo(R.drawable.xxx);
+toolbar.setLogoDescription(getResources().getString(R.string.xxx));
+toolbar.setSubtitle("xxx");
+toolbar.setSubtitleTextColor(getResources().getColor(R.color.xxx));
+toolbar.setTilte("xxx");
+toolbar.setTitleTextColor(getResources().getColor(R.color.xxx));
+toolbar.setnavigationIcon(R.drawable.xxx);
+toolbar.setNavigationContentDescription(getResources().getString(R.string.xxx));
+toolbar.inflateMenu(R.menu.xxx);
+toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener(){
+
+	public boolean onMenuItemClick(MenuItem menuItem){
+		// xxx;
+		return true;
+	}
+});
+toolbar.setNavigationOnClickListener(new View.OnClickListener(){
+
+	public void onClick(View v){
+		// xxx'
+		toolbar.setVisibility(View.GONE);
+	}
+});
