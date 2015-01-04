@@ -1500,3 +1500,11 @@ mMainListView.setOnTouchListener(new View.OnTouchListener(){
 		return false;
 	}
 });
+
+Toolbar actionBarToolBar = (Toolbar)findViewById(R.id.xxx);
+
+setSupportActionBar(actionBarToolBar);
+actionBarToolBar.setNavigationIcon(R.drawable.xxx);
+actionBarToolBar.setNavigationContentDescription(getResources().getString(R.string.xxx));
+actionBarToolBar.setLogo(R.drawable.xxx);
+actionBarToolBar.setLogoDescription(getResources().getString(R.string.xxx));
