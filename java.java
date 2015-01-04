@@ -1563,3 +1563,65 @@ toolbar.setNavigationOnClickListener(new View.OnClickListener(){
 
 消费即表示相应函数返回值为true
 **/
+
+
+// 绘图过程
+performMeasure(int childWidthMeasureSpec, int childHeightMeasureSpec){
+	//...
+	mView.measure(childWidthMeasureSpec,childHeightMeasureSpec);
+	//...
+}
+
+// measurer
+public final void measure(int widthMeasureSpec, int heightMeasureSpec){
+	// ...
+		onMeasure(widthMeasureSpec,heightMeasureSpec);
+	// ...
+}
+
+// onMeasure
+// 设置自己所需要的大小
+protected void onMeasure(int widthMeasureSpec,int heightMeasureSpec){
+	setMeasureDimension(
+		getDefaultSize(getSuggestedMinimumWidth(),widthMeasureSpec),
+		getDefaultSize(getSuggestedMinimumHeight(),heightMeasureSpec)
+		);
+}
+
+// setMeasureDimension()
+// 对两个成员变量进行赋值
+protected final void setMeasureDimension(int measuredWidth, int measureHeight){
+	// ...
+
+	mMeasureWidth = measuredWidth;
+	mMeasureHeight = measureHeight;
+
+	// ...
+}
+
+// Layout过程 布局过程
+
+private void performLayout(WindowManager.LayoutParams lp, int desiredWindowWidth, int desiredWindowHeight){
+	// ...
+	host.layout(0,0,host.getMeasureWidth(),host.getmeasuredHight);
+	// ...
+}
+
+public void layout( int l , int t, int r, int b){
+	//onMeasure(mOldWidthMeasureSpec, mOldHeightMeasureSpec);
+	setFrame();
+	// ...
+	onLayout(changed,l,t,r,b);
+	// ...
+
+}
+
+// view真正渲染到屏幕上的矩形区域
+protected boolean setFrame(int left, int top, int right, int bottom){
+
+}
+
+// measure出来的宽高是该控件期望得到的尺寸，真正显示到屏幕上面的位置和大小由layout方法来决定。
+
+// 要实现一个ViewGroup的话，你只需要在onLayout() 方法中遍历的调用子控件的onLayout()方法就行了，
+// 需要做的就是把lrtb这四个值算好
