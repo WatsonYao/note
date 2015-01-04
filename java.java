@@ -1536,6 +1536,30 @@ toolbar.setNavigationOnClickListener(new View.OnClickListener(){
 });
 
 // 事件传递
-ViewGroup里的onInterceptTouchEvent默认值是false这样才能把事件传给View里的onTouchEvent.
-ViewGroup里的onTouchEvent默认值是false。
-View里的onTouchEvent返回默认值是true.这样才能执行多次touch事件。
+//ViewGroup里的onInterceptTouchEvent默认值是false这样才能把事件传给View里的onTouchEvent.
+//ViewGroup里的onTouchEvent默认值是false。
+//View里的onTouchEvent返回默认值是true.这样才能执行多次touch事件。
+
+/**
+每个事件都是以 ACTION_DOWN 开始 和 ACTION_UP 结束
+对事件的处理包括三类：
+1. dispatchTouchEvent() 传递
+2. onInterceptTouchEvent() 拦截
+3. onTouchEvent() OnTouchListener 消费
+
+传递流程：
+1. 事件从activity.dispatchTouchEvent() 开始传递，
+只要没有被停止或拦截，从最上层的ViewGroup开始一直往下传递。
+下层的view可以用过onTouchEvent()对事件进行处理
+
+2. 事件由父ViewGroup传递给子view，ViewGroup可以通过onInterceptTouchEvent对事件做拦截，停止其往下传递
+
+3. 如果事件从上往下传递过程中一直没有被停止，且最底层子View没有消费事件，事件会反向往上传递，
+这时父ViewGroup可以进行消费，如果还是没有被消费的话，最后会到activity的onTouchEvent()函数
+
+4. 如果View没有对ACTION_DOWN进行消费，之后的其他事件也不会传递过来
+
+5. OnTouchListener优先于onTouchEvent()对事件进行消费
+
+消费即表示相应函数返回值为true
+**/
