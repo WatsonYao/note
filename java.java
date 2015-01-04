@@ -1625,3 +1625,78 @@ protected boolean setFrame(int left, int top, int right, int bottom){
 
 // 要实现一个ViewGroup的话，你只需要在onLayout() 方法中遍历的调用子控件的onLayout()方法就行了，
 // 需要做的就是把lrtb这四个值算好
+
+// 自绘控件
+// 继承view，重写onDraw方法，在布局文件里面引用
+public class MyRingView extends View{
+
+	private static final int FLUSH = 0;
+
+	public MyRingView(Context context, AttributeSet attrs){
+		super(context, attrs);
+	}
+
+	private float radius;
+
+	private Paint paint;
+
+	private void initView(){
+		radius = 0;
+		paint = new Paint();
+		paint.setAntiAlias(true);
+		paint.setStyle(Style.STROKE);
+		paint.setStrokeWidth(0);
+		paint.setAlpha(255);
+		paint.setColor(Color.RED);
+
+		invalidate();
+	}
+
+	private Handle handler = new Handler(){
+		public void handleMessage(android.os.Message msg){
+			radius += 5;
+
+			paint.setStrokeWidth(radius/3);
+			int alpha = paint.getAlpha();
+			alpha -= 10;
+
+			if(alpha <10){
+				alpha = 0;
+			}
+
+			paint.setAlpha(alpha);
+			// 刷新视图
+			invalidate();
+		}
+	}
+
+	protected void onDraw(Canvas canvas){
+		if(paint == null){
+			return;
+		}
+
+		canvas.drawCircle(cx, cy, radius, paint);
+
+		if(paint.getAlpha() >0){
+			handler.sendEmptyMessageDelayed(FLUSH,100);
+		}
+	}
+
+
+	private int cx;
+	private int cy;
+
+	public boolean onTouchEvent(MotionEvent event){
+		if(event.getAction() == MotionEvent.ACTION_DOWN){
+			cx = (int) event.getX();
+			cy = (int) event.getY();
+			initView();
+		}
+
+		return super.onTouchEvent(evnet);
+	}
+
+	protected void onMeasure(int widthMeasureSpce, int heightMeasureSpec){
+		super.onMeasure(widthMeasureSpec,heightMeasureSpec);
+	}
+}
