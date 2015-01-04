@@ -1534,3 +1534,8 @@ toolbar.setNavigationOnClickListener(new View.OnClickListener(){
 		toolbar.setVisibility(View.GONE);
 	}
 });
+
+// 事件传递
+ViewGroup里的onInterceptTouchEvent默认值是false这样才能把事件传给View里的onTouchEvent.
+ViewGroup里的onTouchEvent默认值是false。
+View里的onTouchEvent返回默认值是true.这样才能执行多次touch事件。
