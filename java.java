@@ -8,6 +8,22 @@
 // Factory Method == Polymorphic Factory == Virtual Constructor
 // Abstract Factory == Kit == ToolKit
 
+// 创建模式
+// 对类的实例化过程的抽象化
+// 一些系统在创建对象时，需要动态地决定怎样创建对象，创建哪些对象，以及如何组合表示这些对象
+// 创建模式表述了 怎样构造和封装这些动态的决定
+
+// 创建模式分为 类的 和 对象的 创建模式
+/**
+ * 类的创建模式
+ * 类的创建模式使用继承关系，把类的创建延迟到子类，
+ * 从而封装了客户端将得到哪些具体类的信息，并且隐藏了这些类的实例是如何被创建和放在一起的
+ * 
+ * 对象的创建模式
+ * 把对象的创建过程动态的委派给另一个对象，从而动态地决定客户端将得到哪些具体的实例，以及...
+ * 
+ * /
+
 //静态工厂方法
 public static Fruit factory(String which) throws BadFruitException{
 	if(which.equalsIgnoreCase("apple")){
@@ -116,6 +132,81 @@ public class Client{
 
 // 工厂方法模式之所以有一个别名叫 多态性工厂模式
 // 具体工厂类都有共同的接口，或者都有共同的抽象父类
+
+// 原始模型 模式
+// 简单 和 登记
+
+public class Client{
+
+	private Prototype ptototype;
+
+	public void operation(Prototype example){
+		Prototype p = (Prototype) example.clone();
+
+	}
+}
+
+public interface Prototype extends Cloneable{
+	Prototype clone();
+}
+
+public class ConcretePrototype implements Prototype{
+	public Object clone(){
+		try{
+			return super.clone();
+		}catch(){
+			return null;
+		}
+	}
+}
+
+// 登记式 保存到原型管理器中
+public interface Prototype extends Cloneable{
+	public Object clone();
+}
+
+public class ConcretePrototype implements Prototype{
+
+	public synchronized Object clone(){
+		Prototype temp = null;
+		try{
+			temp = (Prototype)super.clone();
+			return temp;
+		}catch(){
+
+		}finally{
+			return temp;
+		}
+	}
+}
+
+public class PrototypeManager{
+	private Vector objects = new Vector();
+
+	public void add(Prototype object){
+		objects.add(object);
+	}
+
+	public Prototype get(int i){
+		return (Prototype)objects.get(i);
+	}
+
+	public int getSize(){
+		return objects.size();
+	}
+}
+
+public class Client{
+	private PrototypeManager mgr;
+	private Prototype prototype;
+
+	public void registerPrototype(){
+		prototype = new ConcretePrototype();
+		Prototype copytype = (Prototype) prototype.clone();
+		mgr.add(copytype);
+	}
+}
+
 
 
 //View相关
