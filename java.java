@@ -1805,3 +1805,61 @@ public class MyRingView extends View{
 		super.onMeasure(widthMeasureSpec,heightMeasureSpec);
 	}
 }
+
+// 策略模式
+
+// 环境
+public class Context{
+
+	private Strategy strategy;
+
+	// 策略方法
+	public void contextInterface(){
+		strategy.strategyInterface();
+	}
+}
+
+abstract public class Strategy{
+
+	public abstract void strategyInterface();
+}
+
+public class ConcreteStrategy extends Strategy{
+
+	public void strategyInterface{
+		// ...
+	}
+}
+
+// 观察者模式
+// 定义了一对多的依赖
+// 当一个对象改变状态时，所有依赖者都会收到通知并自动更新
+// 发布订阅模式 模型视图模式 源监听模式 从属模式
+
+
+// 装饰模式 包装模式
+// 以对客户端透明的方式扩展对象的功能，是继承关系的一个替代方案
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
