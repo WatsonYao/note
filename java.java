@@ -2198,3 +2198,26 @@ class SlidingTabStrip extends LinearLayout{
 
 	}
 }
+
+// ListView 保存滑动状态
+private Parcelable mListState = null;
+private static final String LIST_STATE_KEY = "liststate";
+
+protected void onSaveInstanceState(Bundle icicle){
+	super.onSaveInstanceState(icicle);
+
+	if(mList != null){
+		icicle.putParcelable(LIST_STATE_KEY,mList.onSaveInstanceState());
+	}
+}
+
+protected void onRestoreInstanceState(Bundle icicle){
+	super.onRestoreInstanceState(icicle);
+	mListState = icicle.getParcelable(LIST_STATE_KEY);
+}
+
+if(mListState != null){
+	mList.onRestoreInstanceState(mListState);
+	mListState = null;
+}
+
