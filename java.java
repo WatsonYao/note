@@ -1805,3 +1805,396 @@ public class MyRingView extends View{
 		super.onMeasure(widthMeasureSpec,heightMeasureSpec);
 	}
 }
+
+
+public class SlidingTabsBasicFragment extends Fragment{
+
+	private SlidingTabLayout mSlidingTabLayout;
+	private ViewPager mViewPager;
+
+	public void onViewCreated(View view, Bundle savedInstanceState){
+
+		mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
+		mViewPager.setAdapter(new SamplePagerAdapter());
+
+		mSlidingTabLayout = (SlidingTabLayout) view.findViewById(R.id.sliding_tabs);
+		mSlidingTabLayout.setViewPager(mViewPager);
+	}
+
+	class SamplePagerAdapter extends PagerAdapter{
+
+		public int getCount(){
+			return 10;
+		}
+
+		public boolean isViewFromObject(View view, Object o){
+			return o == view;
+		}
+
+		public CharSequence getPageTitle(int position){
+			return "Item" + (position + 1);
+		}
+
+		public Object instantiateItem(ViewGroup container, int position){
+			View view = getActivity().getLayoutInflater().inflate(R.layout.pager_item,container,false);
+
+			container.addView(view);
+
+			TextView title = (TextView) view.findViewById(R.id.item_title);
+			title.setText(String.valueOf(position + 1));
+
+			return view;
+		}
+
+		public void destroyItem( ViewGroup container, int position, Object object){
+			container.removeView((View)object);
+		}
+	}
+}
+
+public class SlidingTabLayout extends HorizontalScrollView{
+
+	public interface TabColorizer{
+
+		int getIndicatorColor(int position);
+
+		int getDividerColor(int position);
+	}
+
+	private static final int TITLE_OFFSET_DIPS =24;
+	private static final int TAB_VIEW_PADDING_DIPS = 16;
+	private static final int TAB_VIEW_TEXT_SIZE_SP = 12;
+
+	private int mTitleOffset;
+
+	private int mTabViewLayoutId;
+	private int mTabViewTextViewId;
+
+	private ViewPager mViewPager;
+	private ViewPager.OnPageChangeListener mViewPagerPageChangeListener;
+
+	private final SlidingTabStrip mTabStrip;
+
+	private SlidingTabLayout(Context context){
+		this(context, null);
+	}
+
+	public SlidingTabLayout(Context context, AttributeSet attrs){
+		this(context, null);
+	}
+
+	public SlidingTabLayout(Context context, AttributeSet attrs){
+		this(context, attrs, 0);
+	}
+
+	public SlidingTabLayout(Context context, AttributeSet attrs, int defStyle){
+		super(context, attrs, defStyle);
+
+		setHorizontalScrollBarenabled(false);
+		setFillViewport(true);
+
+		mTitleOffset = (int)(TITLE_OFFSET_DIPS * getResources().getDisplayMetrics().density);
+
+		mTabStrip = new SlidingTabStrip(context);
+
+		addView(mTabStrip, LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+	}
+
+	public void setCustomTabColorizer(TabColorizer tabColorizer){
+		mTabStrip.setCustomTabColorizer(tabColorizer);
+	}
+
+	public void setSelectedIndicatorColors(int... colors){
+		mTabStrip.setSelectedIndicatorColors(colors);
+	}
+
+	public void setDividerColors(int... colors){
+		mTabStrip.setDividerColors(colors);
+	}
+
+	// ...
+
+	public void setViewPager(ViewPager viewPager){
+		mTabStrip.removeAllViews();
+
+		mViewPager = viewPager;
+		if(viewPager != null){
+			viewPager.setOnPageChangeListener(new InternalViewPagerListener());
+			populateTabStrip();
+		}
+
+	}
+
+	protected TextView createDefaultTabView(Context context){
+		TextView textView = new TextView(context);
+		textView.setGravity(Gravity.CENTER);
+		textView.setTextSize(TypedValue.COMPLEX_UNIT_SP,TAB_VIEW_TEXT_SIZE_SP);
+		textView.setTypeface(Typeface.DEFAULT_BOLD);
+
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
+			TypedValue outValue = new TypedValue();
+			getConctext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground,outValue,true);
+			textView.setBackgroundResource(outValue.resourceId);
+		}
+
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH){
+			textView.setAllCaps(true);
+		}
+
+		int padding = (int) (TAB_VIEW_PADDING_DIPS * getResources().getDisplayMetrics().density);
+		textView.setPadding(padding,padding,padding,padding);
+
+		return textView;
+	}
+
+	private void populateTabStrip(){
+		final PagerAdapter adapter = mViewPager.getAdapter();
+		final View.OnClickListener tabClickListener = new TabClickListener();
+
+		for( int i= 0; i< adapter.getCount(); i++){
+			View tabView = null;
+			TextView tabTitleView = null;
+
+			if(mTabViewLayoutId != 0){
+				tabView = LayoutInflater.from(getContext()).inflate(mTabViewLayoutId,mTabStrip,false);
+				tabTitleView = (TextView) tabView.findViewById(mTabViewTextViewId);
+			}
+
+			if(tabView == null){
+				tabView = createDefaultTabView(getContext());
+			}
+
+			if(tabTitleView == null && TextView.class.isInstance(tabView)){
+				tabTitleView = (TextView) tabView;
+			}
+
+			tabTitleView.setText(adapter.getPageTitle(i));
+			tabView.setOnclickListener(tabClickListener);
+
+			mTabStrip.addView(tabView);
+		}
+	}
+
+	protecetd void onAttachedToWindow(){
+		super.onAttachToWindow();
+
+		if(mViewPager != null){
+			scrollToTab(mViewPager.getCurrentItem(),0);
+		}
+	}
+
+	private void scrollToTab(int tabIndex, int positionOffset){
+		final int tabStripChildCount = mTabStrip.getChildCount();
+		if(tabStripChildCount == 0 || tabIndex <0 || tabIndex >= tabStripChildCount){
+			return;
+		}
+
+		View selectedChild = mTabStrip.getChildAt(tabIndex);
+		if(selectedChild != null){
+			int targetScrollX = selectedChild.getLeft() + positionOffset;
+
+			if(tabIndex > 0 || positionOffset > 0){
+				targetScrollX -= mTitleOffset;
+			}
+
+			scrollTo(targetScrollX, 0);
+		}
+	}
+
+	private class InternalViewPagerListener implements ViewPager.OnPageChangeListener{
+
+		private int mScrollState;
+
+		public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels){
+
+			int tabStripChildCount = mTabStrip.getChildCount();
+			if((tabStripChildCount == 0) || (positioni < 0) || (position >= tabStripChildCount)){
+				return;
+			}
+
+			mTabStrip.onViewPagerChanged(position, positionOffset);
+
+			View selectedTitle = mTabStrip.getChildAt(position);
+			int extraOffset = (selectedTitle != null)
+				? (int)(positionOffset * selectedTitle.getWidth())
+				: 0;
+			scrollToTab(position, extraOffset);
+
+			if(mViewPagerPageChangeListener != null){
+				mViewPagerPageChangeListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
+			}
+		}
+
+		public void onPageScrollStateChanged(int state){
+			mScrollState = state;
+
+			if(mViewPagerPageChangeListener != null){
+				mViewPagerPageChangeListener.onPageScrollStateChanged(state);
+			}
+		}
+
+		public void onPageSelected(int position){
+			if(mScrollState == ViewPager.SCROLL_STATE_IDLE){
+				mTabStrip.onViewPagerPageChanged(position, 0f);
+				scrollToTab(position, 0);
+			}
+
+			if(mViewPagerPageChangeListener != null){
+				mViewPagerPageChangeListener.onPageSelected(position);
+			}
+		}
+	}
+
+	private class TabClickListener implements View.OnClickListener{
+		public void onClick(View v){
+			for(int i=0; i<mTabStrip.getChildCount(); i++){
+				if( v == mTabStrip.getChildAt(i)){
+					mViewPager.setCurrentItem(i);
+					return ;
+				}
+			}
+		}
+	}
+
+}
+
+class SlidingTabStrip extends LinearLayout{
+
+	private SlidingTabLayout.TabColorizer mCustomTabColorizer;
+	private final SimpleTabColorizer mDefaultTabColorizer;
+
+	SlidingTabStrip(Context context){
+		this(context, null);
+	}
+
+	SlidingTabStrip(Context context, AttributeSet attrs){
+		super(context, attrs);
+		setWillNotDraw(false);
+
+		final float desity = getResources().getDisplayMetrics().density;
+
+		TypedValue outValue = new TypedValue();
+		context.getTheme().resolveAttribute(R.attr.colorForeground, outValue, true);
+		final int themeForegroundColor = outValue.data;
+
+		mDefaultBottomBorderColor = setColorAlpa(themeForegroundColor,DEFAULT_BOTTOM_BORDER_COLOR_ALPHA);
+
+		mDefaultTabColorizer = new SimpleTabColorizer();
+		mDefaultTabColorizer.setIndicatorColors(DEFAULT_SELLECTED_INDICATOR_COLOR);
+		mDefaultTabColorizer.setDividerColors(setColorAlpha(themeForegroundColor,DEFAULT_DIVIDER_COLOR_ALPHA));
+
+		mBottomBorderThickness = (int)(DEFAULT_BOTTOM_BORDER_THICKNESS_DIPS * density);
+		mBottomBorderPaint = new Paint();
+		mBottomBorderPaint.setColor(mDefaultBottomBorderColor);
+
+		mSelectedIndicatorThickness = (int) (SELECTED_INDICATOR_THICKNESS_DIPS * density);
+		mselectedIndicatorPaint = new Paint();
+
+		mDividerHight = DEFAULT_DIVIDER_HEIGHT;
+		mDividerPaint = new Paint();
+		mDividerPaint.setStokeWidth((int)(DEFAULT_DIVIDER_THICKNESS_DIPS * density));
+	}
+
+	void setCustomTabColorizer(SlidingTabLayout.TabColorizer, customTabColorizer){
+		mCustomTabColorizer = customTabColorizer;
+		invalidate();
+	}
+
+	void setSelectedIndicatorColors(int... colors){
+		mCustomTabColorizer = null;
+		mDefaultTabColorizer.setIndicatorColors(colors);
+		invalidate();
+	}
+
+	void setDividerColors(int... colors){
+		mCustomTabColorizer = null;
+		mDefaultTabColorizer.setDividerColors(colors);
+		invalidate();
+	}
+
+	void onViewPagerChanged(int position, float positionOffset){
+		mSelectedPosition = position;
+		mSelectionOffset = positionOffset;
+		invalidate();
+	}
+
+	protected void onDraw(Canvas canvas){
+		final int height = getHeight();
+		final int childCount = getChildCount();
+		final int mDividerHightPx = (int)(Math.min(Math.max(0f,mDividerHight),1f) * height);
+
+		final SlidingTabLayout.TabColorizer tabColorizer = mCustomTabColorizer != null
+			? mCustomTabColorizer
+			: mDefaultTabColorizer;
+
+		if(childCount > 0){
+			View selectedTitle = getChildAt(mSelectedPosition);
+
+			int left = selectedTitle.getLeft();
+			int right = selectedTitle.getRight();
+			int color = tabColorizer.getIndicatorColor(mSelectedPosition);
+
+			if(mSelectionOffset > 0f && mSelectedPosition < (getChildCount() - 1)){
+				int nextColor = tabColorizer.getIndicatorColor(mSelectedPosition + 1);
+				if(color != nextColor){
+					color = blendColors(nextColor,color,mSelectionOffset);
+				}
+
+				View nextTitle = getChildAt(mSelectedPosition + 1);
+				left = (int)(mSelectionOffset * nextTitle.getLeft() + (1.0f - mSelectionOffset * left);
+				right = (int)(mSelectionOffset * nextTitle.getRight() + (1.0f -mSelectionOffset * right));
+			}
+
+			mselectedIndicatorPaint.setColor(color);
+
+			canvas.drawRect(left, height - mSelectedIndicatorThickness, right, height, mselectedIndicatorPaint);
+		}
+
+		canvas.drawRect(0, height - mBottomBorderThickness, getWidth(),height, mBottomBorderPaint);
+
+		int separatorTop = (height - dividerHieghtPx ) / 2;
+		for( int i=0; i<childCount -1; i++){
+			View child = getChildAt(i);
+			mDividerPaint.setColor(tabColorizer.getDividerColor(i));
+			canvas.drawLine(child.getRight(),separatorTop, child.getRight(),
+				separatorTop + dividerHieghtPx, mDividerPaint);
+		}
+
+	}
+
+	private static int setColorAlpha( int color, byte alpha){
+		return Color.argb(alpha, Color.red(color),Color.green(color),Color.blue(color));
+	}
+
+	private static int blendColors(int color1, int color2, float ratio){
+		final float inverseRation = 1f - ratio;
+
+		float r = (Color.red(color1)* ratio) + (Color.red(color2) * inverseRation);
+		float g = (Color.green(color1) * ratio) + (Color.green(color2) * inverseRation);
+		float b = (Color.blue(color1) * ratio) +　(Color.blue(color2) * inverseRation);
+
+		return Color.rgb((int)r, (int)g, (int)b);
+	}
+
+	private static class SimpleTabColorizer implments SlidingTabLayout.TabColorizer{
+		private int[] mIndicatorColors;
+		private int[] mDividerColors;
+
+		public final int getindicatorColor(int position){
+			return mIndicatorColors[position % mIndicatorColors.length];
+		}
+
+		public final int getDividerColor(int position){
+			return mDividerColors[position % mDividerColors.length];
+		}
+
+		void setIndicatorColors(int... colors){
+			mIndicatorColors = colors;
+		}
+
+		void setDividerColors(int... colors){
+			mDividerColors = colors;
+		}
+
+	}
+}
