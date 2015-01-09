@@ -2221,3 +2221,604 @@ if(mListState != null){
 	mListState = null;
 }
 
+// tools
+public class LUtils{
+
+	protected ActionBarActivity mActivity;
+
+	private LUtils(ActionBarActivity activity){
+		mActivity = activity;
+	}
+
+	public static LUtils getInstance(ActionBarActivity activity){
+		return new LUtils(activity);
+	}
+
+	private static boolean hasL(){
+		return Build.VERSION.SDK_INT >= Build.VERSION.CODES.LOLLIPOP;
+	}
+
+	public void startActivityWithTransition(Intent intent, final View clickedView, final String transtionName){
+		ActivityOptions options = null;
+		if(hasL() && clickedView != null && !TextUtils.isEmpty(setTransitionName)){
+
+		}
+
+		mActivity.startActivity(intent, (options!=null) ? options.toBundle():null);
+	}
+}
+
+public class PrefUtils{
+
+	public static void init(final Contenxt context){
+		SharedPreferences sp = PreferenceManager.getDefaultSharePreferences(context);
+		// ...
+	}
+}
+
+public class ScrimInsetsScrollView extends ScrollView{
+
+	private Drawable mInsetForeground;
+
+	private Rect mInsets；
+	private Rect mTempRect = new Rect();
+	private OnInsetsCallback mOnInsetsCallback;
+
+	 public ScrimInsetsScrollView(Context context) {
+        super(context);
+        init(context, null, 0);
+    }
+
+    public ScrimInsetsScrollView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init(context, attrs, 0);
+    }
+
+    public ScrimInsetsScrollView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        init(context, attrs, defStyle);
+    }
+
+    private void init(Context context, AttributeSet attrs, int defStyle){
+    	final TypedArray a = context.obtainStyledAttributes(attrs,
+                R.styleable.ScrimInsetsView, defStyle, 0);
+        if (a == null) {
+            return;
+        }
+        mInsetForeground = a.getDrawable(R.styleable.ScrimInsetsView_insetForeground);
+        a.recycle();
+
+        setWillNotDraw(true);
+    }
+
+     protected boolean fitSystemWindows(Rect insets) {
+        mInsets = new Rect(insets);
+        setWillNotDraw(mInsetForeground == null);
+        ViewCompat.postInvalidateOnAnimation(this);
+        if (mOnInsetsCallback != null) {
+            mOnInsetsCallback.onInsetsChanged(insets);
+        }
+        return true; // consume insets
+    }
+
+    public void draw(Canvas canvas){
+    	super.draw(canvas);
+
+    	int width = getWidth();
+    	int height = getHeight();
+
+    	if (mInsets != null && mInsetForeground != null) {
+    		int sc = canvas.save();
+    		canvas.translate(getScrollX(),getScrollY());
+    	}
+    }
+}
+
+protected void onNavDrawerStateChanged(boolean isOpen,boolean isAnimation){
+	if(mActioinBarAutoHideEnabled && isOpen){
+		autoShowOrHideActionBar(true);
+	}
+}
+
+protected void autoShowOrHideActionBar(boolean show) {
+        if (show == mActionBarShown) {
+            return;
+        }
+
+        mActionBarShown = show;
+        onActionBarAutoShowOrHide(show);
+}
+
+    protected void registerHideableHeaderView(View hideableHeaderView) {
+        if (!mHideableHeaderViews.contains(hideableHeaderView)) {
+            mHideableHeaderViews.add(hideableHeaderView);
+        }
+    }
+
+    protected void deregisterHideableHeaderView(View hideableHeaderView) {
+        if (mHideableHeaderViews.contains(hideableHeaderView)) {
+            mHideableHeaderViews.remove(hideableHeaderView);
+        }
+    }
+
+protected void onActionBarAutoShowOrHide(boolean shown) {
+        if (mStatusBarColorAnimator != null) {
+            mStatusBarColorAnimator.cancel();
+        }
+        mStatusBarColorAnimator = ObjectAnimator.ofInt(
+                (mDrawerLayout != null) ? mDrawerLayout : mLUtils,
+                (mDrawerLayout != null) ? "statusBarBackgroundColor" : "statusBarColor",
+                shown ? Color.BLACK : mNormalStatusBarColor,
+                shown ? mNormalStatusBarColor : Color.BLACK)
+                .setDuration(250);
+        if (mDrawerLayout != null) {
+            mStatusBarColorAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    ViewCompat.postInvalidateOnAnimation(mDrawerLayout);
+                }
+            });
+        }
+        mStatusBarColorAnimator.setEvaluator(ARGB_EVALUATOR);
+        mStatusBarColorAnimator.start();
+
+        updateSwipeRefreshProgressBarTop();
+
+        for (View view : mHideableHeaderViews) {
+            if (shown) {
+                view.animate()
+                        .translationY(0)
+                        .alpha(1)
+                        .setDuration(HEADER_HIDE_ANIM_DURATION)
+                        .setInterpolator(new DecelerateInterpolator());
+            } else {
+                view.animate()
+                        .translationY(-view.getBottom())
+                        .alpha(0)
+                        .setDuration(HEADER_HIDE_ANIM_DURATION)
+                        .setInterpolator(new DecelerateInterpolator());
+            }
+        }
+    }
+
+
+public abstract class BaseActivity extends ActionBarActivity implments 
+	SharedPreferences.OnSharedPreferenceChangeListener,
+	MultiSwipeRefreshLayout.CanChildScrollUpCallback{
+
+	protected void onCreate(Bundle savedInstanceState){
+		// super
+
+		PrefUtils.init(this);
+
+		mLUtils = LUtils.getInstance(this);
+	}
+
+	private void trySetupSwipeRefresh() {}
+
+	protected void setProgressBarTopWhenActionBarShown(int progressBarTopWhenActionBarShown) {}
+
+	private void updateSwipeRefreshProgressBarTop() {}
+
+	protected int getSelfNavDrawerItem() {}
+
+	private void setupNavDrawer(){
+
+		int selfItem = getSelfNavDrawerItem();
+
+		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (mDrawerLayout == null) {
+            return;
+        }
+
+        mDrawerLayout.setStatusBarBackgroundColor{
+        	getResources().getColor(R.color.xxx);
+        	 ScrimInsetsScrollView navDrawer = (ScrimInsetsScrollView)
+                mDrawerLayout.findViewById(R.id.navdrawer);
+        }
+
+        mActionBarToolbar.setNavigationIcon(R.drawable.ic_drawer);
+        mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mDrawerLayout.openDrawer(Gravity.START);
+                }
+            }); 
+
+ 		mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                // run deferred action, if we have one
+                if (mDeferredOnDrawerClosedRunnable != null) {
+                    mDeferredOnDrawerClosedRunnable.run();
+                    mDeferredOnDrawerClosedRunnable = null;
+                }
+                if (mAccountBoxExpanded) {
+                    mAccountBoxExpanded = false;
+                    setupAccountBoxToggle();
+                }
+                onNavDrawerStateChanged(false, false);
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                onNavDrawerStateChanged(true, false);
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                onNavDrawerStateChanged(isNavDrawerOpen(), newState != DrawerLayout.STATE_IDLE);
+            }
+
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                onNavDrawerSlide(slideOffset);
+            }
+        });
+	}
+
+	protected void onResume(){
+		super.onResume();
+	}
+
+	private void onMainContentScrolled(int currentY, int deltaY){
+		if(deltaY > mActionBarAutoHideSensivity){
+			deltaY = mActionBarAutoHideSensivity;
+		}else if(deltaY < -mActionBarAutoHideSensivity){
+			deltaY = -mActionBarAutoHideSensivity;
+		}
+
+		if (Math.signum(deltaY) * Math.signum(mActionBarAutoHideSignal) < 0) {
+            // deltaY is a motion opposite to the accumulated signal, so reset signal
+            mActionBarAutoHideSignal = deltaY;
+        } else {
+            // add to accumulated signal
+            mActionBarAutoHideSignal += deltaY;
+        }
+
+         boolean shouldShow = currentY < mActionBarAutoHideMinY ||
+                (mActionBarAutoHideSignal <= -mActionBarAutoHideSensivity);
+
+        autoShowOrHideActionBar(shouldShow);
+	}
+}
+
+protected void enableActionBarAutoHide(final ListView listView){
+	initActionBarAutoHide();
+	listView.setOnScrollListener(new AbsListView.OnScrollListener(){
+		//门槛
+		final static int ITEMS_THRESHOLD = 3;
+		int lastFvi = 0;
+
+		public void onScrollStateChanged(AbsListView view, int scrollState){
+
+		}
+
+		public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,int totalItemCount){
+			onMainContentScrolled(firstVisibleItem <= ITEMS_THRESHOLD ? 0 : Integer.MAX_VALUE,
+				lastFvi - firstVisibleItem >0 
+					? Integer.MIN_VALUE
+					: lastFvi == firstVisibleItem ? 0 : Integer.MAX_VALUE;
+
+				);
+			lastFvi = firstVisibleItem;
+		}
+
+	});
+}
+
+public class HelpUtils{
+
+	public static void showAbout(Activity activity){
+		FragmentManager fm = activity.getFragmentManager();
+		FragmentTransaction ft = fm.beginTransaction();
+		Fragment prev = fm.fnidFragmentByTag("dialog_about");
+		if( pre != null){
+			ft.remove(prev);
+		}
+		ft.addToBackStack(null);
+
+		new AboutDialog().show(ft, "dialog_about");
+	}
+
+	public static class showOpenSourceLiceses(Activity activity){
+		FragmentManager fm = activity.getFragmentManager();
+		FragmentTransaction  ft = fm.beginTransaction();
+		Fragment prev = fm.findFragmentByTag("xxx");
+		if(prev != null){
+			ft.remove(prev);
+		}
+		ft.addToBackStack(null);
+
+		new OpenSourceLicensesDialog().show(ft, "xxx");
+	}
+
+	public static class AboutDialog extends DialogFragment{
+
+		private static final String = "xxx";
+
+		public AboutDialog(){
+
+		}
+
+		public Dialog onCreateDialog(Bundle savedInstanceState){
+			Packagemanger pm = getActivity().getPackageManager();
+
+			String packageName = getActivity().getPackageName();
+			String versionName;
+
+			try{
+				PackageInfo info = pm.getPackageInfo(packageName, 0);
+				versionName = info.versionName;
+			}catch( PackageManager.NameNotFoundException e){
+				versionName = VERSION_UNAVAILABLE;
+			}
+
+			SpannableStringBuilder aboutBody = new SpannableStringBuilder();
+			aboutBody.append(Html.fromHtml(getString(R.String.about_body,versionName)));
+
+			SpannableStringBuilder licenseLink = new SpannableStringBuilder("xxx");
+			licenseLink.setSpan(new ClickableSpan(){
+				public void onClick(View view){
+					HelpUtils.showOpenSourceLiceses(getActivity());
+				}
+			}, 0, licenseLink.length(),0);
+			aboutBody.append("\n\n");
+            aboutBody.append(licensesLink);
+
+            LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(
+            	Context.LAYOUT_INFLATER_SERVICE);
+            TextView aboutBodyView = (TextView) layoutInflater.inflate(R.layout.xxx,null);
+            aboutBodyView.setText(aboutBody);
+            aboutBodyView.setMovementMethod(new LinkMovementMethod());
+
+            return new AlertDialog.Builder(getActivity())
+            	.setTitle("xxx")
+            	.setView(aboutBodyView)
+            	.setPositiveButton("OK",new DialogInterface.OnClickListener(){
+            		public void onClick(DialogInterface dialog, int whichButton){
+            			dialog.dismiss();
+            		}
+            	})
+            	.create();
+		}
+	}
+
+	public static class OpenSourceLicensesDialog extends DialogFragment{
+
+		public OpenSourceLicensesDialog(){
+
+		}
+
+		public Dialog onCreateDialog(Bundle savedInstanceState){
+			WebView webView = new WebView( getActivity());
+			webView.loadUrl("wwww.xxx");
+
+			return new AlertDialog.Builder(getActivity())
+				.setTitle("xxx")
+				.setView(webView)
+				.setPositiveButton("OK",
+					new DialogInterface.OnClickListener(){
+						public void onClick(DialogInterface dialog, int whichButton){
+							dialog.dismiss();
+						};
+					})
+				.create();
+		}
+	}
+
+	public static class EulaDialog extends DialogFragment{
+
+		public EulaDialog(){
+
+		}
+
+		public Dialog onCreateDialog(Bundle savedInstanceState){
+			int padding = getResources().getDimensionPixelSize(R.dimen.xxx);
+
+			TextView eulaTextView = new TextView(getActivity());
+			eulaTextView.setText(Html.fromHtml("xxx"));
+			eulaTextView.setMovementMethod(LinkMovementMethod.getInstance());
+			eulaTextView.setPadding(padding,padding,padding,padding);
+
+			return new AlertDialog.Builder(getActivity())
+				.setTitle("xxx")
+				.setView(eulaTextView)
+				.setPositiveButton("OK",
+					new DialogInterface.OnClickListener(){
+						public void onClick(DialogInterface dialog, int whichButton){
+							dialog.dismiss();
+						};
+					})
+				.create();
+		}
+	}
+}
+
+
+public class MultiSwipeRefreshLayout extends SwipeRefreshLayout{
+	private CanChildScrollUpCallback mCanChildScrollUpCallback;
+
+	private Drawable mForegroundDrawable;
+
+	public MultiSwipeRefreshLayout(Context context) {
+        this(context, null);
+    }
+
+    public MultiSwipeRefreshLayout(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        final TypedArray a = context.obtainStyledAttributes(attrs,
+                R.styleable.MultiSwipeRefreshLayout, 0, 0);
+
+        mForegroundDrawable = a.getDrawable(R.styleable.MultiSwipeRefreshLayout_foreground);
+        if (mForegroundDrawable != null) {
+            mForegroundDrawable.setCallback(this);
+            setWillNotDraw(false);
+        }
+
+        a.recycle();
+    }
+
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        if (mForegroundDrawable != null) {
+            mForegroundDrawable.setBounds(0, 0, w, h);
+        }
+    }
+
+    public void draw(Canvas canvas) {
+        super.draw(canvas);
+        if (mForegroundDrawable != null) {
+            mForegroundDrawable.draw(canvas);
+        }
+    }
+
+    public void setCanChildScrollUpCallback(CanChildScrollUpCallback canChildScrollUpCallback) {
+        mCanChildScrollUpCallback = canChildScrollUpCallback;
+    }
+
+    public static interface CanChildScrollUpCallback {
+        public boolean canSwipeRefreshChildScrollUp();
+    }
+
+    public boolean canChildScrollUp() {
+        if (mCanChildScrollUpCallback != null) {
+            return mCanChildScrollUpCallback.canSwipeRefreshChildScrollUp();
+        }
+        return super.canChildScrollUp();
+    }
+
+}
+
+public class UIUtils {
+
+	public static float getProgress(int value, int min, int max){
+		if(min == max){
+			throw new IllegaArgumentException("cannot equal");
+		}
+
+		return (value - min)/(float)(max - min);
+	}
+}
+
+
+public class BrowseSessionsActivity extends BaseActivity implements SessionsFragment.Callbacks{
+
+}
+
+public class SessionDetailActivity extends BaseActivity implments
+	LoaderManager.LoaderCallbacks<Cursor>,
+	ObservableScrollView.Callbacks{
+
+	private ViewTreeObserver.addOnGlobalLayoutListener mGlobalLayoutListener
+		= new ViewTreeObserver.OnGlobalLayoutListener(){
+
+			public void onGlobalLayout(){
+				mAddScheduleButtonHeightPixels = mAddScheduleButton.getHeight();
+				recomputePhotoAndScrollingMetrics();
+			}
+		}
+
+	@Override
+    protected void onCreate(Bundle savedInstanceState) {
+
+    	final Toolbar toolbar = getActionBarToolbar();
+		toolbar.setNavigationIcon(shouldBeFloatingWindow
+                ? R.drawable.ic_ab_close : R.drawable.ic_up);
+		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+		// 最外面一层可滑动
+        mScrollView = (ObservableScrollView) findViewById(R.id.scroll_view);
+        mScrollView.addCallbacks(this);
+
+        mHeaderBox = findViewById(R.id.header_session);
+        mPhotoViewContainer = findViewById(R.id.session_photo_container);
+
+        ViewTreeObserver vto = mScrollView.getViewTreeObserver();
+        if (vto.isAlive()) {
+            vto.addOnGlobalLayoutListener(mGlobalLayoutListener);
+        }
+    }
+
+
+    public void onScrollChanged(int deltaX, int deltaY){
+
+    	int scrollY = mScrollView.getScrollY();
+
+    	float newTop = Math.max(mPhotoHeightPixels, scrollY);
+    	mHeaderBox.setTranslationY(newTop);
+
+    	float gapFillProgress = 1;
+    	if(mPhotoHeightPixels != 0){
+    		gapFillProgress = Math.min(
+    			Math.max(
+    				UIUtils.getProgress(scrollY,0,mPhotoHeightPixels)
+    				,0)
+    			,1);
+    	}
+
+    	mPhotoViewContainer.setTranslationY(scrollY * 0.5f);
+    }
+
+		
+
+}
+
+public class ObservableScrollView extends ScrollView{
+	private ArrayList<Callbacks> mCallbacks = new Arraylist<Callbacks>();
+
+	public ObservableScrollView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    protected void onScrollChanged(int l, int t, int oldl, int oldt) {
+        super.onScrollChanged(l, t, oldl, oldt);
+        for (Callbacks c : mCallbacks) {
+            c.onScrollChanged(l - oldl, t - oldt);
+        }
+    }
+
+    public int computeVerticalScrollRange(){
+    	return super.computeVerticalScrollRange();
+    }
+
+    public void addCallbacks(Callbacks listener) {
+        if (!mCallbacks.contains(listener)) {
+            mCallbacks.add(listener);
+        }
+    }
+
+    public static interface Callbacks {
+        public void onScrollChanged(int deltaX, int deltaY);
+    }
+
+}
+
+private void recomputePhotoAndScrollingMetrics(){
+
+	mHeaderHeightPixels = mHeaderBox.getHeight();
+
+	mPhotoHeightPixels = 0;
+
+	ViewGroup.LayoutParams lp;
+	lp = mPhotoViewContainer.getLayoutParams();
+	if (lp.height != mPhotoHeightPixels) {
+            lp.height = mPhotoHeightPixels;
+            mPhotoViewContainer.setLayoutParams(lp);
+    }
+
+    ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams)mDetailsContainer.getLayoutParams();
+    if (mlp.topMargin != mHeaderHeightPixels + mPhotoHeightPixels) {
+            mlp.topMargin = mHeaderHeightPixels + mPhotoHeightPixels;
+            mDetailsContainer.setLayoutParams(mlp);
+	}
+
+	onScrollChanged(0, 0); // trigger scroll handling    
+
+}
+
