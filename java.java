@@ -2822,3 +2822,209 @@ private void recomputePhotoAndScrollingMetrics(){
 
 }
 
+// popmenu
+
+public class FeedContextMenu extends LinearLayout{
+
+	private static final int CONTEXT_MENU_WIDTH = Utils.dpToPx(240);
+
+	private int feedItem = -1;
+
+	private OnFeedContextMenuItemClickListener onItemClickListener;
+
+	public FeedContextMenu(Context context){
+		super(context);
+		init();
+	}
+
+	private void init(){
+		LayoutInflater.from(getContext()).inflate(R.layout.view_context_menu,this,true);
+		setBackgroundResource(R.drawable.bg_container_shadow);
+		setOrientation(VERTICAL);
+		setLayoutParams(new LayoutParams(CONTEXT_MENU_WIDTH,ViewGroup.LayoutParams.WRAP_CONTENT));
+	}
+
+	public void bindToItem(int feedItem){
+		this.feedItem = feedItem;
+	}
+
+	protected void onAttachedToWindow(){
+		super.onAttacchedToWindow();
+		ButterKnife.inject(this);
+	}
+
+	public void dismiss(){
+		((ViewGroup) getParent()).removeView(FeedContextMenu.this);
+	}
+
+	@OnClick(R.id.btnReport)
+	public void onReportClick(){
+		if( onItemClickListener != null){
+			onItemClickListener.onReportClick(feedItem);
+		}
+	}
+
+	@OnClick(R.id.btnSharePhoto)
+	public void onSharePhotoClick(){
+		if(onItemClickListener != null){
+			onItemClickListener.onSharePhotoClick(feedItem);
+		}
+	}
+
+	@OnClick(R.id.btnCopyShareUrl)
+	public void onCopyShareUrlClick(){
+		if(onItemClickListener != null){
+			onItemClickListener.onCopyShareUrlClick(feedItem);
+		}
+	}
+
+	 @OnClick(R.id.btnCancel)
+    public void onCancelClick() {
+        if (onItemClickListener != null) {
+            onItemClickListener.onCancelClick(feedItem);
+        }
+    }
+
+    public void setOnFeedMenuItemClickListener(OnFeedContextMenuItemClickListener onItemClickListener){
+    	this.onItemClickListener = onItemClickListener;
+    }
+
+    public interface OnFeedContextMenuItemClickListener{
+
+    	public void onReportClick(int feedItem);
+
+    	public void onSharePhotoClick(int feedItem);
+
+    	public void onCopyShareUrlClick(int feedItem);
+
+    	public void onCancelClick(int feedItem);
+    }
+}
+
+
+// menu selector
+// res/drawable/btn_context_menu.xml
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:drawable="@color/btn_context_menu_normal" android:state_focused="false" android:state_pressed="false">
+	<item android:drawable="@color/btn_context_menu_pressed" android:state_pressed="true">
+	<item android:drawable="@color/btn_context_menu_pressed" android:state_focused="true">
+</selector>	
+// res/drawable-v21/btn_context_menu.xml
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="@color/btn_context_menu_pressed">
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/btn_context_menu_normal" />
+        </shape>
+    </item>
+</ripple>
+
+
+public class FeedContextMenuManager extends RecyclerView.OnScrollListener implements View.OnAttachStateChangeListener{
+
+	private static FeedContextMenuManager instance;
+
+	private FeedContextMenu contextMenuView;
+
+	public static FeedContextMenuManager getInstance(){
+		if(instance == null){
+			instance = new FeedContextMenuManager();
+		}
+		return instance;
+	}
+
+	public void onViewAttachedToWindow(View v){
+
+	}
+
+	public void onViewDetachedFromWindow(View v){
+		contextMenuView = null;
+	}
+
+	public void toggleContextMenuFromView(View openingView, int feedItem, FeedContextMenu.OnFeedContextMenuItemClickListener listener){
+		if(contextMenuView == null){
+			showContextMenuFromView(openingView,feedItem,listener);
+		}else{
+			hideContextMenu();
+		}
+	}
+
+	private void showContextMenuFromView(final View openingView, int feedItem, FeedContextMenu.OnFeedContextMenuItemClickListener listener){
+		if( !isContextMenuShowing){
+			isContextMenuShowing = true;
+			contextMenuView = new FeedContextMenu(openingView,getContext());
+			contextMenuView.bindToItem(feedItem);
+			contextMenuView.addOnAttachStateChangeListener(this);
+			contextMenuView.setOnFeedMenuItemClickListener(listener);
+
+			((ViewGroup)openingView.getRootView().findViewById(android.R.id.content)).addView(contextMenuView);
+
+			contextMenuView.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.addOnPreDrawListener(){
+
+				public boolean onPreDraw(){
+					contextMenuView.getViewTreeObserver().removeOnPreDrawListener(this);
+					setupContextMenuInitialPosition(openingView);
+					performShowAnimation();
+					return false;
+				}
+
+			});
+		}
+	}
+
+	private void setupContextMenuInitialPosition(View openingView){
+		final int[] openingViewLocation = new int[2];
+		openingView.getLocationOnScreen(openingViewLocation);
+		int additionlBottomMargin = Utils.dpToPx(16);
+		contextMenuView.setTranslationX(openingViewLocation[0] - contextMenuView.getWidth()/3);
+		contextMenuView.setTranslationY(openingViewLocation[1] - contextMenuView.getHeight() - additionlBottomMargin);
+	}
+
+	private void performShowAnimation(){
+		contextMenuView.setPivotX(contextMenuView.getWidth()/2);
+		contextMenuView.setPivotY(contextMenuView.getHeight());
+		contextMenuView.setScaleX(0.1f);
+		contextMenuView.setScaleY(0.1f);
+		contextMenuView.animate()
+			.scaleX(1f).scaleY(1f)
+			.setDuration(150)
+			.setInterpolator(new Overshootinterpolator(){
+				public void onAnimationEnd(){
+					isContextMenuShowing = false;
+				}
+			});
+	}
+
+	public void hideContextMenu(){
+		if( !isContextMenuShowing){
+			isContextMenuShowing = true;
+			performDismissAnimation();
+		}
+	}
+
+	private void performDismissAnimation(){
+		contextMenuView.setPivotX(contextMenuView.getWidth()/2);
+		contextMenuView.setPivotY(contextMenuView.getHeight());
+		contextMenuView.animate()
+			.scaleX(0.1f).scaleY(0.1f)
+			.setDuration(150)
+			.setInterpolator(new AccelerateInterpolatro())
+			.setStartDelay(100)
+			.setListener(new AnimatorListenerAdater(){
+				public void onAnimationEnd(Animator animationi){
+					if( contextMenuView != null){
+						contextMenuView.dismiss();
+					}
+					isContextMenuShowing = false;
+				}
+			})
+	}
+
+	public void onScrolled(RecyclerView recyclerView, int dx, int dy){
+		if(contextMenuView != null){
+			hideContextMenu();
+			contextMenuView.setTranslationY(contextMenuView.getTranslationY() - dy);
+		}
+	}
+}
+
