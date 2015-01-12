@@ -3028,3 +3028,87 @@ public class FeedContextMenuManager extends RecyclerView.OnScrollListener implem
 	}
 }
 
+<TextSwitcher
+	android:id="@+id/tsLikesCounter"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:layout_marginLeft="8dp"
+	android:layout_marginRight="8dp"
+	android:inAnimation="@anim/slide_in_likes_counter"
+	android:outAnimation="@anim/slide_out_likes_counter">
+
+		<TextView 
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="123 likes"
+			android:textColor="@color/text_like_counter" />
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textColor="@color/text_like_counter" />
+</TextSwitcher>
+
+private void updateLikesCounter(CellFeedViewHolder holder, boolean animated){
+	int currentLikesCount = likesCount.get(holder.getPosition()) + 1;
+	String likesCountText = context.getResources().getQuantityString(R.plurals.likes_count,currentLikesCount,currentLikesCount);
+
+	if(animated){
+		holder.tsLikesCounter.setText(likesCountText);
+	}else{
+		holder.tsLikesCounter.setCurrentText(likesCountText);
+	}
+
+	likesCount.put(holder.getPosition(),currentLikesCount);
+}
+
+<String name="welcomme">Hello,%1$s! You have %2$d new messages</string>
+Resources res = getresources();
+String text = String.format(res.getString(R.string.xxx), username, mailCount);
+
+
+private void updateHeartButton(final CellFeedViewHolder holder, boolean animated){
+	if( animated){
+		if( !likeAnimatioins.containsKey(holder)){
+			AnimatorSet animatorSet = new AnimatorSet();
+			likeAnimatioins.put(holder, animatorSet);
+
+			ObjectAnimator ratationAnim = ObjectAnimator.ofFloat(holder.btnLike, "rotationi", 0f, 360f);
+			rotationAnim.setDuration(300);
+			rotationAnim.setInterpolator(ACCELERATE_INTERPOLATOR);
+
+			ObjectAnimator bounceAnimX = ObjectAnimator.ofFloat(holder.btnLike, "scaleX", 0.2f, 1f);
+			bounceAnimX.setDuration(300);
+			bounceAnimX.setInterpolator(OVERSHOOT_INTEPOLATOR);
+
+			ObjectAnimator bounceAnimY = ObjectAnimator.ofFloat(holder.btnLike,"scaleY", 0.2f, 1f);
+			bounceAnimY.setDuration(300);
+			bounceAnimY.setInterpolator(OVERSHOOT_INTEPOLATOR);
+			bounceAnimY.addListener(new AnimatorListenerAdater(){
+				public void onAnimationStart(Animator animation){
+					holder.btnLike.setImageResource(R.drawable.ic_heart_red);
+				}
+			});
+
+			animatorSet.play(rotationAnim);
+			animatorSet.play(bounceAnimX).with(bounceAnimY).after(rotationAnim);
+
+			animatorSet.addListener(new AnimatiorListenerAdapter(){
+
+				public void onAnimationEnd(Animator animation){
+					resetLikeAnimationState(holder);
+				}
+			});
+
+			animatorSet.start();
+		}
+	}else{
+		 
+		if (likedPositions.contains(holder.getPosition())) {
+            holder.btnLike.setImageResource(R.drawable.ic_heart_red);
+        } else {
+            holder.btnLike.setImageResource(R.drawable.ic_heart_outline_grey);
+        }
+	}
+}
+
