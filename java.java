@@ -3343,3 +3343,53 @@ public void playWithAfter(View view){
 	animSet.setDuration(10000);
 	animSet.start();
 }
+
+// 主题更换
+// attrs.xml
+<?xml version="1.0" encoding="utf-8"?>  
+<resources>  
+    <attr name="colorValue" format="color" />  
+    <attr name="floatValue" format="float" />  
+    <attr name="integerValue" format="integer" />  
+    <attr name="booleanValue" format="boolean" />  
+    <attr name="dimensionValue" format="dimension" />  
+    <attr name="stringValue" format="string" />  
+    <attr name="referenceValue" format="reference" />  
+</resources>  
+
+<style name="SwitchTheme1" parent="@android:style/Theme.Black">  
+    <item name="colorValue">#FF00FF00</item>  
+    <item name="floatValue">0.35</item>  
+    <item name="integerValue">33</item>  
+    <item name="booleanValue">true</item>  
+    <item name="dimensionValue">76dp</item>  
+    <!-- 如果string类型不是填的引用而是直接放一个字符串,在布局文件中使用正常,但代码里获取的就有问题 -->  
+    <item name="stringValue">@string/hello_world</item>  
+    <item name="referenceValue">@drawable/hand</item>  
+</style>  
+
+<style name="SwitchTheme2" parent="@android:style/Theme.Wallpaper">  
+    <item name="colorValue">#FFFFFF00</item>  
+    <item name="floatValue">1.44</item>  
+    <item name="integerValue">55</item>  
+    <item name="booleanValue">false</item>  
+    <item name="dimensionValue">76px</item>  
+    <item name="stringValue">@string/action_settings</item>  
+    <item name="referenceValue">@drawable/ic_launcher</item>  
+</style>  
+
+<TextView  
+        android:id="@+id/themeColor"  
+        android:layout_width="wrap_content"  
+        android:layout_height="wrap_content"  
+        android:layout_alignLeft="@+id/themeText"  
+        android:layout_below="@+id/themeText"  
+        android:text="TextView"  
+        android:textColor="?attr/colorValue" />  
+
+
+if (useThemeBlack)  
+    setTheme(R.style.SwitchTheme1);  
+else  
+    setTheme(R.style.SwitchTheme2);  
+setContentView(R.layout.activity_theme_switch);
