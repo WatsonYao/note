@@ -3190,3 +3190,156 @@ if( drawable instanceof Animatable){
 	((Animatable) drawable).start();
 }
 
+// 动画
+ObjectAnimator
+.ofFloat(view, "rotationX", 0.0F, 360.0F)
+.setDuration(1000)
+.start();
+
+animator.addUpdateListener(new AnimatorUpdateListener(){
+	public void onAnimationUpdate(ValueAnimator arg0){
+
+	}
+});
+
+ObjectAnimator anim = ObjectAnimator
+	.ofFloat(view, "xxx", 1.0F, 0.0F)
+	.setDuration(500);
+anim.start();
+
+anim.addUpdateListener(new AnimatorUpdateListener(){
+	public void onAnimationUpdate(ValueAnimator animation){
+		floatcVal = (Float) animation.getAnimatedValue();
+		view.setAlpha(cVal);
+		view.setScaleX(cVal);
+		view.setScaleY(cVal);
+	}
+});
+
+private static class WrapperView{
+	private View mTarget;
+
+	public WrapperView(View target){
+		mTarget = target;
+	}
+
+	public int getWidth(){
+		return mTarget.getLayoutParams().width;
+	}
+
+	public void setWidth(int width){
+		mTarget.getLayoutParams().width = width;
+		mTarget.requestLayout();
+	}
+}
+
+ViewWrapper wrapper = new ViewWrapper(mButton);
+ObjectAnimator.ofInt(wrapper,"width",500).setDuration(5000).start();
+
+// 多动画效果的另一种实现方式
+public void propertyValuesHolder(View view){
+	PropertyValueHolder pvhX = PropertyValueHolder.ofFloat("alpha", 1f, 0f, 1f);
+	PropertyValueHolder pvhY = PropertyValueHolder.ofFloat("scaleX",1f, 0, 1f);
+	PropertyValueHolder pvhZ = PropertyValueHolder.ofFloat("scaleY",1f, 0, 1f);
+
+	ObjectAnimator.ofPropertyValueHodler(view, pvhX, pvhY, pvhZ)
+		.setDuration(1000).start();
+}
+
+// 动画更新的过程中，会不断调用setPropName更新元素属性，所有使用objectAnimator更新某个属性，必须有getter和setter
+// 使用valueAnimator 不需要getter 和 setter
+public void verticalRun(View view){
+	ValueAnimator animator = ValueAnimator.ofFloat(0, mScreenHeight - mBuleBall.getHeight());
+	animator.setTarget(mBuleBall);
+	animator.setDuration(1000).start();
+	animator.addUpdateListener(new AnimatorUpdateListener(){
+		public void onAnimationiUpdate(ValueAnimator animation){
+			mBuleBall.setTranslationY((Float)animation.getAnimatedValue());
+		}
+	});
+}
+
+public void parabola(View view){
+	ValueAnimator valueAnimator = new ValueAnimator();
+	valueAnimator.setDuration(3000);
+	valueAnimator.setObjectValues(new PointF(0,0));
+	valueAnimator.setInterpolator(new LinearInterpolator());
+	valueAnimator.setEvaluator(new TypeEvaluator<PointF>(){
+		public PointF evaluate(float fraction, PointF startValue, PointF endValue){
+			PointF point = new PointF();
+			point.x = xxx;
+			point.y = xxx;
+			return point;
+		}
+	});
+
+	valueAnimator.start();
+	valueAnimator.addUpdateListener(new AnimatiorUpdateListener(){
+
+		public void onAnimationUpdate(ValueAnimator animation){
+			PointF point = (PointF) animation.getAnimatedValue();
+			mBuleBall.setX(point.x);
+			mBuleBall.setY(point.y);
+		}
+	});
+}
+
+//可以看到，因为ofInt,ofFloat等无法使用，我们自定义了一个TypeValue，每次根据当前时间返回一个PointF对象，
+//（PointF和Point的区别就是x,y的单位一个是float,一个是int;RectF,Rect也是）
+
+public void fadeOut(View view){
+	ObjectAnimator anim = ObjectAnimator.ofFloat(mBuleBall, "alpha", 0.5f);
+	anim.addListener(new AnimatorListener(){
+
+		public void onAnimationStart(Animator animation){
+
+		}
+
+		public void onAnimationRepeat(Animator animation){
+
+		}
+
+		public void onAnimationEnd(Animator animation){
+
+			ViewGroup parent = (ViewGroup)mBuleBall.getParent();
+			if(parent != null){
+				parent.removeView(mBuleBall);
+			}
+		}
+
+		public void onAnimationCancel(Animator animation){
+
+		}
+	});
+	anim.start();
+}
+
+// AnimatorListenerAdapter继承了AnimatorListener接口，然后空实现了所有的方法~
+// animator还有cancel()和end()方法：cancel动画立即停止，停在当前的位置；end动画直接到最终状态
+
+public void togetherRun(View view){
+	ObjectAnimator anim1 = ObjectAnimator.ofFloat(mBlueBall, "scaleX", 1.0f, 2f);
+	ObjectAnimator anim2 = ObjectAnimator.ofFloat(mBlueBall, "scaleY", 1.0f, 2f);
+
+	AnimatorSet animSet = new AnimatorSet();
+	animSet.setDuration(2000);
+	animSet.setInterpolator(new LinearInterpolator());
+	animSet.playTogether(anim1,anim2);
+	animSet.start();
+}
+
+public void playWithAfter(View view){
+	float cx = mBlueBall.getX();
+
+	ObjectAnimator anim1 = xxx;
+	ObjectAnimator anim2 = xxx;
+	ObjectAnimator anim3 = xxx;
+	ObjectAnimator anim4 = xxx;
+
+	AnimatorSet animSet = new AnimatorSet();
+	animSet.play(anim1).with(anim2);
+	animSet.play(anim2).with(anim3);
+	animSet.play(anim4).with(anim3);
+	animSet.setDuration(10000);
+	animSet.start();
+}
