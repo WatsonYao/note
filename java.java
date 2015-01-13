@@ -3112,3 +3112,81 @@ private void updateHeartButton(final CellFeedViewHolder holder, boolean animated
 	}
 }
 
+// Vector
+<?xml version="1.0" encode="UTF-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+	android:viewportWidth="500"
+	android:viewportHeight="500"
+	android:width="500px"
+	android:height="500px">
+	<group android:name="android">
+		<path
+			android:name="head"
+			android:fillColor="#9fbf3b"
+			android:pathData="M301.314,xxxxxxxxxxxxxxx" />
+		<path
+            android:name="left_eye"
+            android:fillColor="#FFFFFF"
+            android:pathData="M203.956,xxxxxxxxxxxxxxx" />
+</vector>
+
+<group android:name="android">
+	<group android:name="head_eyes">
+		<path
+			android:name="head"
+			android:fillColor="#xxx"
+			android:pathData="Mxxxxxxx" />
+		<path
+			android:name="left_eye"
+			android:fillColor="#xxx"
+			android:pathData="Mxxxxxxx" />
+		<path
+			android:name="right_eye"
+			android:fillColor="#xxx"
+			android:pathData="Mxxxxxxx" />		
+	</group>
+	<group android:name="arms">
+		<path
+			android:name="left_arm"
+			android:fillColor="#xxx"
+			android:pathData="Mxxxxxxx" />
+		<path
+			android:name="right_arm"
+			android:fillColor="#xxx"
+			android:pathData="Mxxxxxxx" />		
+	</group>
+</group>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+	android:drawable="@drawable/android">
+
+	<target
+		android:animation="@animator/shrug"
+		android:name="head_eyes" />
+
+	<target
+		android:animation="@animator/shurg"
+		android:name="arms" />
+
+</animated-vector>
+
+// res/animator/shrug.xml
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+	<ObjectAnimator
+		android:propertyName="translateY"
+		android:valueType="floatType"
+		android:valueFrom="0"
+		android:valueTo="-10"
+		android:repeatMode="reverse"
+		android:repeatCount="infinite"
+		android:duratioin="250" />
+</set>
+
+ImageView androidImageView = (ImageView)findViewById(R.id.xxx);
+Drawable drawable = androidImageView.getDrawable();
+if( drawable instanceof Animatable){
+	((Animatable) drawable).start();
+}
+
