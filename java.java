@@ -3393,3 +3393,62 @@ if (useThemeBlack)
 else  
     setTheme(R.style.SwitchTheme2);  
 setContentView(R.layout.activity_theme_switch);
+
+<?xml version="1.0" encoding="utf-8"?>  
+<objectAnimator xmlns:android="http://schemas.android.com/apk/res/android"  
+	android:duration="10000"
+	android:propertyName="scaleX"
+	android:valueFrom="1.0"
+	android:valueTo="2.0"
+	android:valueType="floatType" >
+</objectAnimator>
+
+public void scaleX(View view){
+	Animatior anim = AnimatorInflater.loadAnimator(this, R.animator.scalex);
+	anim.setTarget(view);
+	anim.start();
+}
+
+<?xml version="1.0" encoding="utf-8"?>  
+<set xmlns:android="http://schemas.android.com/apk/res/android"  
+    android:ordering="together" >  
+  
+    <objectAnimator  
+        android:duration="1000"  
+        android:propertyName="scaleX"  
+        android:valueFrom="1"  
+        android:valueTo="0.5" >  
+    </objectAnimator>  
+    <objectAnimator  
+        android:duration="1000"  
+        android:propertyName="scaleY"  
+        android:valueFrom="1"  
+        android:valueTo="0.5" >  
+    </objectAnimator>  
+  
+</set> 
+
+Animator anim = AnimtorInflater.loadAnimator(this, R.animator.scale);
+mMv.setPivotX(0);
+mMv.setPivotY(0);
+mMv.invalidate();
+anim.setTarget(mMv);
+anim.start();
+
+// 布局动画
+LayoutTransition transition = new LayoutTransition();
+transition.setAnimator(LayoutTransition.CHANGE_APPEARING, transition.getAnimator(LayoutTransition.CHANGE_APPEARING));
+transition.setAnimator(LayoutTransition.APPEARING,null);
+transition.setAnimator(LayoutTransition.DISAPPEARING,null);
+transition.setAnimator(LayoutTransition.CHANGE_DISAPPEARING,null);
+mGridLayout.setLayoutTransitioni(transition);
+
+//LayoutTransition.APPEARING 当一个View在ViewGroup中出现时，对此View设置的动画
+
+//LayoutTransition.CHANGE_APPEARING 当一个View在ViewGroup中出现时，对此View对其他View位置造成影响，对其他View设置的动画
+
+//LayoutTransition.DISAPPEARING  当一个View在ViewGroup中消失时，对此View设置的动画
+
+//LayoutTransition.CHANGE_DISAPPEARING 当一个View在ViewGroup中消失时，对此View对其他View位置造成影响，对其他View设置的动画
+
+//LayoutTransition.CHANGE 不是由于View出现或消失造成对其他View位置造成影响，然后对其他View设置的动画。
