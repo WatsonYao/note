@@ -3664,3 +3664,10 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdatper.ViewHolder
 		return mDataSet.length;
 	}
 }
+
+// dp px 画图
+float textSize = getResources().getDimensionPixelSize(R.dimen.xxx);
+
+float maxTextSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,maxTextSize, getResources().getDisplayMetrics());
+
+setTextSize(TypedValue.COMPLEX_UNIT_PX, letterSize);
