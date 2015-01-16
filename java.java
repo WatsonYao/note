@@ -3563,3 +3563,104 @@ private class DragController implements RecyclerView.OnItemTouchListener{
 		return overlayTop < startBounds.bottom && overlayBottom > startBounds.top;
 	}
 }
+
+// 官方 recyclerview
+private enum LayoutManagerType{
+	GRID_LAYOUT_MANAGER,
+	LINEAR_LAYOUT_MANAGER
+}
+
+protected LayoutManagerType mCurrentLayoutManagerType;
+
+public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+	View rootView = inflater.inflate(R.layout.xxx, container, null);
+
+	rootView.setTag(TAG);
+
+	mRecyclerView = (RecyclerView) rootView.findViewById(R.id.xxx);
+	mLayoutManger = new LinearLayoutManger(getActivity());
+
+	mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
+
+	if(savedinstanceState != null){
+		mCurrentLayoutManagerType  = (LayoutManagerType) savedInstanceState.getSerializable(KEY_LAYOUT_MANAGER);
+	}
+	setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
+
+	mAdpater = new CustomAdapter( mDataset);
+	mRecyclerView.setAdapter(mAdpater);
+
+}
+
+public void setRecyclerViewLayoutManager(LayoutManagerType layoutMagerType){
+	int scrollPosition = 0;
+
+	if(mRecyclerView.getLayoutManager() != null){
+		scrollPosition = ((LinearLayoutManger) mRecyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+	}
+
+	switch(layoutMagerType){
+		case GRID_LAYOUT_MANAGER:
+			mLayoutManger = new GridLayoutManger(getActivity(), SPAN_COUNT);
+			mCurrentLayoutManagerType = LayoutManagerType.GRID_LAYOUT_MANAGER;
+			break;
+		case LINEAR_LAYOUT_MANAGER:
+			mLayoutManger = new LinearLayoutManger(getActivity());
+			mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
+			break;
+		default:
+			mLayoutManger = new LinearLayoutManger(getActivity());
+			mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
+	}
+
+	mRecyclerView.setLayoutManager(mLayoutManger);
+	mRecyclerView.scrollToPosition(scrollPosition);
+}
+
+public void onSaveInstanceState(Bundle savedInstanceState){
+	savedinstanceState.putSerializable(KEY_LAYOUT_MANAGER,mCurrentLayoutManagerType);
+	super.onSaveInstanceState(savedInstanceState);
+}
+
+public class CustomAdapter extends RecyclerView.Adapter<CustomAdatper.ViewHolder>{
+
+	private static final String TAG = "xxx";
+	private String[] mDataSet;
+
+	public static class ViewHolder extends RecyclerView.ViewHolder{
+		private final TextView textView;
+
+		public ViewHolder(View v){
+			super(v);
+
+			v.setOnclickListener(new View.OnClickListener(){
+				public void onClick(View v){
+					// ...
+				}
+			});
+
+			textView = (TextView) v.findViewById(R.id.textView);
+		}
+
+		public TextView getTextView(){
+			return textView;
+		}
+	}
+
+	public CustomAdapter(String[] dataSet){
+		mDataSet = dataSet;
+	}
+
+	public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType){
+		View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.xxx,viewGroup, null);
+		return new ViewHolder(v);
+	}
+
+	public void onBindViewHolder(ViewHolder viewHolder, final int position){
+		viewHolder.getTextView().setText(mDataSet[position]);
+	}
+
+	public int getItemCount(){
+		return mDataSet.length;
+	}
+}
