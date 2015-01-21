@@ -1,1 +1,77 @@
 <polymer-element name="tag-name" constructor="TagName">
+	<template>
+	</template>
+
+	<script>
+		Polymer({
+			// properties and methods here
+		});
+	</script>
+</polymer-element>
+
+<polymer-element name="app-globals">
+	<script>
+	(function(){
+		var firstName = 'John';
+		var lastName = 'Smith';
+
+		Polymer({
+			ready:function(){
+				this.firstName = firstName;
+				this.lastName = lastName;
+			}
+		});
+	});
+	</script>
+</polymer-element>
+
+<polymer-element name="my-component">
+	<template>
+		<app-globals id="globals"></app-globals>
+		<div id="firstname">{{$.globals.firstName}}</div>
+		<div id="lastname">{{$.globals.lastName}}</div>
+	</template>
+
+	<scrip>
+		Polymer({
+			ready:function(){
+				console.log('last name:' + this.$.globals.lastName);
+			}
+		});
+	</scrip>
+</polymer-element>
+
+<body>
+	<polymer-ajax url="http://xxx" handleAs="json"></polymer-ajax>
+<script>
+	window.addEventListener('polymer-ready', function(e){
+		var ajax = document.querySelector('polymer-ajax');
+
+		ajax.addEventListener('polymer-reponse',function(e)){
+			console.log(this.response);
+		});
+
+		ajax.go();
+	})
+</script>
+</body>
+
+<polymer-element name="my-element" noscript>
+	<template>
+		<span>I'm <b>my-element</b>.This is my Shadow DOM.</span>
+		<polymer-ajax url="xxx" auto response="{{resp}}"></polymer-ajax>
+		<textarea value="{{resp}}"></textarea>
+	</template>
+</polymer-element>
+
+<!-- 生命周期 -->
+Polymer('tag-name',{
+	created:functioin(){ ... },
+	ready:function(){ ... }
+	attached:function(){ ... }
+	domReady:function(){ ... }
+	detached:function(){ ... }
+	attributeChanged:function(attrName, oldVal, newVal){
+		console.log( ... );
+	}
+});
