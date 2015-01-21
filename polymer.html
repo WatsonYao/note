@@ -256,3 +256,60 @@ baz 不同的格式，以开启特性发射
  <!-- 
 Polymer 支持声明式在 component 里把的事件和方法绑定起来。它使用特殊的 on-event 语法开启绑定行为
   -->
+<polymer-element name="g-cool" on-keypress="{{keypressHandler}}">
+	<template>
+		<button on-click="{{buttonClick}}"></button>
+	</template>
+
+	<script>
+	Polymer('g-cool',{
+		keypressHandler: function(event, detail, sender) { ... },
+		buttonClick:function(event,detail,sender) { ... }
+	});
+	</script>
+</polymer-element>
+<!-- keypress 事件映射到了element上定义的keypressHandler方法 -->
+
+<!-- 
+视你的 element 的属性变化最简单的方法就是使用变化观察者。
+Polymer elements 所有的属性变化都可以通过实现一个 propertyName Changed 的句柄进行观察
+ -->
+
+<polymer-element name="g-cool" attributes="better best">
+	<script>
+		Polymer('g-cool',{
+			better:'',
+			best:'',
+			betterChanged: function(oldValue, newValue){ ... },
+			bestChanged: function(oldValue, newValue){ ... }
+		});
+	</script>
+</polymer-element>
+
+<!-- 
+自定义属性监视者 - observe 代码块 
+-->
+
+<!-- 
+简单的监视者
+ -->
+
+ Polymer('x-element',{
+ 	foo:'',
+ 	bar:'',
+ 	observe:{
+ 		foo:'validate',
+ 		bar:'validate'
+ 	},
+ 	ready:function(){
+ 		this.foo = 'bar';
+ 		this.bar = 'foo';
+ 	},
+ 	validate: function(oldValue, newValue){
+ 		...
+ 	}
+ });
+
+
+
+
