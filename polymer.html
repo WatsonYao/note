@@ -75,3 +75,184 @@ Polymer('tag-name',{
 		console.log( ... );
 	}
 });
+
+<polymer-element>
+<!-- 有其特殊的特性  name attributes extends noscript constructor -->
+
+<!-- 添加公开的属性和方法 
+向Polymer() 的第二个参数传递一个对象
+-->
+<polymer-element name="tag-name">
+	<template>
+		<script>
+			Polymer('tag-name',{
+				message: "hello!",
+				get greeting(){
+					return this.message + ' there！';
+				},
+				foo: function(){ ... }
+			});
+		</script>
+	</template>
+</polymer-element>
+
+<!-- 
+如果你想初始化一个数组或对象，请在 created 回调中完成它，而不是直接定义在 prototype 里
+ -->
+Polymer(
+	'x-foo',
+	{
+		created:function(){
+			this.list = [];
+			this.person = {};
+		}
+	}
+);
+
+<!-- 私有/ 静态 的变量，类似匿名自调函数的标准技术包裹你的脚本 -->
+<polymer-element name="tag-name">
+	<template>...</template>
+	<script>
+		(function(){
+			var foo_ new Foo();
+
+			Polymer('tag-name',{
+				get foo(){ return foo_; }
+			});
+		})();
+	</script>
+
+<!--
+定义一个应用的全局属性，并可以在内部的所有 elements 里可用
+MonoState 模式
+当定义一个Polymer element时，定义一个闭包，包含这些变量，
+然后在对象的原型上提供访问器，或在构造函数里把他们复制到独立的实例中
+  -->
+
+<polymer-element name="app-globals">
+	<script>
+	(function(){
+		var firstName = 'John';
+		var lastName = 'Smith';
+
+		Polymer('app-globals',{
+			ready:function(){
+				this.firstname = firstName;
+				this.lastname = lastName;
+			}
+		});
+	})();
+	</script>
+</polymer-element>
+
+<polymer-element name="my-component">
+	<template>
+		<app-globals id="globals"></app-globals>
+		<div id="firstname"></div>
+		<div id="lastname"></div>
+		</template>
+
+		<script>
+		Polymer('my-component',{
+			ready:function(){
+				this.globals = this.$.globals;
+			}
+		});
+		</script>
+</polymer-element>
+
+<polymer-element name="app-globals" attributes="values">
+	<script>
+	(function(){
+		var values = {};
+
+		Polymer('app-globals',{
+			ready:function(){
+				this.values = values;
+				for(var i=0; i<this.attributes.length; ++i){
+					var  attr = this.attributes[i];
+					values[attr.nodeName] = attr.nodeValue;
+				}
+			}
+		});
+	})();
+	</script>
+</polymer-element>
+
+<!-- 
+公共的属性 有如下几个特征：
++ 支持声明式双向数据绑定
++ 声明式初始化会使用一个与其名字匹配的HTML特性
++ 可选的，一个属性的当前值可以 反射 回与其名字匹配的
+ -->
+
+ <!-- 第一种方式 -->
+ <polymer-element name="x-foo" attributes="foo bar baz">
+ 	<script>
+ 	Polymer('x-foo');
+ 	</script>
+ </polymer-element>
+
+ <!-- publish写法
+baz 不同的格式，以开启特性发射
+  -->
+ <polymer-element name="x-foo">
+ 	<script>
+ 		Polymer('x-foo',{
+ 			publish:{
+ 				foo:'i am foo!',
+ 				bar:5,
+ 				baz:{
+ 					value:false,
+ 					reflect:true
+ 				}
+ 			}
+ 		});
+ 	</script>
+ </polymer-element>
+
+ <!-- 
+对于属性值是对象或数组的情况，你应该唤为在 created 回调时设置默认值。
+它会确保每个 element 的实例都有一个独立的对象被创建
+
+使用特性来配置一个 element 不应该和数据绑定相混淆。一个公开的属性的数据绑定是通过引用做到的，也就是说值并不会序列化或反序列化为字符串
+-->
+
+<!-- 
+公开的属性是绑定在内部数据上的，并且可以通过{{}}被访问
+
+ -->
+ <polymer-element name="name-tag" attributes="name nameColor">
+ 	<template>
+ 		xxxx , is <span style"color:{{nameColor}}">{{name}}</span>
+ 	</template>
+
+ 	<script>
+ 		Polymer('name-tag',{
+ 			nameColor:"orange"
+ 		})
+ 	</script>
+ </polymer-element>
+
+ <!-- 
+除了标准的公开的属性，你还可以定义基于其它属性值计算出来的属性
+  -->
+ <polymer-element name="square-element">
+ 	<template>
+ 	<input type="number" value="{{num}}"><br>
+ 	<em>{{num}}^2 = {{square}}</em>
+ 	</template>
+
+ 	<script>
+ 		Polymer('square-element',{
+ 			num:2,
+ 			computed:{
+ 				square: 'num*num'
+ 			}
+ 		});
+ 	</script>
+ </polymer-element>
+
+ <!-- 
+Polymer 支持声明式在 component 里把的事件和方法绑定起来。它使用特殊的 on-event 语法开启绑定行为
+  -->
