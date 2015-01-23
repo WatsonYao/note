@@ -1,16 +1,16 @@
 <polymer-element name="tag-name" constructor="TagName">
-	<template>
-	</template>
+<template>
+</template>
 
-	<script>
-		Polymer({
+<script>
+	Polymer({
 			// properties and methods here
 		});
-	</script>
+</script>
 </polymer-element>
 
 <polymer-element name="app-globals">
-	<script>
+<script>
 	(function(){
 		var firstName = 'John';
 		var lastName = 'Smith';
@@ -22,34 +22,34 @@
 			}
 		});
 	});
-	</script>
+</script>
 </polymer-element>
 
 <polymer-element name="my-component">
-	<template>
-		<app-globals id="globals"></app-globals>
-		<div id="firstname">{{$.globals.firstName}}</div>
-		<div id="lastname">{{$.globals.lastName}}</div>
-	</template>
+<template>
+	<app-globals id="globals"></app-globals>
+	<div id="firstname">{{$.globals.firstName}}</div>
+	<div id="lastname">{{$.globals.lastName}}</div>
+</template>
 
-	<scrip>
-		Polymer({
-			ready:function(){
-				console.log('last name:' + this.$.globals.lastName);
-			}
-		});
-	</scrip>
+<scrip>
+	Polymer({
+	ready:function(){
+	console.log('last name:' + this.$.globals.lastName);
+}
+});
+</scrip>
 </polymer-element>
 
 <body>
 	<polymer-ajax url="http://xxx" handleAs="json"></polymer-ajax>
-<script>
-	window.addEventListener('polymer-ready', function(e){
-		var ajax = document.querySelector('polymer-ajax');
+	<script>
+		window.addEventListener('polymer-ready', function(e){
+			var ajax = document.querySelector('polymer-ajax');
 
-		ajax.addEventListener('polymer-reponse',function(e)){
-			console.log(this.response);
-		});
+			ajax.addEventListener('polymer-reponse',function(e)){
+				console.log(this.response);
+			});
 
 		ajax.go();
 	})
@@ -57,23 +57,23 @@
 </body>
 
 <polymer-element name="my-element" noscript>
-	<template>
-		<span>I'm <b>my-element</b>.This is my Shadow DOM.</span>
-		<polymer-ajax url="xxx" auto response="{{resp}}"></polymer-ajax>
-		<textarea value="{{resp}}"></textarea>
-	</template>
+<template>
+	<span>I'm <b>my-element</b>.This is my Shadow DOM.</span>
+	<polymer-ajax url="xxx" auto response="{{resp}}"></polymer-ajax>
+	<textarea value="{{resp}}"></textarea>
+</template>
 </polymer-element>
 
 <!-- 生命周期 -->
 Polymer('tag-name',{
-	created:functioin(){ ... },
-	ready:function(){ ... }
-	attached:function(){ ... }
-	domReady:function(){ ... }
-	detached:function(){ ... }
-	attributeChanged:function(attrName, oldVal, newVal){
-		console.log( ... );
-	}
+created:functioin(){ ... },
+ready:function(){ ... }
+attached:function(){ ... }
+domReady:function(){ ... }
+detached:function(){ ... }
+attributeChanged:function(attrName, oldVal, newVal){
+console.log( ... );
+}
 });
 
 <polymer-element>
@@ -83,54 +83,54 @@ Polymer('tag-name',{
 向Polymer() 的第二个参数传递一个对象
 -->
 <polymer-element name="tag-name">
-	<template>
-		<script>
-			Polymer('tag-name',{
-				message: "hello!",
-				get greeting(){
-					return this.message + ' there！';
-				},
-				foo: function(){ ... }
-			});
-		</script>
-	</template>
+<template>
+	<script>
+		Polymer('tag-name',{
+			message: "hello!",
+			get greeting(){
+				return this.message + ' there！';
+			},
+			foo: function(){ ... }
+		});
+	</script>
+</template>
 </polymer-element>
 
 <!-- 
 如果你想初始化一个数组或对象，请在 created 回调中完成它，而不是直接定义在 prototype 里
- -->
+-->
 Polymer(
-	'x-foo',
-	{
-		created:function(){
-			this.list = [];
-			this.person = {};
-		}
-	}
+'x-foo',
+{
+	created:function(){
+	this.list = [];
+	this.person = {};
+}
+}
 );
 
 <!-- 私有/ 静态 的变量，类似匿名自调函数的标准技术包裹你的脚本 -->
 <polymer-element name="tag-name">
-	<template>...</template>
-	<script>
-		(function(){
-			var foo_ new Foo();
+<template>...</template>
+<script>
+	(function(){
+		var foo_ new Foo();
 
-			Polymer('tag-name',{
-				get foo(){ return foo_; }
-			});
-		})();
-	</script>
+		Polymer('tag-name',{
+			get foo(){ return foo_; }
+		});
+	})();
+</script>
 
 <!--
 定义一个应用的全局属性，并可以在内部的所有 elements 里可用
 MonoState 模式
 当定义一个Polymer element时，定义一个闭包，包含这些变量，
 然后在对象的原型上提供访问器，或在构造函数里把他们复制到独立的实例中
-  -->
+-->
 
 <polymer-element name="app-globals">
-	<script>
+<script>
 	(function(){
 		var firstName = 'John';
 		var lastName = 'Smith';
@@ -142,27 +142,27 @@ MonoState 模式
 			}
 		});
 	})();
-	</script>
+</script>
 </polymer-element>
 
 <polymer-element name="my-component">
-	<template>
-		<app-globals id="globals"></app-globals>
-		<div id="firstname"></div>
-		<div id="lastname"></div>
-		</template>
+<template>
+	<app-globals id="globals"></app-globals>
+	<div id="firstname"></div>
+	<div id="lastname"></div>
+</template>
 
-		<script>
-		Polymer('my-component',{
-			ready:function(){
-				this.globals = this.$.globals;
-			}
-		});
-		</script>
+<script>
+	Polymer('my-component',{
+		ready:function(){
+			this.globals = this.$.globals;
+		}
+	});
+</script>
 </polymer-element>
 
 <polymer-element name="app-globals" attributes="values">
-	<script>
+<script>
 	(function(){
 		var values = {};
 
@@ -176,7 +176,7 @@ MonoState 模式
 			}
 		});
 	})();
-	</script>
+</script>
 </polymer-element>
 
 <!-- 
@@ -184,32 +184,32 @@ MonoState 模式
 + 支持声明式双向数据绑定
 + 声明式初始化会使用一个与其名字匹配的HTML特性
 + 可选的，一个属性的当前值可以 反射 回与其名字匹配的
- -->
+-->
 
- <!-- 第一种方式 -->
- <polymer-element name="x-foo" attributes="foo bar baz">
- 	<script>
- 	Polymer('x-foo');
- 	</script>
- </polymer-element>
+<!-- 第一种方式 -->
+<polymer-element name="x-foo" attributes="foo bar baz">
+<script>
+	Polymer('x-foo');
+</script>
+</polymer-element>
 
  <!-- publish写法
 baz 不同的格式，以开启特性发射
-  -->
- <polymer-element name="x-foo">
- 	<script>
- 		Polymer('x-foo',{
- 			publish:{
- 				foo:'i am foo!',
- 				bar:5,
- 				baz:{
- 					value:false,
- 					reflect:true
- 				}
- 			}
- 		});
- 	</script>
- </polymer-element>
+-->
+<polymer-element name="x-foo">
+<script>
+	Polymer('x-foo',{
+		publish:{
+			foo:'i am foo!',
+			bar:5,
+			baz:{
+				value:false,
+				reflect:true
+			}
+		}
+	});
+</script>
+</polymer-element>
 
  <!-- 
 对于属性值是对象或数组的情况，你应该唤为在 created 回调时设置默认值。
@@ -221,69 +221,69 @@ baz 不同的格式，以开启特性发射
 <!-- 
 公开的属性是绑定在内部数据上的，并且可以通过{{}}被访问
 
- -->
- <polymer-element name="name-tag" attributes="name nameColor">
- 	<template>
- 		xxxx , is <span style"color:{{nameColor}}">{{name}}</span>
- 	</template>
+-->
+<polymer-element name="name-tag" attributes="name nameColor">
+<template>
+	xxxx , is <span style"color:{{nameColor}}">{{name}}</span>
+</template>
 
- 	<script>
- 		Polymer('name-tag',{
- 			nameColor:"orange"
- 		})
- 	</script>
- </polymer-element>
+<script>
+	Polymer('name-tag',{
+		nameColor:"orange"
+	})
+</script>
+</polymer-element>
 
  <!-- 
 除了标准的公开的属性，你还可以定义基于其它属性值计算出来的属性
-  -->
- <polymer-element name="square-element">
- 	<template>
- 	<input type="number" value="{{num}}"><br>
- 	<em>{{num}}^2 = {{square}}</em>
- 	</template>
+-->
+<polymer-element name="square-element">
+<template>
+	<input type="number" value="{{num}}"><br>
+	<em>{{num}}^2 = {{square}}</em>
+</template>
 
- 	<script>
- 		Polymer('square-element',{
- 			num:2,
- 			computed:{
- 				square: 'num*num'
- 			}
- 		});
- 	</script>
- </polymer-element>
+<script>
+	Polymer('square-element',{
+		num:2,
+		computed:{
+			square: 'num*num'
+		}
+	});
+</script>
+</polymer-element>
 
  <!-- 
 Polymer 支持声明式在 component 里把的事件和方法绑定起来。它使用特殊的 on-event 语法开启绑定行为
-  -->
+-->
 <polymer-element name="g-cool" on-keypress="{{keypressHandler}}">
-	<template>
-		<button on-click="{{buttonClick}}"></button>
-	</template>
+<template>
+	<button on-click="{{buttonClick}}"></button>
+</template>
 
-	<script>
+<script>
 	Polymer('g-cool',{
 		keypressHandler: function(event, detail, sender) { ... },
 		buttonClick:function(event,detail,sender) { ... }
 	});
-	</script>
+</script>
 </polymer-element>
 <!-- keypress 事件映射到了element上定义的keypressHandler方法 -->
 
 <!-- 
 视你的 element 的属性变化最简单的方法就是使用变化观察者。
 Polymer elements 所有的属性变化都可以通过实现一个 propertyName Changed 的句柄进行观察
- -->
+-->
 
 <polymer-element name="g-cool" attributes="better best">
-	<script>
-		Polymer('g-cool',{
-			better:'',
-			best:'',
-			betterChanged: function(oldValue, newValue){ ... },
-			bestChanged: function(oldValue, newValue){ ... }
-		});
-	</script>
+<script>
+	Polymer('g-cool',{
+		better:'',
+		best:'',
+		betterChanged: function(oldValue, newValue){ ... },
+		bestChanged: function(oldValue, newValue){ ... }
+	});
+</script>
 </polymer-element>
 
 <!-- 
@@ -292,24 +292,395 @@ Polymer elements 所有的属性变化都可以通过实现一个 propertyName C
 
 <!-- 
 简单的监视者
+-->
+
+Polymer('x-element',{
+foo:'',
+bar:'',
+observe:{
+foo:'validate',
+bar:'validate'
+},
+ready: function(){
+this.foo = 'bar';
+this.bar = 'foo';
+},
+validate: function(oldValue, newValue){
+...
+}
+});
+<!-- 在这个例子中，validate() 会在 foo 或 bar 改变时被调用。 -->
+
+<template>
+	<x-foo id="foo"></x-foo>
+</template>
+Polymer('x-element',{
+observe:{
+'$.foo.someProperty':'fooPropertyChanged'
+},
+fooPropertyChanged: function(oldValue,newValue){
+...
+}
+});
+
+
+<!-- 
+观察一个嵌套对象路径的变化
+-->
+
+Polymer('x-element',{
+observe:{
+'a.b.c':'valudateSubPath'
+},
+ready: function(){
+this.a = {
+b:{
+c:'exists'
+}
+};
+},
+validateSubPath: function(oldValue,newValue){
+var value = Path.get('a.b.c').getValueFrom(this);
+}
+});
+
+<!-- 
+值得注意的是 Polymer 并没有为包含在一个 observe 代码块中的属性回调 propertyNameChanged。
+取而代之的是在定义好的监视者中发生调用
+-->
+Polymer('x-element', {
+bar: '',
+observe: {
+bar: 'validate'
+},
+barChanged: function(oldValue, newValue) {
+console.log("我不会被调用");
+},
+validate: function(oldValue, newValue) {
+console.log("换做我被调用");
+}
+});
+
+<!-- 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+数据绑定
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-->
+
+<!-- 
+对于 Polymer elements 来说，数据模型始终就是 element 本身。
+-->
+<polymer-element name="name-tag">
+<template>
+	xxxx <b>{{owner}}</b> xxxx
+</template>
+
+<script>
+	Polymer('name-tag',{
+		ready:functino(){
+			this.owner = 'rafael';
+		}
+	});
+</script>
+</polymer-element>
+
+document.querySelector('name-tag').owner = 'june';
+
+<!-- 
+在一个 Polymer element 声明中，第一个 (顶级的) <template> element 是用来定义 custom element 的 shadow DOM 的。
+在一个 Polymer element 里，你可以使用带有动态渲染数据绑定内容的 templates
+-->
+
+ <!-- 
+数据绑定的例子
+-->
+
+<polymer-element name="greeting-tag">
+<template>
+	<ul>
+		<template repeat="{{s in salutatioins}}">
+			<li>{{s.what}}: <input type="text" value="{{s.who}}"</li>
+		</template>
+	</ul>
+</template>
+
+<script>
+	Polymer('greeting-tag',{
+		ready: function(){
+			this.salutatioins = [
+			{what:'xxx',who:'yyy'},
+			{what:'xxx',who:'yyy'},
+			{what:'xxx',who:'yyy'},
+			{what:'xxx',who:'yyy'}
+			];
+		}
+	});
+</script>
+</polymer-element>
+
+ <!-- 
+动态绑定
+-->
+
+<polymer-element name="greeting-tag">
+<template>
+	<ul>
+		<template repeate="{{s in salutations}}">
+			<li>{{s.what}}: <input type="text" value="{{s.who}}"</li>				
+		</template>
+	</ul>
+	<button on-click="{{updateModel}}">udpate model</button>
+</template>
+<script src="greeting-tag.js"></script>
+</polymer-element>
+
+Polymer('greeting-tag',{
+ready:function() = {
+this.salutations = [
+{what:'xxx',who:'yyy'},
+{what:'xxx',who:'yyy'},
+{what:'xxx',who:'yyy'},
+];
+this.alternates = ['xxx','xxx','xxx'];
+this.current= 0;
+}
+updateModel: function(){
+this.current = (this.current + 1)% this.alternates.length;
+this.salutations[0].what = this.alternates[this.current];
+}
+});
+
+<!-- 
+声明式事件映射添加带有数据绑定的事件句柄 (on-event 句柄)
+-->
+<template>
+	<ul>
+		<template repeat="{{s in stories}}">
+			<li on-click={{selectStory}}>{{s.headline}}</li>
+		</template>
+	</ul>
+</template>
+
+selectStory: function(e, detail, sender){
+var story =  e.target.templateInstance.model.s;
+console.log("clicked " + story.headline);
+this.loadStory(story.id);
+}
+
+<!-- 
+数据绑定到一个template有多种方法
++ 使用bind特性 指定一个单一对象
++ repeat 特性指定一个对象数组
++ 依赖传递给if特性
+-->
+
+ <!-- 
+单一template 实例
+-->
+
+<template bind="{{person}}">
+	该template 可以绑定你的 person 对象的属性，比如 {{name}}.
+</template>
+
+<template bind="{{person as p}}">
+	该template 通过被命名的作用域来访问属性，比如{{p.name}}.
+</template>
+
+<!-- 
+在 repeat 特性中使用被命名的作用域时，数组中每个项目的index值可以这样用
+-->
+
+<template repeat="{{user, userIndex in users}}">
+	<template repeat="{{userFile, userFileIndex in user}}">
+		{{userIndex}}:{{userFileIndex}}.{{userFile}}
+	</template>
+</template>
+
+this.items = [
+{name: "Milk"},
+{name: "Bread"},
+{name: "Cereal"}
+];
+
+<template bind="{{items}}">
+	<p>项目数量为：{{length}}</p>
+	<ul>
+		<template repeat>
+			<li>{{name}}</li>
+		</template>
+	</ul>
+</template>
+
+<template bind="{{myOptions as m}}">
+	<template if="{{m.showCounter}}">
+		<div> 计数：{{m.counter}}</div>
+	</template>
+</template>
+
+<template binnd="{{myList as list}}">
+	<template repeat="{{items in list.items}}" if="{{list.showItems}}">
+		<li>{{item.name}}</li>
+	</template>
+</template>
+
+<!-- 
+通过引用导入 templates
+-->
+<template id="myTemplate">
+
+</template>
+
+<template bind ref="myTemplate">
+	当创建一个实例的时候，这个template的内容将会被忽略，取而代之的是 #myTemplate的内容
+</template>
+
+<template>
+	<ul>
+		<template repeate="{{items}}" id="t">
+			<li>{{name}}
+				<ul>
+					<template ref="t" repeat="{{children}}"></template>	
+				</ul>
+			</li>
+		</template>
+	</template>
+
+	<polymer-element name="say-hello" attributes="name">
+	<template>
+		hello,<b>{{name}}</b>
+	</template>
+
+	<script>
+		Polymer('say-hello',{
+			ready: function(){
+				this.name='xxx'
+			}
+		});
+	</script>
+</polymer-element>
+<polymer-element name="intro-tag" noscript>
+<template>
+	<p><say-hello name="{{yourname}}"></say-hello></p>
+	<p>你叫什么名字？<input value="{{yourName}}" placeholder="xxx..."></p>
+</template>
+</polymer-element>
+
+<intro-tag></intro-tag>
+
+<polymer-element name="name-tag" attributes="person">
+<template>
+	xxx <span style="color:{{person.nameColor}}">
+	{{person.name}}</span>
+</template>
+
+<script>
+	Polymer('name-tag',{
+		created: function(){
+			this.person={
+				name:"scott",
+				nameColor:"orange"
+			}
+		}
+	});
+</script>
+</polymer-element>
+
+<polymer-element name="visitor-creds">
+<template>
+	<name-tag person="{{person}}"></name-tag>
+</template>
+
+<script>
+	Polymer('visitor-creds',{
+		created: function(){
+			this.person = {
+				name: "sss",
+				nameColor:"red"
+			}
+		}
+	});
+</script>
+</polymer-element>
+<!-- 
+两个 components 都是用了相同的 person 对象。
+-->
+
+ <!-- 
+对于布尔类的特性，你可以使用特殊的条件性特性语法控制其是否出现
+-->
+<span hidden?="{{isHidden}}">xxx</span>
+
+<!-- 
+一次性绑定
+-->
+<input type="text" value="这个值是一次性设置好的：[[ obj.value ]]">
+
+<template>
+	<!-- 最外层 template - element 的属性是可用的 -->
+	<template bind="{{organization as organization}}">
+		<!-- organization.* 是可用的 -->
+		<template bind="{{organization.contact as contact}}">
+			<!-- organization.* 和 contact.* 是可用的 -->
+			<template bind="{{contact.address}}">
+				<!-- 只有 address 的属性是可用的 -->
+				<template bind="{{streetAddress as streetAddress}}">
+          <!-- streetAddress.* 和 address 的属性是可用的
+          而 organization.* 或 contact.* 不可用 -->
+      </template>
+  </template>
+</template>
+</template>
+</template>
+<!-- 
+如果一个 template 使用了被命名的作用域，则其父作用域可见。
+如果一个 template 使用了未被命名的作用域，择期父作用域_不_可见。
+-->
+
+ <!-- 
+过滤器tokenList
+可以用于绑定到class特性。
+其允许你基于传入的对象动态设置/移除class名称。
+如果对象中某一个健的值为真，其名称就会被应用为一个class
+-->
+<div class="{{ {active: user.selected, big: user.type== 'super'} | tokenList}}">
+
+<!-- 
+过滤器styleObejct 会把一个包含CSS样式的json对象转换为一个适合被设为style特性的CSS字符串
+-->
+<div style="color: {{color}}">{{color}}</div>
+<div style="{{styles | styleObject}}"> ... </div>
+<!-- 
+上面，styles 是一个形如{color:'red', background:'blue'} 的对象，
+且styleObeject 过滤器的输出结果是一个css声明的字符串
+-->
+
+ <!-- 
+一个过滤器就是一个简单的函数，其可以转换输入的值。
+-->
+Polymer('greeting-tag',{
+...
+toUpperCase: function(value){
+return value.toUpperCase();
+}
+});
+
+{{s.who | toUpperCase}}
+
+
+<!-- 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+elements 上样式
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  -->
-
- Polymer('x-element',{
- 	foo:'',
- 	bar:'',
- 	observe:{
- 		foo:'validate',
- 		bar:'validate'
- 	},
- 	ready:function(){
- 		this.foo = 'bar';
- 		this.bar = 'foo';
- 	},
- 	validate: function(oldValue, newValue){
- 		...
- 	}
- });
-
-
-
-
