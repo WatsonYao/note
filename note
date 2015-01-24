@@ -1,3 +1,5 @@
 官方样例代码
 https://github.com/googlesamples
 
+官方性能优化
+1. view的背景颜色不要重复设置
