@@ -268,10 +268,10 @@ public class MyView extends View implements OnClickListener{
 	}
 
 	@Override  
-    public void onClick(View v) {  
-         
-        invalidate();  
-    } 
+	public void onClick(View v) {  
+
+		invalidate();  
+	} 
 }
 
 //首先我们在CounterView的构造函数中初始化了一些数据，
@@ -481,8 +481,8 @@ public class MyService extends Service{
 
 //远程Service 实现跨进程通信IPC
 <service  
-        android:name="com.example.servicetest.MyService"  
-        android:process=":remote" >  
+android:name="com.example.servicetest.MyService"  
+android:process=":remote" >  
 </service>
 // remote service 不设置的话（AIDL），不能与activity进行通信
 // AIDL Android Interface Definition Language 
@@ -581,16 +581,16 @@ public class MainActivity extends Activity implements OnClickListener{
 
 		siwtch(index){
 			case 0:
-				if(messageFragment == null){
-					messageFragment = new messageFragment();
-					transaction.add(R.id.content,messageFragment);
-				}else{
-					transaction.show(messageFragment);
-				}
-				break;
+			if(messageFragment == null){
+				messageFragment = new messageFragment();
+				transaction.add(R.id.content,messageFragment);
+			}else{
+				transaction.show(messageFragment);
+			}
+			break;
 			case 1:
 				// ...
-				break;
+			break;
 		}
 	}
 
@@ -632,7 +632,7 @@ Palette.generateAsync(bitmap, new Palette.PaletteAsyncListener{
 });
 
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-    getWindow().setStatusBarColor(Color.BLUE);
+	getWindow().setStatusBarColor(Color.BLUE);
 }
 
 // svg 矢量图形 AnimatedVectorDrawable
@@ -657,13 +657,13 @@ protected void onCreate(Bundle savedInstanceState){
 }
 
 public class SampleRecyclerAdapter extends 
-	RecyclerView.Adapter<SampleRecyclerAdapter.ViewHolder>{
+RecyclerView.Adapter<SampleRecyclerAdapter.ViewHolder>{
 
 	private final  ArrayList<SampleModel> sampleData = DemoApp.getSampleData(20);
 
 	public ViewHolder onCreateViewHolder(ViewGroup parentViewGroup, int i){
 		View item = LayoutInflater.from(parentViewGroup.getContext()).inflate(
-				R.layout.list_basic_item,parentViewGroup,false);
+			R.layout.list_basic_item,parentViewGroup,false);
 
 		return new ViewHolder(item);
 	}
@@ -702,80 +702,80 @@ public class SampleRecyclerAdapter extends
 }
 
 // 官方的例子
- @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        
-        String [] myDataset = {"Android","ios","jack","tony","window","mac","1234","hehe","495948"};
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+	super.onCreate(savedInstanceState);
+	setContentView(R.layout.activity_main);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+	String [] myDataset = {"Android","ios","jack","tony","window","mac","1234","hehe","495948"};
+
+	mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
 
         // improve performance if you know that changes in content
         // do not change the size of the RecyclerView
-        mRecyclerView.setHasFixedSize(true);
+	mRecyclerView.setHasFixedSize(true);
 
         // use a linear layout manager
-        mLayoutManager = new LinearLayoutManager(this);
+	mLayoutManager = new LinearLayoutManager(this);
         //设置RecycleView的显示方向：（默认为垂直） 水平
-        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+	mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+	mRecyclerView.setLayoutManager(mLayoutManager);
 
         // specify an adapter (see also next example)
-        mAdapter = new MyAdapter(myDataset);
-        mRecyclerView.setAdapter(mAdapter);
-    }
+	mAdapter = new MyAdapter(myDataset);
+	mRecyclerView.setAdapter(mAdapter);
+}
 // 有VIewHolder类 类里是控件
 // 通过onCreateViewHolder方法将布局id传到ViewHolder中
 // 在onBindViewHolder 中绑定数据
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
-        private String[] mDataset;
+	private String[] mDataset;
 
         // Provide a reference to the type of views that you are using
         // (custom viewholder)
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            public TextView mTextView;
+	public class ViewHolder extends RecyclerView.ViewHolder {
+		public TextView mTextView;
 
-            public ViewHolder(TextView v) {
-                super(v);
-                mTextView = v;
-            }
-        }
+		public ViewHolder(TextView v) {
+			super(v);
+			mTextView = v;
+		}
+	}
 
         // Provide a suitable constructor (depends on the kind of dataset)
-        public MyAdapter(String[] myDataset) {
-            mDataset = myDataset;
-        }
+	public MyAdapter(String[] myDataset) {
+		mDataset = myDataset;
+	}
 
         // Create new views (invoked by the layout manager)
-        @Override
-        public MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                int viewType) {
+	@Override
+	public MyAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+		int viewType) {
             // create a new view
-            View v = LayoutInflater.from(parent.getContext()).inflate(
-                    R.layout.my_text_view, parent, false);
+		View v = LayoutInflater.from(parent.getContext()).inflate(
+			R.layout.my_text_view, parent, false);
             // set the view's size, margins, paddings and layout parameters
 
-            ViewHolder vh = new ViewHolder((TextView) v);
-            return vh;
-        }
+		ViewHolder vh = new ViewHolder((TextView) v);
+		return vh;
+	}
 
         // Replace the contents of a view (invoked by the layout manager)
-        @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
+	@Override
+	public void onBindViewHolder(ViewHolder holder, int position) {
             // - get element from your dataset at this position
             // - replace the contents of the view with that element
-            holder.mTextView.setText(mDataset[position]);
+		holder.mTextView.setText(mDataset[position]);
 
-        }
+	}
 
         // Return the size of your dataset (invoked by the layout manager)
-        @Override
-        public int getItemCount() {
-            return mDataset.length;
-        }
-    }
+	@Override
+	public int getItemCount() {
+		return mDataset.length;
+	}
+}
 
 // 它的作用就是共享两个acitivity种共同的元素，在Android 5.0下支持如下效果：
 // changeBounds -  改变目标视图的布局边界
@@ -901,51 +901,51 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    	super.onCreate(savedInstanceState);
         // Load the UI from res/layout/activity_main.xml
-        setContentView(R.layout.sample_main);
+    	setContentView(R.layout.sample_main);
 
         // Set up the action bar. The navigation mode is set to NAVIGATION_MODE_TABS, which will
         // cause the ActionBar to render a set of tabs. Note that these tabs are *not* rendered
         // by the ViewPager; additional logic is lower in this file to synchronize the ViewPager
         // state with the tab state. (See mViewPager.setOnPageChangeListener() and onTabSelected().)
         // BEGIN_INCLUDE (set_navigation_mode)
-        final ActionBar actionBar = getActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+    	final ActionBar actionBar = getActionBar();
+    	actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         // END_INCLUDE (set_navigation_mode)
 
         // BEGIN_INCLUDE (setup_view_pager)
         // Create the adapter that will return a fragment for each of the three primary sections
         // of the app.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+    	mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.pager);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+    	mViewPager = (ViewPager) findViewById(R.id.pager);
+    	mViewPager.setAdapter(mSectionsPagerAdapter);
         // END_INCLUDE (setup_view_pager)
 
         // When swiping between different sections, select the corresponding tab. We can also use
         // ActionBar.Tab#select() to do this if we have a reference to the Tab.
         // BEGIN_INCLUDE (page_change_listener)
-        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-                actionBar.setSelectedNavigationItem(position);
-            }
-        });
+    	mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+    		@Override
+    		public void onPageSelected(int position) {
+    			actionBar.setSelectedNavigationItem(position);
+    		}
+    	});
         // END_INCLUDE (page_change_listener)
 
         // BEGIN_INCLUDE (add_tabs)
         // For each of the sections in the app, add a tab to the action bar.
-        for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
+    	for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
             // Create a tab with text corresponding to the page title defined by the adapter. Also
             // specify this Activity object, which implements the TabListener interface, as the
             // callback (listener) for when this tab is selected.
-            actionBar.addTab(
-                    actionBar.newTab()
-                            .setText(mSectionsPagerAdapter.getPageTitle(i))
-                            .setTabListener(this));
-        }
+    		actionBar.addTab(
+    			actionBar.newTab()
+    			.setText(mSectionsPagerAdapter.getPageTitle(i))
+    			.setTabListener(this));
+    	}
         // END_INCLUDE (add_tabs)
     }
 
@@ -961,7 +961,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
         // When the given tab is selected, tell the ViewPager to switch to the corresponding page.
-        mViewPager.setCurrentItem(tab.getPosition());
+    	mViewPager.setCurrentItem(tab.getPosition());
     }
     // END_INCLUDE (on_tab_selected)
 
@@ -987,9 +987,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
     // END_INCLUDE (fragment_pager_adapter)
 
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
+    	public SectionsPagerAdapter(FragmentManager fm) {
+    		super(fm);
+    	}
 
         // BEGIN_INCLUDE (fragment_pager_adapter_getitem)
         /**
@@ -1004,11 +1004,11 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
             // getItem is called to instantiate the fragment for the given page.
             // Return a DummySectionFragment (defined as a static inner class
             // below) with the page number as its lone argument.
-            Fragment fragment = new DummySectionFragment();
-            Bundle args = new Bundle();
-            args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
-            fragment.setArguments(args);
-            return fragment;
+        	Fragment fragment = new DummySectionFragment();
+        	Bundle args = new Bundle();
+        	args.putInt(DummySectionFragment.ARG_SECTION_NUMBER, position + 1);
+        	fragment.setArguments(args);
+        	return fragment;
         }
         // END_INCLUDE (fragment_pager_adapter_getitem)
 
@@ -1021,7 +1021,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+        	return 3;
         }
         // END_INCLUDE (fragment_pager_adapter_getcount)
 
@@ -1034,16 +1034,16 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
          */
         @Override
         public CharSequence getPageTitle(int position) {
-            Locale l = Locale.getDefault();
-            switch (position) {
-                case 0:
-                    return getString(R.string.title_section1).toUpperCase(l);
-                case 1:
-                    return getString(R.string.title_section2).toUpperCase(l);
-                case 2:
-                    return getString(R.string.title_section3).toUpperCase(l);
-            }
-            return null;
+        	Locale l = Locale.getDefault();
+        	switch (position) {
+        		case 0:
+        		return getString(R.string.title_section1).toUpperCase(l);
+        		case 1:
+        		return getString(R.string.title_section2).toUpperCase(l);
+        		case 2:
+        		return getString(R.string.title_section3).toUpperCase(l);
+        	}
+        	return null;
         }
         // END_INCLUDE (fragment_pager_adapter_getpagetitle)
     }
@@ -1064,11 +1064,11 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main_dummy, container, false);
-            TextView dummyTextView = (TextView) rootView.findViewById(R.id.section_label);
-            dummyTextView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
-            return rootView;
+        	Bundle savedInstanceState) {
+        	View rootView = inflater.inflate(R.layout.fragment_main_dummy, container, false);
+        	TextView dummyTextView = (TextView) rootView.findViewById(R.id.section_label);
+        	dummyTextView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
+        	return rootView;
         }
     }
 
@@ -1113,32 +1113,32 @@ Toast.makeText(this, "radio->" + density + ",dpi->" + densityDPI, Toast.LENGTH_L
 
 // L通知
 @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mNotificationManager = (NotificationManager) getActivity().getSystemService(Context
-                .NOTIFICATION_SERVICE);
-    }
-    
-Notification createNotification(boolean makeHeadsUpNotification) {
-        Notification.Builder notificationBuilder = new Notification.Builder(getActivity())
-                .setSmallIcon(R.drawable.ic_launcher_notification)
-                .setPriority(Notification.PRIORITY_DEFAULT)
-                .setCategory(Notification.CATEGORY_MESSAGE)
-                .setContentTitle("Sample Notification")
-                .setContentText("This is a normal notification.");
-        if (makeHeadsUpNotification) {
-            Intent push = new Intent();
-            push.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            push.setClass(getActivity(), LNotificationActivity.class);
+public void onCreate(Bundle savedInstanceState) {
+	super.onCreate(savedInstanceState);
+	mNotificationManager = (NotificationManager) getActivity().getSystemService(Context
+		.NOTIFICATION_SERVICE);
+}
 
-            PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(getActivity(), 0,
-                    push, PendingIntent.FLAG_CANCEL_CURRENT);
-            notificationBuilder
-                    .setContentText("Heads-Up Notification on Android L or above.")
-                    .setFullScreenIntent(fullScreenPendingIntent, true);
-        }
-        return notificationBuilder.build();
-    }
+Notification createNotification(boolean makeHeadsUpNotification) {
+	Notification.Builder notificationBuilder = new Notification.Builder(getActivity())
+	.setSmallIcon(R.drawable.ic_launcher_notification)
+	.setPriority(Notification.PRIORITY_DEFAULT)
+	.setCategory(Notification.CATEGORY_MESSAGE)
+	.setContentTitle("Sample Notification")
+	.setContentText("This is a normal notification.");
+	if (makeHeadsUpNotification) {
+		Intent push = new Intent();
+		push.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		push.setClass(getActivity(), LNotificationActivity.class);
+
+		PendingIntent fullScreenPendingIntent = PendingIntent.getActivity(getActivity(), 0,
+			push, PendingIntent.FLAG_CANCEL_CURRENT);
+		notificationBuilder
+		.setContentText("Heads-Up Notification on Android L or above.")
+		.setFullScreenIntent(fullScreenPendingIntent, true);
+	}
+	return notificationBuilder.build();
+}
 //statusbar 系统状态栏  
 Window window = activity.getWindow();
 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -1152,17 +1152,17 @@ window.setStatusBarColor(activity.getResources().getColor(R.color.example_color)
 mSwitcher.setFactory(mFactory);
 private ViewFactory mFactory = new ViewFactory() {
 
-        @Override
-        public View makeView() {
+	@Override
+	public View makeView() {
 
             // Create a new TextView
-            TextView t = new TextView(MainActivity.this);
-            t.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
-            t.setTextAppearance(MainActivity.this, android.R.style.TextAppearance_Large);
-            return t;
-        }
+		TextView t = new TextView(MainActivity.this);
+		t.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
+		t.setTextAppearance(MainActivity.this, android.R.style.TextAppearance_Large);
+		return t;
+	}
 };
-    
+
 Animation in = AnimationUtils.loadAnimation(this, android.R.anim.fade_in);
 Animation out = AnimationUtils.loadAnimation(this, android.R.anim.fade_out);
 mSwitcher.setInAnimation(in);
@@ -1178,13 +1178,13 @@ public class SlidingTabLayout extends HorizontalScrollView
 // http://blog.csdn.net/dawanganban/article/details/19082949
 ////////////////////////////////
 public class MainActivity extends PreferenceActivity {  
-  
-    @Override  
-    protected void onCreate(Bundle savedInstanceState) {  
-        super.onCreate(savedInstanceState);  
+
+	@Override  
+	protected void onCreate(Bundle savedInstanceState) {  
+		super.onCreate(savedInstanceState);  
         //setContentView(R.layout.activity_main);  
-        addPreferencesFromResource(R.xml.preference);  
-    }  
+		addPreferencesFromResource(R.xml.preference);  
+	}  
 } 
 
 // <?xml version="1.0" encoding="UTF-8"?>  
@@ -1242,83 +1242,83 @@ public class MainActivity extends PreferenceActivity {
 
 <?xml version="1.0" encoding="utf-8"?>  
 <preference-headers   
-    xmlns:android="http://schemas.android.com/apk/res/android">  
-    <!-- 指定启动指定PreferenceFragment的列表项 -->  
-    <header android:fragment=  
-        "org.crazyit.app.PreferenceActivityTest$Prefs1Fragment"  
-        android:icon="@drawable/ic_settings_applications"  
-        android:title="程序选项设置"  
-        android:summary="设置应用的相关选项" />  
-    <!-- 指定启动指定PreferenceFragment的列表项 -->   
-    <header android:fragment=  
-        "org.crazyit.app.PreferenceActivityTest$Prefs2Fragment"  
-        android:icon="@drawable/ic_settings_display"  
-        android:title="界面选项设置 "  
-        android:summary="设置显示界面的相关选项">  
-        <!-- 使用extra可向Activity传入额外的数据 -->  
-        <extra android:name="website"  
-            android:value="www.crazyit.org" />  
-    </header>  
-    <!-- 使用Intent启动指定Activity的列表项 -->  
-    <header  
-        android:icon="@drawable/ic_settings_display"  
-        android:title="使用Intent"  
-        android:summary="使用Intent启动某个Activity">  
-        <intent  android:action="android.intent.action.VIEW"  
-            android:data="http://www.crazyit.org" />  
-    </header>  
+xmlns:android="http://schemas.android.com/apk/res/android">  
+<!-- 指定启动指定PreferenceFragment的列表项 -->  
+<header android:fragment=  
+"org.crazyit.app.PreferenceActivityTest$Prefs1Fragment"  
+android:icon="@drawable/ic_settings_applications"  
+android:title="程序选项设置"  
+android:summary="设置应用的相关选项" />  
+<!-- 指定启动指定PreferenceFragment的列表项 -->   
+<header android:fragment=  
+"org.crazyit.app.PreferenceActivityTest$Prefs2Fragment"  
+android:icon="@drawable/ic_settings_display"  
+android:title="界面选项设置 "  
+android:summary="设置显示界面的相关选项">  
+<!-- 使用extra可向Activity传入额外的数据 -->  
+<extra android:name="website"  
+android:value="www.crazyit.org" />  
+</header>  
+<!-- 使用Intent启动指定Activity的列表项 -->  
+<header  
+android:icon="@drawable/ic_settings_display"  
+android:title="使用Intent"  
+android:summary="使用Intent启动某个Activity">  
+<intent  android:action="android.intent.action.VIEW"  
+android:data="http://www.crazyit.org" />  
+</header>  
 </preference-headers>  
 
 
 public void onBuildHeaders(List<Header> target)  
 {  
     // 加载选项设置列表的布局文件  
-    loadHeadersFromResource(R.xml.preference_headers, target);  
+	loadHeadersFromResource(R.xml.preference_headers, target);  
 } 
 
 public class PreferenceActivityTest extends PreferenceActivity  
 {  
-    @Override  
-    protected void onCreate(Bundle savedInstanceState)  
-    {  
-        super.onCreate(savedInstanceState);  
+	@Override  
+	protected void onCreate(Bundle savedInstanceState)  
+	{  
+		super.onCreate(savedInstanceState);  
         // 该方法用于为该界面设置一个标题按钮  
-        if (hasHeaders())  
-        {  
-            Button button = new Button(this);  
-            button.setText("设置操作");  
+		if (hasHeaders())  
+		{  
+			Button button = new Button(this);  
+			button.setText("设置操作");  
             // 将该按钮添加到该界面上  
-            setListFooter(button);  
-        }  
-    }  
+			setListFooter(button);  
+		}  
+	}  
     // 重写该该方法，负责加载页面布局文件  
-    @Override  
-    public void onBuildHeaders(List<Header> target)  
-    {  
+	@Override  
+	public void onBuildHeaders(List<Header> target)  
+	{  
         // 加载选项设置列表的布局文件  
-        loadHeadersFromResource(R.xml.preference_headers, target);  
-    }  
-  
-    public static class Prefs1Fragment extends PreferenceFragment  
-    {  
-        @Override  
-        public void onCreate(Bundle savedInstanceState)  
-        {  
-            super.onCreate(savedInstanceState);  
-            addPreferencesFromResource(R.xml.preferences);  
-        }  
-    }  
-    public static class Prefs2Fragment extends PreferenceFragment  
-    {  
-        @Override  
-        public void onCreate(Bundle savedInstanceState)  
-        {  
-            super.onCreate(savedInstanceState);  
-            addPreferencesFromResource(R.xml.display_prefs);  
+		loadHeadersFromResource(R.xml.preference_headers, target);  
+	}  
+
+	public static class Prefs1Fragment extends PreferenceFragment  
+	{  
+		@Override  
+		public void onCreate(Bundle savedInstanceState)  
+		{  
+			super.onCreate(savedInstanceState);  
+			addPreferencesFromResource(R.xml.preferences);  
+		}  
+	}  
+	public static class Prefs2Fragment extends PreferenceFragment  
+	{  
+		@Override  
+		public void onCreate(Bundle savedInstanceState)  
+		{  
+			super.onCreate(savedInstanceState);  
+			addPreferencesFromResource(R.xml.display_prefs);  
             // 获取传入该Fragment的参数  
-            String website = getArguments().getString("website");  
-        }  
-    }     
+			String website = getArguments().getString("website");  
+		}  
+	}     
 }  
 
 
@@ -1332,12 +1332,12 @@ android:foreground="?android:attr/selectableItemBackground"
 public boolean onTouchEvent(MotionEvent event){
 	switch(event.getAction()){
 		case MotionEvent.ACTION_DOWN:
-			animate().setDuration(100).scaleX(1.2f).scaleY(1.2f).translationZ(20);
-			return true;
+		animate().setDuration(100).scaleX(1.2f).scaleY(1.2f).translationZ(20);
+		return true;
 		case MotionEvent.ACTION_CANCEL:
 		case MotionEvent.ACTION_UP:
-			animate().setDuration(100).scaleX(1).scaleY(1).translationZ(0);
-			return true;
+		animate().setDuration(100).scaleX(1).scaleY(1).translationZ(0);
+		return true;
 	}
 }
 
@@ -1351,33 +1351,33 @@ android:stateListAnimator="@anim/button_raise" />
 
 <selector>
 <item
-	android:state_enabled="true"
-	android:state_pressed="true">
-	<objectAnimator
-		android:duration="@android:integer/config_shortAnimTime"
-		android:propertyName="translationZ"
-		android:valueFrom="@dimen/button_elevation"
-		android:valueTo="@dimen/button_press_elevation"
-		android:valueType="floatType" />
+android:state_enabled="true"
+android:state_pressed="true">
+<objectAnimator
+android:duration="@android:integer/config_shortAnimTime"
+android:propertyName="translationZ"
+android:valueFrom="@dimen/button_elevation"
+android:valueTo="@dimen/button_press_elevation"
+android:valueType="floatType" />
 </item>
 <item>
-	<objectAnimator
-		android:duration="@android:integer/config_shortAnimTime"
-		android:propertyName="translationZ"
-		android:valueFrom="@dimen/button_press_elevation"
-		android:valueTo="@dimen/button_elevation"
-		android:valueType="floatType"/>
-		
+<objectAnimator
+android:duration="@android:integer/config_shortAnimTime"
+android:propertyName="translationZ"
+android:valueFrom="@dimen/button_press_elevation"
+android:valueTo="@dimen/button_elevation"
+android:valueType="floatType"/>
+
 </item>
 </selector>
 
 
 Theme colors
 <style name="BaseAppTheme" parent="android:Theme.Material.Light">
-	<item name="android:colorPrimary">#xxx</item>
-	<item name="android:navagationBarColor">?android:colorPrimarDark</item>
-	<item name="android:statusBarColor">?android:colorPrimaryDark</item>
-	<item name="android:windowBackground">?android:colorBackground</item>
+<item name="android:colorPrimary">#xxx</item>
+<item name="android:navagationBarColor">?android:colorPrimarDark</item>
+<item name="android:statusBarColor">?android:colorPrimaryDark</item>
+<item name="android:windowBackground">?android:colorBackground</item>
 </style>
 
 final ImageView hero = (ImageView) findViewById(R.id.photo);
@@ -1404,11 +1404,11 @@ private void applyPalette(Palette palette){
 
 // Ripple button
 <ripple android:color="?android:colorControlHightlight">
-	<item>
-		<shape android:shape="oval">
-			<solid android:color="?android:colorAccent"/>
-		</shape>
-	</item>
+<item>
+<shape android:shape="oval">
+<solid android:color="?android:colorAccent"/>
+</shape>
+</item>
 </ripple>
 
 private void colorRipple(int id, int bgColor, int tintColor){
@@ -1464,12 +1464,12 @@ ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimati
 ActivityCompat.startActivity(this,detailIntent,options.toBundle());
 
 public boolean onOptionsItemSelected(MenuItem menuItem) {
-    int id = menuItem.getItemId();
-    if (id == android.R.id.home) {
-        ActivityCompat.finishAfterTransition(this);
-        return true;
-    }
-    return super.onOptionsItemSelected(menuItem);
+	int id = menuItem.getItemId();
+	if (id == android.R.id.home) {
+		ActivityCompat.finishAfterTransition(this);
+		return true;
+	}
+	return super.onOptionsItemSelected(menuItem);
 }
 
 //  RecyclerView does provide an OnItemTouchListener
@@ -1573,34 +1573,34 @@ mMainListView.setOnTouchListener(new View.OnTouchListener(){
 
 		switch(event.getAction()){
 			case MotionEvent.ACTION_DOWN:
-				mStartY = y;
-				mLastY = mStartY;
-				break;
+			mStartY = y;
+			mLastY = mStartY;
+			break;
 			case MotionEvent.ACTION_MOVE:
-				float mDeltaY = y - mLastY;
+			float mDeltaY = y - mLastY;
 
-				float newTansY = translationY + mDeltaY;
+			float newTansY = translationY + mDeltaY;
 
-				if(newTansY <=0 && newTansY >= -mMationToolbar.getHeight()){
-					mMationToolbar.setTranslationY(newTansY);
-				}
+			if(newTansY <=0 && newTansY >= -mMationToolbar.getHeight()){
+				mMationToolbar.setTranslationY(newTansY);
+			}
 
-				mLastY = y;
-				mLastDeltaY = mDeltaY;
+			mLastY = y;
+			mLastDeltaY = mDeltaY;
 
-				break;
+			break;
 			case MotionEvent.ACTION_UP:
-				ObjectAnimator animator = null;
-				if(mLastDeltaY <0 && mMainListView.getFirstVisibilePosition() > 1){
-					ainmator = ObjectAnimator.ofFloat(mMationToolbar,"translationY",mMainToolbar.getTranslationY(),-mMationToolbar.getHeight());
-				}else{
-					animator = ObjectAnimator.ofFloat(mMationToolbar,"translationY",mMationToolbar.getTranslationY(),0);
-				}
+			ObjectAnimator animator = null;
+			if(mLastDeltaY <0 && mMainListView.getFirstVisibilePosition() > 1){
+				ainmator = ObjectAnimator.ofFloat(mMationToolbar,"translationY",mMainToolbar.getTranslationY(),-mMationToolbar.getHeight());
+			}else{
+				animator = ObjectAnimator.ofFloat(mMationToolbar,"translationY",mMationToolbar.getTranslationY(),0);
+			}
 
-				animator.setDuration(100);
-				animator.start();
-				animator.setInterpolator(AnimationUtils.loadInterpolator(MainActivity.this, android.R.interpolator.linear));
-				break;
+			animator.setDuration(100);
+			animator.start();
+			animator.setInterpolator(AnimationUtils.loadInterpolator(MainActivity.this, android.R.interpolator.linear));
+			break;
 		}
 		return false;
 	}
@@ -1680,7 +1680,7 @@ performMeasure(int childWidthMeasureSpec, int childHeightMeasureSpec){
 // measurer
 public final void measure(int widthMeasureSpec, int heightMeasureSpec){
 	// ...
-		onMeasure(widthMeasureSpec,heightMeasureSpec);
+	onMeasure(widthMeasureSpec,heightMeasureSpec);
 	// ...
 }
 
@@ -2016,8 +2016,8 @@ public class SlidingTabLayout extends HorizontalScrollView{
 
 			View selectedTitle = mTabStrip.getChildAt(position);
 			int extraOffset = (selectedTitle != null)
-				? (int)(positionOffset * selectedTitle.getWidth())
-				: 0;
+			? (int)(positionOffset * selectedTitle.getWidth())
+			: 0;
 			scrollToTab(position, extraOffset);
 
 			if(mViewPagerPageChangeListener != null){
@@ -2124,8 +2124,8 @@ class SlidingTabStrip extends LinearLayout{
 		final int mDividerHightPx = (int)(Math.min(Math.max(0f,mDividerHight),1f) * height);
 
 		final SlidingTabLayout.TabColorizer tabColorizer = mCustomTabColorizer != null
-			? mCustomTabColorizer
-			: mDefaultTabColorizer;
+		? mCustomTabColorizer
+		: mDefaultTabColorizer;
 
 		if(childCount > 0){
 			View selectedTitle = getChildAt(mSelectedPosition);
@@ -2142,162 +2142,162 @@ class SlidingTabStrip extends LinearLayout{
 
 				View nextTitle = getChildAt(mSelectedPosition + 1);
 				left = (int)(mSelectionOffset * nextTitle.getLeft() + (1.0f - mSelectionOffset * left);
-				right = (int)(mSelectionOffset * nextTitle.getRight() + (1.0f -mSelectionOffset * right));
+					right = (int)(mSelectionOffset * nextTitle.getRight() + (1.0f -mSelectionOffset * right));
+				}
+
+				mselectedIndicatorPaint.setColor(color);
+
+				canvas.drawRect(left, height - mSelectedIndicatorThickness, right, height, mselectedIndicatorPaint);
 			}
 
-			mselectedIndicatorPaint.setColor(color);
+			canvas.drawRect(0, height - mBottomBorderThickness, getWidth(),height, mBottomBorderPaint);
 
-			canvas.drawRect(left, height - mSelectedIndicatorThickness, right, height, mselectedIndicatorPaint);
+			int separatorTop = (height - dividerHieghtPx ) / 2;
+			for( int i=0; i<childCount -1; i++){
+				View child = getChildAt(i);
+				mDividerPaint.setColor(tabColorizer.getDividerColor(i));
+				canvas.drawLine(child.getRight(),separatorTop, child.getRight(),
+					separatorTop + dividerHieghtPx, mDividerPaint);
+			}
+
 		}
 
-		canvas.drawRect(0, height - mBottomBorderThickness, getWidth(),height, mBottomBorderPaint);
-
-		int separatorTop = (height - dividerHieghtPx ) / 2;
-		for( int i=0; i<childCount -1; i++){
-			View child = getChildAt(i);
-			mDividerPaint.setColor(tabColorizer.getDividerColor(i));
-			canvas.drawLine(child.getRight(),separatorTop, child.getRight(),
-				separatorTop + dividerHieghtPx, mDividerPaint);
+		private static int setColorAlpha( int color, byte alpha){
+			return Color.argb(alpha, Color.red(color),Color.green(color),Color.blue(color));
 		}
 
+		private static int blendColors(int color1, int color2, float ratio){
+			final float inverseRation = 1f - ratio;
+
+			float r = (Color.red(color1)* ratio) + (Color.red(color2) * inverseRation);
+			float g = (Color.green(color1) * ratio) + (Color.green(color2) * inverseRation);
+			float b = (Color.blue(color1) * ratio) +　(Color.blue(color2) * inverseRation);
+
+			return Color.rgb((int)r, (int)g, (int)b);
+		}
+
+		private static class SimpleTabColorizer implments SlidingTabLayout.TabColorizer{
+			private int[] mIndicatorColors;
+			private int[] mDividerColors;
+
+			public final int getindicatorColor(int position){
+				return mIndicatorColors[position % mIndicatorColors.length];
+			}
+
+			public final int getDividerColor(int position){
+				return mDividerColors[position % mDividerColors.length];
+			}
+
+			void setIndicatorColors(int... colors){
+				mIndicatorColors = colors;
+			}
+
+			void setDividerColors(int... colors){
+				mDividerColors = colors;
+			}
+
+		}
 	}
-
-	private static int setColorAlpha( int color, byte alpha){
-		return Color.argb(alpha, Color.red(color),Color.green(color),Color.blue(color));
-	}
-
-	private static int blendColors(int color1, int color2, float ratio){
-		final float inverseRation = 1f - ratio;
-
-		float r = (Color.red(color1)* ratio) + (Color.red(color2) * inverseRation);
-		float g = (Color.green(color1) * ratio) + (Color.green(color2) * inverseRation);
-		float b = (Color.blue(color1) * ratio) +　(Color.blue(color2) * inverseRation);
-
-		return Color.rgb((int)r, (int)g, (int)b);
-	}
-
-	private static class SimpleTabColorizer implments SlidingTabLayout.TabColorizer{
-		private int[] mIndicatorColors;
-		private int[] mDividerColors;
-
-		public final int getindicatorColor(int position){
-			return mIndicatorColors[position % mIndicatorColors.length];
-		}
-
-		public final int getDividerColor(int position){
-			return mDividerColors[position % mDividerColors.length];
-		}
-
-		void setIndicatorColors(int... colors){
-			mIndicatorColors = colors;
-		}
-
-		void setDividerColors(int... colors){
-			mDividerColors = colors;
-		}
-
-	}
-}
 
 // ListView 保存滑动状态
-private Parcelable mListState = null;
-private static final String LIST_STATE_KEY = "liststate";
+	private Parcelable mListState = null;
+	private static final String LIST_STATE_KEY = "liststate";
 
-protected void onSaveInstanceState(Bundle icicle){
-	super.onSaveInstanceState(icicle);
+	protected void onSaveInstanceState(Bundle icicle){
+		super.onSaveInstanceState(icicle);
 
-	if(mList != null){
-		icicle.putParcelable(LIST_STATE_KEY,mList.onSaveInstanceState());
+		if(mList != null){
+			icicle.putParcelable(LIST_STATE_KEY,mList.onSaveInstanceState());
+		}
 	}
-}
 
-protected void onRestoreInstanceState(Bundle icicle){
-	super.onRestoreInstanceState(icicle);
-	mListState = icicle.getParcelable(LIST_STATE_KEY);
-}
+	protected void onRestoreInstanceState(Bundle icicle){
+		super.onRestoreInstanceState(icicle);
+		mListState = icicle.getParcelable(LIST_STATE_KEY);
+	}
 
-if(mListState != null){
-	mList.onRestoreInstanceState(mListState);
-	mListState = null;
-}
+	if(mListState != null){
+		mList.onRestoreInstanceState(mListState);
+		mListState = null;
+	}
 
 // tools
-public class LUtils{
+	public class LUtils{
 
-	protected ActionBarActivity mActivity;
+		protected ActionBarActivity mActivity;
 
-	private LUtils(ActionBarActivity activity){
-		mActivity = activity;
-	}
-
-	public static LUtils getInstance(ActionBarActivity activity){
-		return new LUtils(activity);
-	}
-
-	private static boolean hasL(){
-		return Build.VERSION.SDK_INT >= Build.VERSION.CODES.LOLLIPOP;
-	}
-
-	public void startActivityWithTransition(Intent intent, final View clickedView, final String transtionName){
-		ActivityOptions options = null;
-		if(hasL() && clickedView != null && !TextUtils.isEmpty(setTransitionName)){
-
+		private LUtils(ActionBarActivity activity){
+			mActivity = activity;
 		}
 
-		mActivity.startActivity(intent, (options!=null) ? options.toBundle():null);
+		public static LUtils getInstance(ActionBarActivity activity){
+			return new LUtils(activity);
+		}
+
+		private static boolean hasL(){
+			return Build.VERSION.SDK_INT >= Build.VERSION.CODES.LOLLIPOP;
+		}
+
+		public void startActivityWithTransition(Intent intent, final View clickedView, final String transtionName){
+			ActivityOptions options = null;
+			if(hasL() && clickedView != null && !TextUtils.isEmpty(setTransitionName)){
+
+			}
+
+			mActivity.startActivity(intent, (options!=null) ? options.toBundle():null);
+		}
 	}
-}
 
-public class PrefUtils{
+	public class PrefUtils{
 
-	public static void init(final Contenxt context){
-		SharedPreferences sp = PreferenceManager.getDefaultSharePreferences(context);
+		public static void init(final Contenxt context){
+			SharedPreferences sp = PreferenceManager.getDefaultSharePreferences(context);
 		// ...
+		}
 	}
-}
 
-public class ScrimInsetsScrollView extends ScrollView{
+	public class ScrimInsetsScrollView extends ScrollView{
 
-	private Drawable mInsetForeground;
+		private Drawable mInsetForeground;
 
-	private Rect mInsets；
-	private Rect mTempRect = new Rect();
-	private OnInsetsCallback mOnInsetsCallback;
+		private Rect mInsets；
+		private Rect mTempRect = new Rect();
+		private OnInsetsCallback mOnInsetsCallback;
 
-	 public ScrimInsetsScrollView(Context context) {
-        super(context);
-        init(context, null, 0);
-    }
+		public ScrimInsetsScrollView(Context context) {
+			super(context);
+			init(context, null, 0);
+		}
 
-    public ScrimInsetsScrollView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init(context, attrs, 0);
-    }
+		public ScrimInsetsScrollView(Context context, AttributeSet attrs) {
+			super(context, attrs);
+			init(context, attrs, 0);
+		}
 
-    public ScrimInsetsScrollView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-        init(context, attrs, defStyle);
-    }
+		public ScrimInsetsScrollView(Context context, AttributeSet attrs, int defStyle) {
+			super(context, attrs, defStyle);
+			init(context, attrs, defStyle);
+		}
 
-    private void init(Context context, AttributeSet attrs, int defStyle){
-    	final TypedArray a = context.obtainStyledAttributes(attrs,
-                R.styleable.ScrimInsetsView, defStyle, 0);
-        if (a == null) {
-            return;
-        }
-        mInsetForeground = a.getDrawable(R.styleable.ScrimInsetsView_insetForeground);
-        a.recycle();
+		private void init(Context context, AttributeSet attrs, int defStyle){
+			final TypedArray a = context.obtainStyledAttributes(attrs,
+				R.styleable.ScrimInsetsView, defStyle, 0);
+			if (a == null) {
+				return;
+			}
+			mInsetForeground = a.getDrawable(R.styleable.ScrimInsetsView_insetForeground);
+			a.recycle();
 
-        setWillNotDraw(true);
-    }
+			setWillNotDraw(true);
+		}
 
-     protected boolean fitSystemWindows(Rect insets) {
-        mInsets = new Rect(insets);
-        setWillNotDraw(mInsetForeground == null);
-        ViewCompat.postInvalidateOnAnimation(this);
-        if (mOnInsetsCallback != null) {
-            mOnInsetsCallback.onInsetsChanged(insets);
-        }
+		protected boolean fitSystemWindows(Rect insets) {
+			mInsets = new Rect(insets);
+			setWillNotDraw(mInsetForeground == null);
+			ViewCompat.postInvalidateOnAnimation(this);
+			if (mOnInsetsCallback != null) {
+				mOnInsetsCallback.onInsetsChanged(insets);
+			}
         return true; // consume insets
     }
 
@@ -2321,70 +2321,70 @@ protected void onNavDrawerStateChanged(boolean isOpen,boolean isAnimation){
 }
 
 protected void autoShowOrHideActionBar(boolean show) {
-        if (show == mActionBarShown) {
-            return;
-        }
+	if (show == mActionBarShown) {
+		return;
+	}
 
-        mActionBarShown = show;
-        onActionBarAutoShowOrHide(show);
+	mActionBarShown = show;
+	onActionBarAutoShowOrHide(show);
 }
 
-    protected void registerHideableHeaderView(View hideableHeaderView) {
-        if (!mHideableHeaderViews.contains(hideableHeaderView)) {
-            mHideableHeaderViews.add(hideableHeaderView);
-        }
-    }
+protected void registerHideableHeaderView(View hideableHeaderView) {
+	if (!mHideableHeaderViews.contains(hideableHeaderView)) {
+		mHideableHeaderViews.add(hideableHeaderView);
+	}
+}
 
-    protected void deregisterHideableHeaderView(View hideableHeaderView) {
-        if (mHideableHeaderViews.contains(hideableHeaderView)) {
-            mHideableHeaderViews.remove(hideableHeaderView);
-        }
-    }
+protected void deregisterHideableHeaderView(View hideableHeaderView) {
+	if (mHideableHeaderViews.contains(hideableHeaderView)) {
+		mHideableHeaderViews.remove(hideableHeaderView);
+	}
+}
 
 protected void onActionBarAutoShowOrHide(boolean shown) {
-        if (mStatusBarColorAnimator != null) {
-            mStatusBarColorAnimator.cancel();
-        }
-        mStatusBarColorAnimator = ObjectAnimator.ofInt(
-                (mDrawerLayout != null) ? mDrawerLayout : mLUtils,
-                (mDrawerLayout != null) ? "statusBarBackgroundColor" : "statusBarColor",
-                shown ? Color.BLACK : mNormalStatusBarColor,
-                shown ? mNormalStatusBarColor : Color.BLACK)
-                .setDuration(250);
-        if (mDrawerLayout != null) {
-            mStatusBarColorAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    ViewCompat.postInvalidateOnAnimation(mDrawerLayout);
-                }
-            });
-        }
-        mStatusBarColorAnimator.setEvaluator(ARGB_EVALUATOR);
-        mStatusBarColorAnimator.start();
+	if (mStatusBarColorAnimator != null) {
+		mStatusBarColorAnimator.cancel();
+	}
+	mStatusBarColorAnimator = ObjectAnimator.ofInt(
+		(mDrawerLayout != null) ? mDrawerLayout : mLUtils,
+		(mDrawerLayout != null) ? "statusBarBackgroundColor" : "statusBarColor",
+		shown ? Color.BLACK : mNormalStatusBarColor,
+		shown ? mNormalStatusBarColor : Color.BLACK)
+	.setDuration(250);
+	if (mDrawerLayout != null) {
+		mStatusBarColorAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+			@Override
+			public void onAnimationUpdate(ValueAnimator valueAnimator) {
+				ViewCompat.postInvalidateOnAnimation(mDrawerLayout);
+			}
+		});
+	}
+	mStatusBarColorAnimator.setEvaluator(ARGB_EVALUATOR);
+	mStatusBarColorAnimator.start();
 
-        updateSwipeRefreshProgressBarTop();
+	updateSwipeRefreshProgressBarTop();
 
-        for (View view : mHideableHeaderViews) {
-            if (shown) {
-                view.animate()
-                        .translationY(0)
-                        .alpha(1)
-                        .setDuration(HEADER_HIDE_ANIM_DURATION)
-                        .setInterpolator(new DecelerateInterpolator());
-            } else {
-                view.animate()
-                        .translationY(-view.getBottom())
-                        .alpha(0)
-                        .setDuration(HEADER_HIDE_ANIM_DURATION)
-                        .setInterpolator(new DecelerateInterpolator());
-            }
-        }
-    }
+	for (View view : mHideableHeaderViews) {
+		if (shown) {
+			view.animate()
+			.translationY(0)
+			.alpha(1)
+			.setDuration(HEADER_HIDE_ANIM_DURATION)
+			.setInterpolator(new DecelerateInterpolator());
+		} else {
+			view.animate()
+			.translationY(-view.getBottom())
+			.alpha(0)
+			.setDuration(HEADER_HIDE_ANIM_DURATION)
+			.setInterpolator(new DecelerateInterpolator());
+		}
+	}
+}
 
 
 public abstract class BaseActivity extends ActionBarActivity implments 
-	SharedPreferences.OnSharedPreferenceChangeListener,
-	MultiSwipeRefreshLayout.CanChildScrollUpCallback{
+SharedPreferences.OnSharedPreferenceChangeListener,
+MultiSwipeRefreshLayout.CanChildScrollUpCallback{
 
 	protected void onCreate(Bundle savedInstanceState){
 		// super
@@ -2407,54 +2407,54 @@ public abstract class BaseActivity extends ActionBarActivity implments
 		int selfItem = getSelfNavDrawerItem();
 
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (mDrawerLayout == null) {
-            return;
-        }
+		if (mDrawerLayout == null) {
+			return;
+		}
 
-        mDrawerLayout.setStatusBarBackgroundColor{
-        	getResources().getColor(R.color.xxx);
-        	 ScrimInsetsScrollView navDrawer = (ScrimInsetsScrollView)
-                mDrawerLayout.findViewById(R.id.navdrawer);
-        }
+		mDrawerLayout.setStatusBarBackgroundColor{
+			getResources().getColor(R.color.xxx);
+			ScrimInsetsScrollView navDrawer = (ScrimInsetsScrollView)
+			mDrawerLayout.findViewById(R.id.navdrawer);
+		}
 
-        mActionBarToolbar.setNavigationIcon(R.drawable.ic_drawer);
-        mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mDrawerLayout.openDrawer(Gravity.START);
-                }
-            }); 
+		mActionBarToolbar.setNavigationIcon(R.drawable.ic_drawer);
+		mActionBarToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				mDrawerLayout.openDrawer(Gravity.START);
+			}
+		}); 
 
- 		mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
-            @Override
-            public void onDrawerClosed(View drawerView) {
+		mDrawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
+			@Override
+			public void onDrawerClosed(View drawerView) {
                 // run deferred action, if we have one
-                if (mDeferredOnDrawerClosedRunnable != null) {
-                    mDeferredOnDrawerClosedRunnable.run();
-                    mDeferredOnDrawerClosedRunnable = null;
-                }
-                if (mAccountBoxExpanded) {
-                    mAccountBoxExpanded = false;
-                    setupAccountBoxToggle();
-                }
-                onNavDrawerStateChanged(false, false);
-            }
+				if (mDeferredOnDrawerClosedRunnable != null) {
+					mDeferredOnDrawerClosedRunnable.run();
+					mDeferredOnDrawerClosedRunnable = null;
+				}
+				if (mAccountBoxExpanded) {
+					mAccountBoxExpanded = false;
+					setupAccountBoxToggle();
+				}
+				onNavDrawerStateChanged(false, false);
+			}
 
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                onNavDrawerStateChanged(true, false);
-            }
+			@Override
+			public void onDrawerOpened(View drawerView) {
+				onNavDrawerStateChanged(true, false);
+			}
 
-            @Override
-            public void onDrawerStateChanged(int newState) {
-                onNavDrawerStateChanged(isNavDrawerOpen(), newState != DrawerLayout.STATE_IDLE);
-            }
+			@Override
+			public void onDrawerStateChanged(int newState) {
+				onNavDrawerStateChanged(isNavDrawerOpen(), newState != DrawerLayout.STATE_IDLE);
+			}
 
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-                onNavDrawerSlide(slideOffset);
-            }
-        });
+			@Override
+			public void onDrawerSlide(View drawerView, float slideOffset) {
+				onNavDrawerSlide(slideOffset);
+			}
+		});
 	}
 
 	protected void onResume(){
@@ -2470,16 +2470,16 @@ public abstract class BaseActivity extends ActionBarActivity implments
 
 		if (Math.signum(deltaY) * Math.signum(mActionBarAutoHideSignal) < 0) {
             // deltaY is a motion opposite to the accumulated signal, so reset signal
-            mActionBarAutoHideSignal = deltaY;
-        } else {
+			mActionBarAutoHideSignal = deltaY;
+		} else {
             // add to accumulated signal
-            mActionBarAutoHideSignal += deltaY;
-        }
+			mActionBarAutoHideSignal += deltaY;
+		}
 
-         boolean shouldShow = currentY < mActionBarAutoHideMinY ||
-                (mActionBarAutoHideSignal <= -mActionBarAutoHideSensivity);
+		boolean shouldShow = currentY < mActionBarAutoHideMinY ||
+		(mActionBarAutoHideSignal <= -mActionBarAutoHideSensivity);
 
-        autoShowOrHideActionBar(shouldShow);
+		autoShowOrHideActionBar(shouldShow);
 	}
 }
 
@@ -2497,8 +2497,8 @@ protected void enableActionBarAutoHide(final ListView listView){
 		public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,int totalItemCount){
 			onMainContentScrolled(firstVisibleItem <= ITEMS_THRESHOLD ? 0 : Integer.MAX_VALUE,
 				lastFvi - firstVisibleItem >0 
-					? Integer.MIN_VALUE
-					: lastFvi == firstVisibleItem ? 0 : Integer.MAX_VALUE;
+				? Integer.MIN_VALUE
+				: lastFvi == firstVisibleItem ? 0 : Integer.MAX_VALUE;
 
 				);
 			lastFvi = firstVisibleItem;
@@ -2564,23 +2564,23 @@ public class HelpUtils{
 				}
 			}, 0, licenseLink.length(),0);
 			aboutBody.append("\n\n");
-            aboutBody.append(licensesLink);
+			aboutBody.append(licensesLink);
 
-            LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(
-            	Context.LAYOUT_INFLATER_SERVICE);
-            TextView aboutBodyView = (TextView) layoutInflater.inflate(R.layout.xxx,null);
-            aboutBodyView.setText(aboutBody);
-            aboutBodyView.setMovementMethod(new LinkMovementMethod());
+			LayoutInflater layoutInflater = (LayoutInflater) getActivity().getSystemService(
+				Context.LAYOUT_INFLATER_SERVICE);
+			TextView aboutBodyView = (TextView) layoutInflater.inflate(R.layout.xxx,null);
+			aboutBodyView.setText(aboutBody);
+			aboutBodyView.setMovementMethod(new LinkMovementMethod());
 
-            return new AlertDialog.Builder(getActivity())
-            	.setTitle("xxx")
-            	.setView(aboutBodyView)
-            	.setPositiveButton("OK",new DialogInterface.OnClickListener(){
-            		public void onClick(DialogInterface dialog, int whichButton){
-            			dialog.dismiss();
-            		}
-            	})
-            	.create();
+			return new AlertDialog.Builder(getActivity())
+			.setTitle("xxx")
+			.setView(aboutBodyView)
+			.setPositiveButton("OK",new DialogInterface.OnClickListener(){
+				public void onClick(DialogInterface dialog, int whichButton){
+					dialog.dismiss();
+				}
+			})
+			.create();
 		}
 	}
 
@@ -2595,15 +2595,15 @@ public class HelpUtils{
 			webView.loadUrl("wwww.xxx");
 
 			return new AlertDialog.Builder(getActivity())
-				.setTitle("xxx")
-				.setView(webView)
-				.setPositiveButton("OK",
-					new DialogInterface.OnClickListener(){
-						public void onClick(DialogInterface dialog, int whichButton){
-							dialog.dismiss();
-						};
-					})
-				.create();
+			.setTitle("xxx")
+			.setView(webView)
+			.setPositiveButton("OK",
+				new DialogInterface.OnClickListener(){
+					public void onClick(DialogInterface dialog, int whichButton){
+						dialog.dismiss();
+					};
+				})
+			.create();
 		}
 	}
 
@@ -2622,15 +2622,15 @@ public class HelpUtils{
 			eulaTextView.setPadding(padding,padding,padding,padding);
 
 			return new AlertDialog.Builder(getActivity())
-				.setTitle("xxx")
-				.setView(eulaTextView)
-				.setPositiveButton("OK",
-					new DialogInterface.OnClickListener(){
-						public void onClick(DialogInterface dialog, int whichButton){
-							dialog.dismiss();
-						};
-					})
-				.create();
+			.setTitle("xxx")
+			.setView(eulaTextView)
+			.setPositiveButton("OK",
+				new DialogInterface.OnClickListener(){
+					public void onClick(DialogInterface dialog, int whichButton){
+						dialog.dismiss();
+					};
+				})
+			.create();
 		}
 	}
 }
@@ -2642,51 +2642,51 @@ public class MultiSwipeRefreshLayout extends SwipeRefreshLayout{
 	private Drawable mForegroundDrawable;
 
 	public MultiSwipeRefreshLayout(Context context) {
-        this(context, null);
-    }
+		this(context, null);
+	}
 
-    public MultiSwipeRefreshLayout(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        final TypedArray a = context.obtainStyledAttributes(attrs,
-                R.styleable.MultiSwipeRefreshLayout, 0, 0);
+	public MultiSwipeRefreshLayout(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		final TypedArray a = context.obtainStyledAttributes(attrs,
+			R.styleable.MultiSwipeRefreshLayout, 0, 0);
 
-        mForegroundDrawable = a.getDrawable(R.styleable.MultiSwipeRefreshLayout_foreground);
-        if (mForegroundDrawable != null) {
-            mForegroundDrawable.setCallback(this);
-            setWillNotDraw(false);
-        }
+		mForegroundDrawable = a.getDrawable(R.styleable.MultiSwipeRefreshLayout_foreground);
+		if (mForegroundDrawable != null) {
+			mForegroundDrawable.setCallback(this);
+			setWillNotDraw(false);
+		}
 
-        a.recycle();
-    }
+		a.recycle();
+	}
 
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        if (mForegroundDrawable != null) {
-            mForegroundDrawable.setBounds(0, 0, w, h);
-        }
-    }
+	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+		super.onSizeChanged(w, h, oldw, oldh);
+		if (mForegroundDrawable != null) {
+			mForegroundDrawable.setBounds(0, 0, w, h);
+		}
+	}
 
-    public void draw(Canvas canvas) {
-        super.draw(canvas);
-        if (mForegroundDrawable != null) {
-            mForegroundDrawable.draw(canvas);
-        }
-    }
+	public void draw(Canvas canvas) {
+		super.draw(canvas);
+		if (mForegroundDrawable != null) {
+			mForegroundDrawable.draw(canvas);
+		}
+	}
 
-    public void setCanChildScrollUpCallback(CanChildScrollUpCallback canChildScrollUpCallback) {
-        mCanChildScrollUpCallback = canChildScrollUpCallback;
-    }
+	public void setCanChildScrollUpCallback(CanChildScrollUpCallback canChildScrollUpCallback) {
+		mCanChildScrollUpCallback = canChildScrollUpCallback;
+	}
 
-    public static interface CanChildScrollUpCallback {
-        public boolean canSwipeRefreshChildScrollUp();
-    }
+	public static interface CanChildScrollUpCallback {
+		public boolean canSwipeRefreshChildScrollUp();
+	}
 
-    public boolean canChildScrollUp() {
-        if (mCanChildScrollUpCallback != null) {
-            return mCanChildScrollUpCallback.canSwipeRefreshChildScrollUp();
-        }
-        return super.canChildScrollUp();
-    }
+	public boolean canChildScrollUp() {
+		if (mCanChildScrollUpCallback != null) {
+			return mCanChildScrollUpCallback.canSwipeRefreshChildScrollUp();
+		}
+		return super.canChildScrollUp();
+	}
 
 }
 
@@ -2707,65 +2707,65 @@ public class BrowseSessionsActivity extends BaseActivity implements SessionsFrag
 }
 
 public class SessionDetailActivity extends BaseActivity implments
-	LoaderManager.LoaderCallbacks<Cursor>,
-	ObservableScrollView.Callbacks{
+LoaderManager.LoaderCallbacks<Cursor>,
+ObservableScrollView.Callbacks{
 
 	private ViewTreeObserver.addOnGlobalLayoutListener mGlobalLayoutListener
-		= new ViewTreeObserver.OnGlobalLayoutListener(){
+	= new ViewTreeObserver.OnGlobalLayoutListener(){
 
-			public void onGlobalLayout(){
-				mAddScheduleButtonHeightPixels = mAddScheduleButton.getHeight();
-				recomputePhotoAndScrollingMetrics();
-			}
+		public void onGlobalLayout(){
+			mAddScheduleButtonHeightPixels = mAddScheduleButton.getHeight();
+			recomputePhotoAndScrollingMetrics();
 		}
+	}
 
 	@Override
-    protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
 
-    	final Toolbar toolbar = getActionBarToolbar();
+		final Toolbar toolbar = getActionBarToolbar();
 		toolbar.setNavigationIcon(shouldBeFloatingWindow
-                ? R.drawable.ic_ab_close : R.drawable.ic_up);
+			? R.drawable.ic_ab_close : R.drawable.ic_up);
 		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+			@Override
+			public void onClick(View view) {
+				finish();
+			}
+		});
 
 		// 最外面一层可滑动
-        mScrollView = (ObservableScrollView) findViewById(R.id.scroll_view);
-        mScrollView.addCallbacks(this);
+		mScrollView = (ObservableScrollView) findViewById(R.id.scroll_view);
+		mScrollView.addCallbacks(this);
 
-        mHeaderBox = findViewById(R.id.header_session);
-        mPhotoViewContainer = findViewById(R.id.session_photo_container);
+		mHeaderBox = findViewById(R.id.header_session);
+		mPhotoViewContainer = findViewById(R.id.session_photo_container);
 
-        ViewTreeObserver vto = mScrollView.getViewTreeObserver();
-        if (vto.isAlive()) {
-            vto.addOnGlobalLayoutListener(mGlobalLayoutListener);
-        }
-    }
+		ViewTreeObserver vto = mScrollView.getViewTreeObserver();
+		if (vto.isAlive()) {
+			vto.addOnGlobalLayoutListener(mGlobalLayoutListener);
+		}
+	}
 
 
-    public void onScrollChanged(int deltaX, int deltaY){
+	public void onScrollChanged(int deltaX, int deltaY){
 
-    	int scrollY = mScrollView.getScrollY();
+		int scrollY = mScrollView.getScrollY();
 
-    	float newTop = Math.max(mPhotoHeightPixels, scrollY);
-    	mHeaderBox.setTranslationY(newTop);
+		float newTop = Math.max(mPhotoHeightPixels, scrollY);
+		mHeaderBox.setTranslationY(newTop);
 
-    	float gapFillProgress = 1;
-    	if(mPhotoHeightPixels != 0){
-    		gapFillProgress = Math.min(
-    			Math.max(
-    				UIUtils.getProgress(scrollY,0,mPhotoHeightPixels)
-    				,0)
-    			,1);
-    	}
+		float gapFillProgress = 1;
+		if(mPhotoHeightPixels != 0){
+			gapFillProgress = Math.min(
+				Math.max(
+					UIUtils.getProgress(scrollY,0,mPhotoHeightPixels)
+					,0)
+				,1);
+		}
 
-    	mPhotoViewContainer.setTranslationY(scrollY * 0.5f);
-    }
+		mPhotoViewContainer.setTranslationY(scrollY * 0.5f);
+	}
 
-		
+
 
 }
 
@@ -2773,29 +2773,29 @@ public class ObservableScrollView extends ScrollView{
 	private ArrayList<Callbacks> mCallbacks = new Arraylist<Callbacks>();
 
 	public ObservableScrollView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
+		super(context, attrs);
+	}
 
-    protected void onScrollChanged(int l, int t, int oldl, int oldt) {
-        super.onScrollChanged(l, t, oldl, oldt);
-        for (Callbacks c : mCallbacks) {
-            c.onScrollChanged(l - oldl, t - oldt);
-        }
-    }
+	protected void onScrollChanged(int l, int t, int oldl, int oldt) {
+		super.onScrollChanged(l, t, oldl, oldt);
+		for (Callbacks c : mCallbacks) {
+			c.onScrollChanged(l - oldl, t - oldt);
+		}
+	}
 
-    public int computeVerticalScrollRange(){
-    	return super.computeVerticalScrollRange();
-    }
+	public int computeVerticalScrollRange(){
+		return super.computeVerticalScrollRange();
+	}
 
-    public void addCallbacks(Callbacks listener) {
-        if (!mCallbacks.contains(listener)) {
-            mCallbacks.add(listener);
-        }
-    }
+	public void addCallbacks(Callbacks listener) {
+		if (!mCallbacks.contains(listener)) {
+			mCallbacks.add(listener);
+		}
+	}
 
-    public static interface Callbacks {
-        public void onScrollChanged(int deltaX, int deltaY);
-    }
+	public static interface Callbacks {
+		public void onScrollChanged(int deltaX, int deltaY);
+	}
 
 }
 
@@ -2808,14 +2808,14 @@ private void recomputePhotoAndScrollingMetrics(){
 	ViewGroup.LayoutParams lp;
 	lp = mPhotoViewContainer.getLayoutParams();
 	if (lp.height != mPhotoHeightPixels) {
-            lp.height = mPhotoHeightPixels;
-            mPhotoViewContainer.setLayoutParams(lp);
-    }
+		lp.height = mPhotoHeightPixels;
+		mPhotoViewContainer.setLayoutParams(lp);
+	}
 
-    ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams)mDetailsContainer.getLayoutParams();
-    if (mlp.topMargin != mHeaderHeightPixels + mPhotoHeightPixels) {
-            mlp.topMargin = mHeaderHeightPixels + mPhotoHeightPixels;
-            mDetailsContainer.setLayoutParams(mlp);
+	ViewGroup.MarginLayoutParams mlp = (ViewGroup.MarginLayoutParams)mDetailsContainer.getLayoutParams();
+	if (mlp.topMargin != mHeaderHeightPixels + mPhotoHeightPixels) {
+		mlp.topMargin = mHeaderHeightPixels + mPhotoHeightPixels;
+		mDetailsContainer.setLayoutParams(mlp);
 	}
 
 	onScrollChanged(0, 0); // trigger scroll handling    
@@ -2878,45 +2878,45 @@ public class FeedContextMenu extends LinearLayout{
 		}
 	}
 
-	 @OnClick(R.id.btnCancel)
-    public void onCancelClick() {
-        if (onItemClickListener != null) {
-            onItemClickListener.onCancelClick(feedItem);
-        }
-    }
+	@OnClick(R.id.btnCancel)
+	public void onCancelClick() {
+		if (onItemClickListener != null) {
+			onItemClickListener.onCancelClick(feedItem);
+		}
+	}
 
-    public void setOnFeedMenuItemClickListener(OnFeedContextMenuItemClickListener onItemClickListener){
-    	this.onItemClickListener = onItemClickListener;
-    }
+	public void setOnFeedMenuItemClickListener(OnFeedContextMenuItemClickListener onItemClickListener){
+		this.onItemClickListener = onItemClickListener;
+	}
 
-    public interface OnFeedContextMenuItemClickListener{
+	public interface OnFeedContextMenuItemClickListener{
 
-    	public void onReportClick(int feedItem);
+		public void onReportClick(int feedItem);
 
-    	public void onSharePhotoClick(int feedItem);
+		public void onSharePhotoClick(int feedItem);
 
-    	public void onCopyShareUrlClick(int feedItem);
+		public void onCopyShareUrlClick(int feedItem);
 
-    	public void onCancelClick(int feedItem);
-    }
+		public void onCancelClick(int feedItem);
+	}
 }
 
 
 // menu selector
 // res/drawable/btn_context_menu.xml
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-	<item android:drawable="@color/btn_context_menu_normal" android:state_focused="false" android:state_pressed="false">
-	<item android:drawable="@color/btn_context_menu_pressed" android:state_pressed="true">
-	<item android:drawable="@color/btn_context_menu_pressed" android:state_focused="true">
+<item android:drawable="@color/btn_context_menu_normal" android:state_focused="false" android:state_pressed="false">
+<item android:drawable="@color/btn_context_menu_pressed" android:state_pressed="true">
+<item android:drawable="@color/btn_context_menu_pressed" android:state_focused="true">
 </selector>	
 // res/drawable-v21/btn_context_menu.xml
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
-    android:color="@color/btn_context_menu_pressed">
-    <item>
-        <shape android:shape="rectangle">
-            <solid android:color="@color/btn_context_menu_normal" />
-        </shape>
-    </item>
+android:color="@color/btn_context_menu_pressed">
+<item>
+<shape android:shape="rectangle">
+<solid android:color="@color/btn_context_menu_normal" />
+</shape>
+</item>
 </ripple>
 
 
@@ -2986,13 +2986,13 @@ public class FeedContextMenuManager extends RecyclerView.OnScrollListener implem
 		contextMenuView.setScaleX(0.1f);
 		contextMenuView.setScaleY(0.1f);
 		contextMenuView.animate()
-			.scaleX(1f).scaleY(1f)
-			.setDuration(150)
-			.setInterpolator(new Overshootinterpolator(){
-				public void onAnimationEnd(){
-					isContextMenuShowing = false;
-				}
-			});
+		.scaleX(1f).scaleY(1f)
+		.setDuration(150)
+		.setInterpolator(new Overshootinterpolator(){
+			public void onAnimationEnd(){
+				isContextMenuShowing = false;
+			}
+		});
 	}
 
 	public void hideContextMenu(){
@@ -3006,18 +3006,18 @@ public class FeedContextMenuManager extends RecyclerView.OnScrollListener implem
 		contextMenuView.setPivotX(contextMenuView.getWidth()/2);
 		contextMenuView.setPivotY(contextMenuView.getHeight());
 		contextMenuView.animate()
-			.scaleX(0.1f).scaleY(0.1f)
-			.setDuration(150)
-			.setInterpolator(new AccelerateInterpolatro())
-			.setStartDelay(100)
-			.setListener(new AnimatorListenerAdater(){
-				public void onAnimationEnd(Animator animationi){
-					if( contextMenuView != null){
-						contextMenuView.dismiss();
-					}
-					isContextMenuShowing = false;
+		.scaleX(0.1f).scaleY(0.1f)
+		.setDuration(150)
+		.setInterpolator(new AccelerateInterpolatro())
+		.setStartDelay(100)
+		.setListener(new AnimatorListenerAdater(){
+			public void onAnimationEnd(Animator animationi){
+				if( contextMenuView != null){
+					contextMenuView.dismiss();
 				}
-			})
+				isContextMenuShowing = false;
+			}
+		})
 	}
 
 	public void onScrolled(RecyclerView recyclerView, int dx, int dy){
@@ -3029,24 +3029,24 @@ public class FeedContextMenuManager extends RecyclerView.OnScrollListener implem
 }
 
 <TextSwitcher
-	android:id="@+id/tsLikesCounter"
-	android:layout_width="wrap_content"
-	android:layout_height="wrap_content"
-	android:layout_marginLeft="8dp"
-	android:layout_marginRight="8dp"
-	android:inAnimation="@anim/slide_in_likes_counter"
-	android:outAnimation="@anim/slide_out_likes_counter">
+android:id="@+id/tsLikesCounter"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_marginLeft="8dp"
+android:layout_marginRight="8dp"
+android:inAnimation="@anim/slide_in_likes_counter"
+android:outAnimation="@anim/slide_out_likes_counter">
 
-		<TextView 
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="123 likes"
-			android:textColor="@color/text_like_counter" />
+<TextView 
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="123 likes"
+android:textColor="@color/text_like_counter" />
 
-		<TextView
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:textColor="@color/text_like_counter" />
+<TextView
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:textColor="@color/text_like_counter" />
 </TextSwitcher>
 
 private void updateLikesCounter(CellFeedViewHolder holder, boolean animated){
@@ -3103,85 +3103,85 @@ private void updateHeartButton(final CellFeedViewHolder holder, boolean animated
 			animatorSet.start();
 		}
 	}else{
-		 
+
 		if (likedPositions.contains(holder.getPosition())) {
-            holder.btnLike.setImageResource(R.drawable.ic_heart_red);
-        } else {
-            holder.btnLike.setImageResource(R.drawable.ic_heart_outline_grey);
-        }
+			holder.btnLike.setImageResource(R.drawable.ic_heart_red);
+		} else {
+			holder.btnLike.setImageResource(R.drawable.ic_heart_outline_grey);
+		}
 	}
 }
 
 // Vector
 <?xml version="1.0" encode="UTF-8"?>
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-	android:viewportWidth="500"
-	android:viewportHeight="500"
-	android:width="500px"
-	android:height="500px">
-	<group android:name="android">
-		<path
-			android:name="head"
-			android:fillColor="#9fbf3b"
-			android:pathData="M301.314,xxxxxxxxxxxxxxx" />
-		<path
-            android:name="left_eye"
-            android:fillColor="#FFFFFF"
-            android:pathData="M203.956,xxxxxxxxxxxxxxx" />
+android:viewportWidth="500"
+android:viewportHeight="500"
+android:width="500px"
+android:height="500px">
+<group android:name="android">
+<path
+android:name="head"
+android:fillColor="#9fbf3b"
+android:pathData="M301.314,xxxxxxxxxxxxxxx" />
+<path
+android:name="left_eye"
+android:fillColor="#FFFFFF"
+android:pathData="M203.956,xxxxxxxxxxxxxxx" />
 </vector>
 
 <group android:name="android">
-	<group android:name="head_eyes">
-		<path
-			android:name="head"
-			android:fillColor="#xxx"
-			android:pathData="Mxxxxxxx" />
-		<path
-			android:name="left_eye"
-			android:fillColor="#xxx"
-			android:pathData="Mxxxxxxx" />
-		<path
-			android:name="right_eye"
-			android:fillColor="#xxx"
-			android:pathData="Mxxxxxxx" />		
-	</group>
-	<group android:name="arms">
-		<path
-			android:name="left_arm"
-			android:fillColor="#xxx"
-			android:pathData="Mxxxxxxx" />
-		<path
-			android:name="right_arm"
-			android:fillColor="#xxx"
-			android:pathData="Mxxxxxxx" />		
-	</group>
+<group android:name="head_eyes">
+<path
+android:name="head"
+android:fillColor="#xxx"
+android:pathData="Mxxxxxxx" />
+<path
+android:name="left_eye"
+android:fillColor="#xxx"
+android:pathData="Mxxxxxxx" />
+<path
+android:name="right_eye"
+android:fillColor="#xxx"
+android:pathData="Mxxxxxxx" />		
+</group>
+<group android:name="arms">
+<path
+android:name="left_arm"
+android:fillColor="#xxx"
+android:pathData="Mxxxxxxx" />
+<path
+android:name="right_arm"
+android:fillColor="#xxx"
+android:pathData="Mxxxxxxx" />		
+</group>
 </group>
 
 <?xml version="1.0" encoding="UTF-8"?>
 <animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
-	android:drawable="@drawable/android">
+android:drawable="@drawable/android">
 
-	<target
-		android:animation="@animator/shrug"
-		android:name="head_eyes" />
+<target
+android:animation="@animator/shrug"
+android:name="head_eyes" />
 
-	<target
-		android:animation="@animator/shurg"
-		android:name="arms" />
+<target
+android:animation="@animator/shurg"
+android:name="arms" />
 
 </animated-vector>
 
 // res/animator/shrug.xml
 <?xml version="1.0" encoding="utf-8"?>
 <set xmlns:android="http://schemas.android.com/apk/res/android">
-	<ObjectAnimator
-		android:propertyName="translateY"
-		android:valueType="floatType"
-		android:valueFrom="0"
-		android:valueTo="-10"
-		android:repeatMode="reverse"
-		android:repeatCount="infinite"
-		android:duratioin="250" />
+<ObjectAnimator
+android:propertyName="translateY"
+android:valueType="floatType"
+android:valueFrom="0"
+android:valueTo="-10"
+android:repeatMode="reverse"
+android:repeatCount="infinite"
+android:duratioin="250" />
 </set>
 
 ImageView androidImageView = (ImageView)findViewById(R.id.xxx);
@@ -3203,8 +3203,8 @@ animator.addUpdateListener(new AnimatorUpdateListener(){
 });
 
 ObjectAnimator anim = ObjectAnimator
-	.ofFloat(view, "xxx", 1.0F, 0.0F)
-	.setDuration(500);
+.ofFloat(view, "xxx", 1.0F, 0.0F)
+.setDuration(500);
 anim.start();
 
 anim.addUpdateListener(new AnimatorUpdateListener(){
@@ -3243,7 +3243,7 @@ public void propertyValuesHolder(View view){
 	PropertyValueHolder pvhZ = PropertyValueHolder.ofFloat("scaleY",1f, 0, 1f);
 
 	ObjectAnimator.ofPropertyValueHodler(view, pvhX, pvhY, pvhZ)
-		.setDuration(1000).start();
+	.setDuration(1000).start();
 }
 
 // 动画更新的过程中，会不断调用setPropName更新元素属性，所有使用objectAnimator更新某个属性，必须有getter和setter
@@ -3348,59 +3348,59 @@ public void playWithAfter(View view){
 // attrs.xml
 <?xml version="1.0" encoding="utf-8"?>  
 <resources>  
-    <attr name="colorValue" format="color" />  
-    <attr name="floatValue" format="float" />  
-    <attr name="integerValue" format="integer" />  
-    <attr name="booleanValue" format="boolean" />  
-    <attr name="dimensionValue" format="dimension" />  
-    <attr name="stringValue" format="string" />  
-    <attr name="referenceValue" format="reference" />  
+<attr name="colorValue" format="color" />  
+<attr name="floatValue" format="float" />  
+<attr name="integerValue" format="integer" />  
+<attr name="booleanValue" format="boolean" />  
+<attr name="dimensionValue" format="dimension" />  
+<attr name="stringValue" format="string" />  
+<attr name="referenceValue" format="reference" />  
 </resources>  
 
 <style name="SwitchTheme1" parent="@android:style/Theme.Black">  
-    <item name="colorValue">#FF00FF00</item>  
-    <item name="floatValue">0.35</item>  
-    <item name="integerValue">33</item>  
-    <item name="booleanValue">true</item>  
-    <item name="dimensionValue">76dp</item>  
-    <!-- 如果string类型不是填的引用而是直接放一个字符串,在布局文件中使用正常,但代码里获取的就有问题 -->  
-    <item name="stringValue">@string/hello_world</item>  
-    <item name="referenceValue">@drawable/hand</item>  
+<item name="colorValue">#FF00FF00</item>  
+<item name="floatValue">0.35</item>  
+<item name="integerValue">33</item>  
+<item name="booleanValue">true</item>  
+<item name="dimensionValue">76dp</item>  
+<!-- 如果string类型不是填的引用而是直接放一个字符串,在布局文件中使用正常,但代码里获取的就有问题 -->  
+<item name="stringValue">@string/hello_world</item>  
+<item name="referenceValue">@drawable/hand</item>  
 </style>  
 
 <style name="SwitchTheme2" parent="@android:style/Theme.Wallpaper">  
-    <item name="colorValue">#FFFFFF00</item>  
-    <item name="floatValue">1.44</item>  
-    <item name="integerValue">55</item>  
-    <item name="booleanValue">false</item>  
-    <item name="dimensionValue">76px</item>  
-    <item name="stringValue">@string/action_settings</item>  
-    <item name="referenceValue">@drawable/ic_launcher</item>  
+<item name="colorValue">#FFFFFF00</item>  
+<item name="floatValue">1.44</item>  
+<item name="integerValue">55</item>  
+<item name="booleanValue">false</item>  
+<item name="dimensionValue">76px</item>  
+<item name="stringValue">@string/action_settings</item>  
+<item name="referenceValue">@drawable/ic_launcher</item>  
 </style>  
 
 <TextView  
-        android:id="@+id/themeColor"  
-        android:layout_width="wrap_content"  
-        android:layout_height="wrap_content"  
-        android:layout_alignLeft="@+id/themeText"  
-        android:layout_below="@+id/themeText"  
-        android:text="TextView"  
-        android:textColor="?attr/colorValue" />  
+android:id="@+id/themeColor"  
+android:layout_width="wrap_content"  
+android:layout_height="wrap_content"  
+android:layout_alignLeft="@+id/themeText"  
+android:layout_below="@+id/themeText"  
+android:text="TextView"  
+android:textColor="?attr/colorValue" />  
 
 
 if (useThemeBlack)  
-    setTheme(R.style.SwitchTheme1);  
+	setTheme(R.style.SwitchTheme1);  
 else  
-    setTheme(R.style.SwitchTheme2);  
+	setTheme(R.style.SwitchTheme2);  
 setContentView(R.layout.activity_theme_switch);
 
 <?xml version="1.0" encoding="utf-8"?>  
 <objectAnimator xmlns:android="http://schemas.android.com/apk/res/android"  
-	android:duration="10000"
-	android:propertyName="scaleX"
-	android:valueFrom="1.0"
-	android:valueTo="2.0"
-	android:valueType="floatType" >
+android:duration="10000"
+android:propertyName="scaleX"
+android:valueFrom="1.0"
+android:valueTo="2.0"
+android:valueType="floatType" >
 </objectAnimator>
 
 public void scaleX(View view){
@@ -3411,21 +3411,21 @@ public void scaleX(View view){
 
 <?xml version="1.0" encoding="utf-8"?>  
 <set xmlns:android="http://schemas.android.com/apk/res/android"  
-    android:ordering="together" >  
-  
-    <objectAnimator  
-        android:duration="1000"  
-        android:propertyName="scaleX"  
-        android:valueFrom="1"  
-        android:valueTo="0.5" >  
-    </objectAnimator>  
-    <objectAnimator  
-        android:duration="1000"  
-        android:propertyName="scaleY"  
-        android:valueFrom="1"  
-        android:valueTo="0.5" >  
-    </objectAnimator>  
-  
+android:ordering="together" >  
+
+<objectAnimator  
+android:duration="1000"  
+android:propertyName="scaleX"  
+android:valueFrom="1"  
+android:valueTo="0.5" >  
+</objectAnimator>  
+<objectAnimator  
+android:duration="1000"  
+android:propertyName="scaleY"  
+android:valueFrom="1"  
+android:valueTo="0.5" >  
+</objectAnimator>  
+
 </set> 
 
 Animator anim = AnimtorInflater.loadAnimator(this, R.animator.scale);
@@ -3473,14 +3473,14 @@ private class DragController implements RecyclerView.OnItemTouchListener{
 		this.overlay = overlay;
 
 		GestureDetector.SimpleOnGestureListener longClickGestureListener = 
-			new GestureDetector.SimpleOnGestureListener(){
-				public void onLongPress(MotionEvent e){
-					super.onLongPress(e);
+		new GestureDetector.SimpleOnGestureListener(){
+			public void onLongPress(MotionEvent e){
+				super.onLongPress(e);
 
-					isDragging = true;
-					dragStart(e.getX(), e.getY());
-				}
+				isDragging = true;
+				dragStart(e.getX(), e.getY());
 			}
+		}
 		this.gestureDetector = new GestureDetectorCompat(recyclerView.getContext(), longClickGestureListener);
 	}
 
@@ -3601,16 +3601,16 @@ public void setRecyclerViewLayoutManager(LayoutManagerType layoutMagerType){
 
 	switch(layoutMagerType){
 		case GRID_LAYOUT_MANAGER:
-			mLayoutManger = new GridLayoutManger(getActivity(), SPAN_COUNT);
-			mCurrentLayoutManagerType = LayoutManagerType.GRID_LAYOUT_MANAGER;
-			break;
+		mLayoutManger = new GridLayoutManger(getActivity(), SPAN_COUNT);
+		mCurrentLayoutManagerType = LayoutManagerType.GRID_LAYOUT_MANAGER;
+		break;
 		case LINEAR_LAYOUT_MANAGER:
-			mLayoutManger = new LinearLayoutManger(getActivity());
-			mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
-			break;
+		mLayoutManger = new LinearLayoutManger(getActivity());
+		mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
+		break;
 		default:
-			mLayoutManger = new LinearLayoutManger(getActivity());
-			mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
+		mLayoutManger = new LinearLayoutManger(getActivity());
+		mCurrentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
 	}
 
 	mRecyclerView.setLayoutManager(mLayoutManger);
@@ -3671,3 +3671,257 @@ float textSize = getResources().getDimensionPixelSize(R.dimen.xxx);
 float maxTextSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,maxTextSize, getResources().getDisplayMetrics());
 
 setTextSize(TypedValue.COMPLEX_UNIT_PX, letterSize);
+
+public class RevealBackgroundView extends View{
+	public static final int STATE_NOT_STARTED = 0;
+	public static final int STATE_FILL_STARTED = 1;
+	public static final int STATE_FINISH = 2;
+
+	private static final Interpolator INTERPOLATOR = new AccelerateInterpolator();
+	private static final int FILL_TIME = 400;
+
+	private int state = STATE_NOT_STARTED;
+
+	private Paint fillPaint;
+	private int currentRadius;
+	ObjectAnimator revealAnimator;
+
+	private int statrLocationX;
+	private int startLocationY;
+
+	private OnStateChangeListener onStateChangeListener;
+
+	public RevealBackgroundView(Context context){
+		super(context);
+		init();
+	}
+
+	public RevealBackgroundView(Context context, AttributeSet attrs){
+		suepr(context, attrs);
+		init();
+	}
+
+	public RevealBackgroundView(Context context, AttributeSet attrs, int defStyleAttr){
+		super(context, attrs, defStyle);
+		init();
+	}
+
+	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+	public RevealBackgroundView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes){
+		super(context, attrs, defStyleAttr, defStyleRes);
+		init();
+	}
+
+	private void init(){
+		fillPaint = new Paint();
+		fillPaint.setStyle(Paint.Style.FILL);
+		fillPaint.setColor(Color.WHITE);
+	}
+
+	public void startFromLocation(int[] tapLocationOnScreen){
+		changeState(STATE_FILL_STARTED);
+		statrLocationX = tapLocationOnScreen[0];
+		startLocationY = tapLocationOnScreen[1];
+		revealAnimator = ObjectAnimator.ofInt(this,"currentRadius",0,getWidth() + getHeight()).setDuration(FILL_TIME);
+		revealAnimator.setInterpolator(INTERPOLATOR);
+		revealAnimator.addListener(new AnimatorListenerAdapter(){
+
+			public void onAnimationEnd(Animator animation){
+				changeState(STATE_FINISH);
+			}
+		});
+		revealAnimator.start();
+	}
+
+	public void setToFinishedFrame(){
+		changeState(STATE_FINISH);
+		invalidate();
+	}
+
+	protected void onDraw(Canvas canvas){
+		if(state == STATE_FINISH){
+			canvas.drawRect(0,0,getWidth(),getHeight(),fillPaint);
+		}else{
+			canvas.drawCircle(statrLocationX,startLocationY,currentRadius,fillPaint);
+		}
+	}
+
+	private void onDraw(Canvas canvas){
+		if(state == STATE_FINISH){
+			canvas.drawRect(0,0,getWidth(),getHeight(), fillPaint);
+		}else{
+			canvas.drawCircle(statrLocationX,startLocationY, currentRadius, fillPaint);
+		}
+	}
+
+	private void changeState(int state){
+		if( this.state == state){
+			return;
+		}
+
+		this.state = state;
+		if(onStateChangeListener != null){
+			onStateChangeListener.onStateChange(state);
+		}
+	}
+
+	public void setOnStateChangeListener(OnStateChangeListener onStateChangeListener){
+		this.onStateChangeListener = onStateChangeListener;
+	}
+
+	public void setCurrentRadius(int radius){
+		this.currentRadius = radius;
+		invalidate();
+	}
+
+	public static interface OnStateChangeListener{
+		void onStateChange(int state);
+	}
+}
+
+public viod onProfileClick(View v){
+	int[] startingLocation = new int[2];
+	v.getLocationOnScreen(startingLocation);
+	startingLocation[0] += v.getWidth()/2;
+	UserProfileActivity.startUserProfileFromLocation(startingLocation, this);
+	overridePendingTransition(0,0);
+}
+
+public class UserProfileActivity extends BaseActivity implements RevvealBackgroundView.OnStateChangeListener{
+	public static final String ARG_REVEAL_STATE_LOCATION = "reveal_start_location";
+
+	private UserProfileAdapter userPhotosAdapter;
+
+	public static void startUserProfileFromLocation(int[] startLocation, Activity startingActivity){
+		Intent intent = new Intent(startingActivity, UserProfileActivity.class);
+		intent.putExtra(ARG_REVEAL_STATE_LOCATION, startingLocation);
+		startingActivity.startActivity(intent);
+	}
+
+	protected void onCreate(Bundle savedInstanceState){
+		super.onCreate(savedinstanceState);
+		setContentView(R.layout.xxx);
+		setupUserProfileGrid();
+		setupRevealBackground(savedinstanceState);
+	}
+
+	private void setupRevealBackground(Bundle savedinstanceState){
+		vRevealBackground.setOnStateChangeListener(this);
+		if(savedinstanceState == null){
+			final int[] startingLocation = getIntent().getIntArrayExtra(ARG_REVEAL_STATE_LOCATION);
+			vRevealBackground.getViewTreeObserver().addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener(){
+				public boolean onPreDraw(){
+					vRevealBackground.getViewTreeObserver().removeOnPreDrawListener(this);
+					vRevealBackground.startFromLocation(startingLocation);
+					return false;
+				}
+			});
+		}else{
+			userPhotosAdapter.setLockedAnimationis(true);
+			vRevealBackground.setToFinishedFrame();
+		}
+	}
+
+	 private void setupUserProfileGrid() {
+        final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        rvUserProfile.setLayoutManager(layoutManager);
+        rvUserProfile.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                userPhotosAdapter.setLockedAnimations(true);
+            }
+        });
+    }
+ 
+    @Override
+    public void onStateChange(int state) {
+        if (RevealBackgroundView.STATE_FINISHED == state) {
+            rvUserProfile.setVisibility(View.VISIBLE);
+            userPhotosAdapter = new UserProfileAdapter(this);
+            rvUserProfile.setAdapter(userPhotosAdapter);
+        } else {
+            rvUserProfile.setVisibility(View.INVISIBLE);
+        }
+    }
+}
+
+//SlidingPaneLayout 侧边栏
+spl = (SlidingPaneLayout) this.findViewById(R.id.slidingpanellayout);
+spl.setPanelSlideListener(new PanelSlideListener() {
+    @Override
+    public void onPanelClosed(View view) {
+        MainActivity.this.getFragmentManager()
+                .findFragmentById(R.id.leftfragment)
+                .setHasOptionsMenu(false);
+    }
+
+    @Override
+    public void onPanelOpened(View viw) {
+        MainActivity.this.getFragmentManager()
+                .findFragmentById(R.id.leftfragment)
+                .setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onPanelSlide(View arg0, float arg1) {
+
+    }
+});
+
+// ViewDragHelper
+// ViewDragHelper.Callback是连接ViewDragHelper与view之间的桥梁（这个view一般是指拥子view的容器即parentView）
+// ViewDragHelper的实例是通过静态工厂方法创建的；
+// 你能够指定拖动的方向；
+// ViewDragHelper可以检测到是否触及到边缘；
+// ViewDragHelper并不是直接作用于要被拖动的View，而是使其控制的视图容器中的子View可以被拖动，
+// 如果要指定某个子view的行为，需要在Callback中想办法；
+
+// ViewDragHelper类的设计决定了其适用于被包含在一个自定义ViewGroup之中，而不是对任意一个布局上的视图容器使用ViewDragHelper
+
+public class DragLayout extends LinearLayout{
+	private final ViewDragHelper mDragHelper;
+	private View mDragView;
+
+	public DragLayout(Context context){
+		this(context, null);
+	}
+
+	public DragLayout(Context context, AttributeSet attrs){
+		this(context, attrs, 0);
+	}
+
+	public DragLayout(Context context, AttributeSet attrs, int defStyle){
+		super(context, attrs, defStyle);
+		mDragHelper = ViewDragHelper.create(this, 1.0f, new DragHelperCallback());
+	}
+
+	public boolean onInterceptTouchEvent(MotionEvent ev){
+		final int action = MotionEventCompat.getActionMasked(ev);
+		if(action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_UP){
+			mDragHelper.cancel();
+			return false;
+		}
+		return mDragHelper.shouldInterceptTouchEvent(ev);
+	}
+
+	public boolean onTouchEvent(MotionEvent ev){
+		mDragHelper.processTouchEvent(ev);
+		return true;
+	}
+
+	public int clampViewPositionHorizontal(View child, int left, int dx){
+		final int leftBound = getPaddingLeft();
+		final int rightBound = getWidth() - mDragView.getWidth();
+		final int newLeft = Math.min(Math.max(left,leftBound), rightBound);
+		return newLeft;
+	}
+
+	@Override
+	public int clampViewPositionVertical(View child, int top, int dy) {
+		final int topBound = getPaddingTop();
+		final int bottomBound = getHeight() - mDragView.getHeight();
+		final int newTop = Math.min(Math.max(top, topBound), bottomBound);
+		return newTop;
+	}
+
+}
