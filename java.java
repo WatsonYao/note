@@ -3924,4 +3924,19 @@ public class DragLayout extends LinearLayout{
 		return newTop;
 	}
 
+//返回值可以决定一个parentview中哪个子view可以拖动
+	@Override
+	public boolean tryCaptureView(View child, int pointerId) {
+		return child == mDragView1;
+	}
+
+	mDragHelper.setEdgeTrackingEnabled(ViewDragHelper.EDGE_LEFT);
+
+	public void onEdgeTouched(int edgeFlags, int pointerId){
+		super.onEdgeTouched(edgeFlags,pointerId);
+	}
+
+	public void onEdgeDragStarted(int edgeFlags, int pointerId){
+		mDragHelper.captureChildView(mDragView2, pointerId);
+	}
 }
