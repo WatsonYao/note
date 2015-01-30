@@ -3,3 +3,14 @@ https://github.com/googlesamples
 
 官方性能优化
 1. view的背景颜色不要重复设置
+
+productFlavors{
+	wandoujia{}
+	baidu{}
+	qihu360{}
+	uc{}
+
+	productFlavors.all {
+		flavor -> flavor.manifestPlaceholders = [ XX_YY_ZZ:name]
+	}
+}

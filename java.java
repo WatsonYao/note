@@ -3940,3 +3940,83 @@ public class DragLayout extends LinearLayout{
 		mDragHelper.captureChildView(mDragView2, pointerId);
 	}
 }
+
+// ValueAnimator
+public class SampleAnimatorA extends Activity implements ValueAnimator.AnimatorUpdateListener{
+	private ValueAnimator mAnim;
+
+	protected void onCreate(Bundle savedInstanceState){
+		mAnim = ValueAnimator.ofFloat(0.0f, 1.0f);
+		mAnim.setDuration(2000);
+		mAnim.addUpdateListener(this);
+		mAnimLogButton.setOnClickListener(new View.OnClickListener(){
+			public void onClick(View v){
+				mAnim.start();
+			}
+		});
+	}
+
+	public void onAnimatoinUpdate(ValueAnimator animation){
+		animation.getAnimatedValue();
+	}
+}
+
+PropertyValuesHolder colorHolder = PropertyValuesHolder.ofObject("color",new ArgbEvaluator(),Integer.valueOf(xxx),Integer.valueOf(xxx));
+mColorAnim2 = ObjectAnimator.ofPropertyValueHodler(xxx,colorHolder);
+mColorAnim2.start();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
