@@ -3965,22 +3965,146 @@ PropertyValuesHolder colorHolder = PropertyValuesHolder.ofObject("color",new Arg
 mColorAnim2 = ObjectAnimator.ofPropertyValueHodler(xxx,colorHolder);
 mColorAnim2.start();
 
+// 侧滑栏 硬编码进activity
+public class GlobalMenuView extends ListView implments View.OnClickListener{
+
+	private OnHeaderClickListener onHeaderClickListener;
+	private GlobalMenuAdapter globalMenuAdapter;
+	private ImageView ivUserProfilePhoto;
+	private int avatarSize;
+	private String profilePhoto;
+
+	public GlobalMenuView(Context context){
+		super(context);
+		inti();
+	}
+
+	private void init(){
+		setChoiceMode(CHOICE_MODE_SINGLE);
+		setDivider(getResources().getDrawable(android.R.color.transparent));
+		setDividerHight(0);
+		setBackgroundColor(Color.WHITE);
+
+		setupHeader();
+		setupAdapter();
+	}
+
+	private void setupAdapter(){
+		globalMenuAdapter = new GlobalMenuAdapter(getContext());
+		setAdapter(globalMenuAdapter);
+	}
+
+	private void setupHeader(){
+		this.avatarSize = getResources().getDimensionPixelSize(R.dimen.xxx);
+		this.profilePhoto = getResources().getString(R.string.xxx);
+
+		setHeaderDividerEnabled(true);
+		View vHeader = LayoutInflater.from(getContext()).inflate(R.layout.xxx);
+		ivUser.ProfilePhoto = (ImageView)vHeader.findViewById(R.id.xxx);
+		Picasso.with(getContext())
+			.load(profilePhoto)
+			.placeholder(R.drawable.xxx)
+			.resize(avatarSize,avatarSize);
+			.centerCrop()
+			.transform(new CircleTransformation())
+			.into(ivUserProfilePhoto);
+		addHeaderView(vHeader);
+		vHeader.setOnClickListener(this);
+	}
+
+	public void onClick(View v){
+		if(onHeaderClickListener != null){
+			onHeaderClickListener.OnGlobalLayoutListener(v);
+		}
+	}
+
+	public interface OnHeaderClickListener{
+		public void onGlobalMenuHeaderClick(View v);
+	}
+
+	public void setOnHeaderClickListener(OnHeaderClickListener onHeaderClickListener){
+		this.onHeaderClickListener = onHeaderClickListener;
+	}
+}
+
+private void addDrawerToActivity(DrawerLayout drawerLayout){
+	ViewGroup rootView = (ViewGroup) activity.findViewById(android.R.id.content);
+	ViewGroup drawerContentRoot = (ViewGroup) drawerLayout.getChildAt(0);
+	View contentView = rootView.getChildAt(0);
+
+	rootView.removeView(contentView);
+
+	drawerContentRoot.addView(contentView, new ViewGroup.LayoutParams(
+		ViewGroup.LayoutParams.MATCH_PARENT,
+		ViewGroup.LayoutParams.MATCH_PARENT
+	));
+
+	rootView.addView(drawerLayout, new ViewGroup.LayoutParams(
+		ViewGroup.LayoutParams.MATCH_PARENT,
+		ViewGroup.LayoutParams.MATCH_PARENT
+	));
+}
+
+private void setupDrawer(){
+	GlobalMenuView menuView = new GlobalMenuView(this);
+	menuView.setOnHeaderClickListener(this);
+
+	drawerLayout = DrawerLayoutInstaller.from(this)
+		.drawerRoot(R.layout.xxx)
+		.drawerLeftView(menuView)
+		.drawerLeftWidth(Utils.dpToPx(300))
+		.widthNavigationIconToggler(getToolbar())
+		.build();
+}
 
 
+// 开发工具 之 tools
+// xmlns:tools="http://schemas.android.com/tools"
+// There are three Lint attributes in the tools namespace:
+
+// tools:ignore
+// tools:targetApi
+// tools:locale
+
+<ImageView
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:layout_marginStart="@dimen/margin_main"
+  android:layout_marginTop="@dimen/margin_main"
+  android:scaleType="center"
+  android:src="@drawable/divider"
+  tools:ignore="contentDescription" />
+
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:color="@color/accent_color"
+  tools:targetApi="LOLLIPOP" />
+
+// 八个和UI相关的
+// tools:context
+// tools:menu
+// tools:actionBarNavMode
+// tools:listitem/listheader/listfooter
+// tools:showIn
+// tools:layout
 
 
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/container"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical"
+  tools:context="com.android.example.MainActivity">
 
+tools:menu="menu_main,menu_edit"
 
-
-
-
-
-
-
-
-
-
-
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+ xmlns:tools="http://schemas.android.com/tools"
+ android:layout_width="match_parent"
+ android:layout_height="match_parent"
+ tools:showIn="@layout/activity_main">
 
 
 
