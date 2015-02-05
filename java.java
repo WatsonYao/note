@@ -4106,7 +4106,27 @@ tools:menu="menu_main,menu_edit"
  android:layout_height="match_parent"
  tools:showIn="@layout/activity_main">
 
+public void onCreateOptionMenu(Menu menu, MenuInflater inflater){
+	super.onCreateOptionMenu(menu, inflater);
+	mOptionsMenu = menu;
+	inflater.infalte(R.menu.main, menu);
+}
 
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    public void setRefreshActionButtonState(boolean refreshing) {
+        if (mOptionsMenu == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+            return;
+        }
+
+        final MenuItem refreshItem = mOptionsMenu.findItem(R.id.menu_refresh);
+        if (refreshItem != null) {
+            if (refreshing) {
+                refreshItem.setActionView(R.layout.actionbar_indeterminate_progress);
+            } else {
+                refreshItem.setActionView(null);
+            }
+        }
+    }
 
 
 
