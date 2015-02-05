@@ -4128,9 +4128,60 @@ public void onCreateOptionMenu(Menu menu, MenuInflater inflater){
         }
     }
 
+// google sample 
+// spinner interpolator path使用
+Interpolator interpolator = mInterpolators[mInterpolatorSpinner.getSelectedItemPosition()];
+long duration = mDurationSeekbar.getProgress();
+Path path = mIsOut?mPathIn:mPathOut;
 
+startAnimation(interpolator, duration, path);
+mIsOut = !mIsOut;
 
+public ObejctAnimator startAnimation(Interpolator interpolator, long duration, Path path){
+	ObjectAnimator animator = ObjectAnimator.ofFloat(mView, View.SCAL_X, View.SVALE_Y, path);
+	animator.setDuration(duration);
+	animator.setInterpolator(interpolator);
 
+	animator.start();
+
+	return animator;
+}
+
+ mInterpolators = new Interpolator[]{
+                new AnimationUtils().loadInterpolator(getActivity(),
+                        android.R.interpolator.linear),
+                new AnimationUtils().loadInterpolator(getActivity(),
+                        android.R.interpolator.fast_out_linear_in),
+                new AnimationUtils().loadInterpolator(getActivity(),
+                        android.R.interpolator.fast_out_slow_in),
+                new AnimationUtils().loadInterpolator(getActivity(),
+                        android.R.interpolator.linear_out_slow_in)
+        };
+
+mPathIn = new Path();
+        mPathIn.moveTo(0.2f, 0.2f);
+        mPathIn.lineTo(1f, 1f);
+
+        // Path for 'out' animation: shrinking from 100% to 20%
+        mPathOut = new Path();
+        mPathOut.moveTo(1f, 1f);
+        mPathOut.lineTo(0.2f, 0.2f);
+
+ @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate our menu from the resources by using the menu inflater.
+        getMenuInflater().inflate(R.menu.main, menu);
+
+        // It is also possible add items here. Use a generated id from
+        // resources (ids.xml) to ensure that all menu ids are distinct.
+        MenuItem locationItem = menu.add(0, R.id.menu_location, 0, R.string.menu_location);
+        locationItem.setIcon(R.drawable.ic_action_location);
+
+        // Need to use MenuItemCompat methods to call any action item related methods
+        MenuItemCompat.setShowAsAction(locationItem, MenuItem.SHOW_AS_ACTION_IF_ROOM);
+
+        return true;
+    }
 
 
 
