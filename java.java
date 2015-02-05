@@ -4200,9 +4200,81 @@ mPathIn = new Path();
         return true;
     }
 
+public class FloatingActionButton extends FrameLayout implements Checkable{
 
+	public staitc interface OnCheckedChangeListener{
+		void onCkeckChanged(FloatingActionButton fabView, boolean isChecked);
+	}
 
+	private static final int[] CHECKED_STATE_SET = { android.R.attr.state_checked};
+	private boolean mChecked;
+	private OnCheckedChangeListener mOnCheckedChangeListener;
 
+	public FloatingActionButton(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes){
+		super(context, attrs, defStyleAttr);
+
+		setClickable(true);
+
+		setOutlineProvider(new ViewOutlineProvider(){
+			public void getOutline(View view, Outline outline){
+				outline.setOval(0,0,getWidth(),getHeight());
+			}
+		});
+
+		setClipToOutline(true);
+	}
+}
+
+public void setChecked(boolean checked) {
+	// If trying to set the current state, ignore.
+	if (checked == mChecked) {
+	    return;
+	}
+	mChecked = checked;
+
+	// Now refresh the drawable state (so the icon changes)
+	refreshDrawableState();
+
+	if (mOnCheckedChangeListener != null) {
+	    mOnCheckedChangeListener.onCheckedChanged(this, checked);
+	}
+}
+
+    
+    
+ @Override
+public boolean isChecked() {
+    return mChecked;
+}
+
+@Override
+public void toggle() {
+    setChecked(!mChecked);
+}
+
+@Override
+public boolean performClick() {
+    toggle();
+    return super.performClick();
+}
+
+@Override
+protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+    super.onSizeChanged(w, h, oldw, oldh);
+
+    // As we have changed size, we should invalidate the outline so that is the the
+    // correct size
+    invalidateOutline();
+}
+
+@Override
+protected int[] onCreateDrawableState(int extraSpace) {
+    final int[] drawableState = super.onCreateDrawableState(extraSpace + 1);
+    if (isChecked()) {
+        mergeDrawableStates(drawableState, CHECKED_STATE_SET);
+    }
+    return drawableState;
+}
 
 
 
