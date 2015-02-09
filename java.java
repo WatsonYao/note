@@ -4371,8 +4371,123 @@ public class BasicGestureDetectFragment extends Fragment{
 }
 
 
+// 简单的MVP模式
+public class UserBean{
+	private String mFirstName;
+	private String mLastName;
 
+	public UserBean(String firstName, String lastName){
+		this.mFirstName = firstName;
+		this.mLastName = lastName;
+	}
 
+	public String getFirstName(){
+		return mFirstName;
+	}
+
+	public String getLastName(){
+		return mLastName;
+	}
+
+}
+
+public interface IUserModel{
+	void setID(int id);
+	void setFirstName(String firstName);
+	void setLastName(String lastName);
+
+	int getID();
+
+	UserBean load(int id);
+}
+
+// 实现省略
+public interface IUserView{
+	int getID();
+
+	String getFristName();
+	String getLastName();
+
+	void setFirstName(String firstName);
+	void setLastName(String lastName);
+}
+
+// 通过iView 和 iModel 接口操作 model和view
+// activity 可以把所有逻辑给presenter处理
+public class UserPresenter{
+	private IUserView mUserView;
+	private IUserModel mUserModel;
+
+	public UserPresenter(IUserView view){
+		mUserView = view;
+		mUserModel = new mUserModel();
+	}
+
+	public void saveUser(int id, String firstName, String lastName){
+		mUserModel.setID(id);
+		mUserModel.setFirstName(firstName);
+		mUserModel.setLastName(lastName);
+	}
+
+	public void loadUser(int id){
+		UserBean user = mUserModel.load(id);
+		mUserView.setFirstName(user.getFirstName());
+		mUserView.setLastName(user.getLastName());
+	}
+}
+
+public class MainActivity extends Activity implements OnClickListener,IUserView{
+	UserPresente presenter;
+	EditText id,first,last;
+
+	protected void onCreate(Bundle savedInstanceState){
+		super.onCreate(savedinstanceState);
+		setContentView(R.id.xxx);
+
+		findViewById(R.id.xxx).setOnClickListener(this);
+		findViewById(R.id.yyy).setOnClickListener(this);
+
+		id = (EditText) findViewById(R.id.xxx);
+		first = (EditText) findViewById(R.id.xxx);
+		last = (EditText) findViewById(R.id.xxx);
+
+		presenter = new UserPresenter(this);
+	}
+
+	public void onClick(View v){
+		switch(v.getId()){
+			case R.id.save:
+				presenter.saveUser(getID(),getFristName(),getLastName());
+				break;
+			case R.id.load:
+				presenter.loadUser(getID());
+				break;
+			default:
+				break;
+
+		}
+	}
+
+	public int getID(){
+		return new Integer(id.getText().toString());
+	}
+
+	public String getFristName(){
+		return first.getText().toString();
+	}
+
+	public String getLastName(){
+		return last.getText().toString();
+	}
+
+	public void setFirstName(String firstName){
+		first.setText(firstName);
+	}
+
+	public void setLastName(String lastName){
+		last.setText(lastName);
+	}
+}
 
 
 
