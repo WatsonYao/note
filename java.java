@@ -4812,7 +4812,53 @@ public class TouchDisplayView extends View{
 	}
 }
 
+// list pop item
+// android.support.v7.widget
+class PopupAdapter extends ArrayAdpater<String>{
 
+	PopupAdapter(ArrayList<String> items){
+		super(getActivity(), R.layout.list_item, android.R.id.text1, items);
+	}
+
+	public View getView(int position,View convertView, ViewGroup container){
+		View view = super.getView(position,convertView, container);
+
+		View popupButton = view.findViewById(R.id.xxx);
+		popupButton.setTag(getItem(position));
+		popupButton.setOnClickListener(PopupListFragment.this);
+
+		return view;
+	}
+
+	public void onClick(final View view){
+		view.post(new Runnable(){
+			public void run(){
+				showPopupMenu(view);
+			}
+		});
+	}
+
+	private void showPopupMenu(View view){
+
+		final PopupAdapter adapter = (PopupAdapter)getListAdapter();
+
+		final String item = (String) view.getTag();
+
+		PopupMenu popup = new PopupMenu(getActivity(),view);
+		popup.getMenuInflater().infalte(R.menu.popup, popup.getMenu());
+		popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener(){
+			public boolean onMenuItemClick(MenuItem menuItem){
+				switch(menuItem.getItemId()){
+					adapter.remove(item);
+					return true;
+				}
+				return false;
+			}
+		});
+
+		popup.show();
+	}
+}
 
 
 
