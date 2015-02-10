@@ -4954,6 +4954,164 @@ public class Main{
 }
 
 // Fragment 优秀实践
+public class ContentFragment extends Fragment{
+	private String mArgument;
+	public static final String ARGUMENT = "argument";
+
+	public void onCreate(Bundle savedInstanceState){
+		super.onCreate(savedinstanceState);
+
+		Bundle bundle = getArguments();
+		if(bundle != null){
+			mArgument = bundle.getString(ARGUMENT);
+		}
+	}
+
+	public static ContentFragment newInstance(String argument){
+		Bundle bundle = new Bundle();
+		bundle.putString(ARGUMENT, argument);
+		ContentFragment contentFragment = new ContentFragmentc();
+		contenxtFragment.setArguments(bundle);
+		return contentFragment;
+	}
+}
+
+// 在Fragment中存在startActivityForResult（）以及onActivityResult（）方法，
+// 但是呢，没有setResult（）方法，用于设置返回的intent，
+// 这样我们就需要通过调用getActivity().setResult(ListTitleFragment.REQUEST_DETAIL, intent);。
+
+
+public class ListTitleFragment extends ListFragment{
+	public static final int REQUEST_DETAIL = 0x110;
+	private List<String> mTitles = Arrays.asList("xxx","xxx","xxx");
+	private int mCurrentPos;
+	private ArrayAdapter<String> mAdapter;
+
+	public void onActivityCreated(Bundle savedinstanceState){
+		super.onActivityCreated(savedinstanceState);
+		setListAdapter(mAdapter = new ArrayAdapter<String>(
+			getActivity(),android.R.layout.simple_list_item_1, mTitles));
+	}
+
+	public void onListItemClick(ListView l, View v, int position, long id){
+		mCurrentPos = position;
+		Intent intent = new Intent(getActivity(),ContentActivity.class);
+		intent.putExtra(ConentFragment.ARGUMENT,mTitles.get(position));
+		startActivityForResult(intent,REQUEST_DETAIL);
+	}
+
+	public void onActivityResult(int requestCode,int resultCode,Intent data){
+		super.xxx();
+		if(requestCode == REQUEST_DETAIL){
+			mTitles.set(mCurrentPos,mTitles.get(mCurrentPos)+" -" + data.getStringExtra(ContentFragment.RESPONSE));
+			mAdpater.notifyDataSetChanged();
+		}
+	}
+}
+
+public class ContentFragment extends Fragment{
+
+	private String mArgument;
+	public static final String ARGUMENT = "argument";
+	public static final String RESPONSE = "response";
+
+	public void onCreate(Bundle savedinstanceState){
+		super.xxx();
+
+		Bundle bundle = getArgument();
+		if(bundle != null){
+			mArgument = bundle.getString(ARGUMENT);
+			Intent intent = new Intent();
+			intent.putExtra(RESPONSE,"god");
+			getActivity().setResult(ListTitleFragment.REQUEST_DETAIL,intent);
+		}
+	}
+}
+
+// 抽象出一个加载fragment的activity
+public abstract class SingleFragmentActivity extends FragmentActivity{
+
+	protected abstract Fragment createFragment();
+
+	protected void onCreata(Bundle savedInstanceState){
+		super.xxx();
+		setContentView(R.layout.xxx);
+
+		FragmentManager fm = getSupportFragmentManager();
+		Fragment fragment = fm.findFragmentById(R.id.xxx);
+		if(fragment == null){
+			fragment = createFragment();
+			fm.beginTransaction().add(R.id.xxx,fragment).commit();
+		}
+
+	}
+}
+
+public class ContentActivity extends SingleFragmentActivity  
+{  
+    private ContentFragment mContentFragment;  
+  
+    @Override  
+    protected Fragment createFragment()  
+    {  
+        String title = getIntent().getStringExtra(ContentFragment.ARGUMENT);  
+  
+        mContentFragment = ContentFragment.newInstance(title);  
+        return mContentFragment;  
+    }  
+}
+
+// fragment 里面的dialog
+public void onClick(View v){
+	EvaluateDialog = new EvaluateDialog();
+	dialog.setTargetFragment(ContentFragment.this, REQUEST_DETAIL);
+	dialog.show(getFragmentManager(),EVALUATE_DIALOG);
+}
+
+// 我们调用了Fragment.setTargetFragment ，
+// 这个方法，一般就是用于当前fragment由别的fragment启动
+
+public class EvaluateDialog extends DialogFragment{
+	private String[] mEvaluateVals = new String[]{"xxx","xxx","xxx"};
+	public static final String RESPONSE_EVALUATE = "response_evaluate";
+
+	public Dialog onCreateDialog(Bundle savedinstanceState){
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setTitle("Evaluate")
+			.setItems(mEvaluateVals,
+				new OnClickListener(){
+					public void onClick(DialogInterface dialog, int which){
+						setResult(which);
+					}
+				})
+			return builder.create();
+	}
+
+	protected void setResult(int which){
+		if(getTargetFragment() == null){
+			return;
+		}
+
+		Intent intent = new Intent();
+		intent.putExtra(xxx,xxx);
+		getTargetFragment().onActivityResult(ContentFragment.REQUEST_EVALUATE,Activity.RESULT_OK, intent);
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
