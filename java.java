@@ -5099,7 +5099,70 @@ public class EvaluateDialog extends DialogFragment{
 }
 
 
+// SurfaceView
+public class GameFlabbyBird extends SurfaceView implements Callback,Runnable{
+	private SurfaceHolder mHolder;
+	private Canvas mCanvas;
+	private Thread t;
+	private boolean isRunning;
 
+	public GameFlabbyBird(Context context){
+		this(context,null);
+	}
+
+	public GameFlabbyBird(Context context,AttributeSet attrs){
+		super(context, attrs);
+
+		mHolder = getHolder();
+		mHolder.addCallback(this);
+
+		setZOrderOnTop(true);
+		mHolder.setFormat(PixelFormat.TRANSLUCENT);
+
+		setFocusable(true);
+		setFocusableInTouchMode(true);
+		this.setKeepScreenOn(true);
+	}
+
+	public void surfaceCreated(SurfaceHolder holder){
+		isRunning = true;
+		t = new Thread(this);
+		t.start();
+	}
+
+	public void surfaceChanged(SurfaceHolder holder,int format, int width,int height){
+
+	}
+
+	public void surfaceDestroyed(SurfaceHolder holder){
+		isRunning = false;
+	}
+
+	public void run(){
+		while(isRunning){
+			long start = System.currentTimeMillis();
+			draw();
+			long end = System.currentTimeMillis();
+
+			// ....
+		}
+	}
+
+	private void draw(){
+		try{
+			mCanvas = mHolder.lockCanvas();
+			if(mCanvas != null){
+				// drawing...
+			}
+		}catch(Exception e){
+
+		}finally{
+			if(mCanvas != null){
+				mHolder.unlockCanvasAndPost(mCanvas);
+			}
+		}
+	}
+}
 
 
 
