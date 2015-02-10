@@ -4861,14 +4861,99 @@ class PopupAdapter extends ArrayAdpater<String>{
 }
 
 
+// 静态代理
+// 代理类和委托类也常常继承同一父类或实现同一接口
 
+class ClassA{
+	public void operateMethod1(){};
 
+	public void operateMethod2(){};
 
+	public void operateMethod3(){};
+}
 
+// 代理类
+public class ClassB{
+	private ClassA a;
 
+	public ClassB(ClassA a){
+		this.a = a;
+	}
 
+	public void operateMethod1(){
+		a.operateMethod1();
+	}
 
+	public void operateMethod2(){
+		a.operateMethod2();
+	}
+}
 
+// 动态代理
+// 1. 新建委托类
+// 2. 实现Invocationhandler接口，这是负责连接代理和委托类的中间类必须实现的接口
+// 3. 通过Proxy 类新建代理对象
+
+public interface Operate{
+	public void operateMethod1();
+	public void operateMethod2();
+	public void operateMethod3();
+}
+
+public class OperateImpl implements Operate{
+	public void operateMethod1(){
+		sleep(110);
+	}
+
+	public void operateMethod2(){
+		sleep(120);
+	}
+
+	public void operateMethod3(){
+		sleep(130);
+	}
+
+	private static void sleep(long millSeconds){
+		try{
+			Thread.sleep(millSeconds);
+		}catch(InterruptedException e){
+			e.printStackTrace();
+		}
+	}
+}
+
+// InvocationHandler 是负责连接代理类和委托类的中间类必须实现的接口
+public class TimingInvocationHandler implements InvocationHandler{
+
+	// 委托类对象
+	private Object target;
+
+	public TimingInvocationHandler(){
+		this.target = target;
+	}
+
+	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable{
+		long start = System.currentTimeMillis();
+		Obejct obj = method.invoke(target, args);
+		return obj;
+	}
+}
+
+//调用代理对象的每个函数实际最终都是调用了InvocationHandler的invoke函数
+// 通过proxy 类静态函数生成代理对象
+
+public class Main{
+	public static void main(Stirng[] args){
+		TimingInvocationHandler timingInvocationHandler = new TimingInvocationHandler(new OperateImpl());
+		Operate operate = (Operate)(Proxy.newProxyInstance(Operate.class.getClassLoader(),new Class[]{Operate.class},timingInvocationHandler));
+
+		operate.operateMethod1();
+		operate.operateMethod2();
+		operate.operateMethod3();
+	}
+}
+
+// Fragment 优秀实践
 
 
 
