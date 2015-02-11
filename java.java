@@ -5336,6 +5336,79 @@ public static ArrayList<String> randomList(int count){
 	return new ArrayList<String>(items);
 }
 
+// recyclerView 
+public class RecyclerViewFragment extends Fragment {
+
+	 @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.recycler_view_frag, container, false);
+        rootView.setTag(TAG);
+
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
+        mAdapter = new CustomAdapter(mDataset);
+        mRecyclerView.setAdapter(mAdapter);
+    }
+
+    public void setRecyclerViewLayoutManager(LayoutManagerType layoutManagerType){
+    	int scrollPosition = 0;
+
+    	if(mRecyclerView.getLayoutManager() != null){
+    		scrollPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFristCompletelyVisibleItemPosition();
+    	}
+
+    	// swithc() ...
+
+    	mLayoutManager = new GridLayoutManager(getActivity(), SPAN_COUNT);
+    	mLayoutManager = new LinearLayoutManager(getActivity());
+
+    	mRecyclerView.setLayoutManager(mLayoutManager);
+    	mRecyclerView.scrollToPosition(scrollPosition);
+    }
+}
+
+public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder>{
+
+	private static final String TAG = "xxx";
+	private String[] mDataSet;
+
+	public static class ViewHolder extends RecyclerView.ViewHolder{
+		private final TextView textView;
+
+		public ViewHolder(View v){
+			super(v);
+			v.setOnClickListener(new View.OnClickListener(){
+				public void onClick(View v){
+					// ...
+				}
+			});
+			textView = (TextView) v.findViewById(R.id.textView);
+		}
+
+		public TextView getTextView(){
+			return textView;
+		}
+	}
+
+	public CustomAdapter(String[] dataSet){
+		mDataSet = dataSet;
+	}
+
+	public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType){
+		View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.xxx,viewGroup,false);
+		return new ViewHolder(v);
+	}
+
+	public void onBindViewHolder(ViewHolder viewHolder, final int position){
+		viewholder.getTextView().setText(mDataset[position]);
+	}
+
+	public int getItemCount(){
+		return mDataSet.length;
+	}
+}
 
 
 
