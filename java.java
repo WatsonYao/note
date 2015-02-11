@@ -5165,8 +5165,176 @@ public class GameFlabbyBird extends SurfaceView implements Callback,Runnable{
 }
 
 
+// multiSwipeRefresh
 
+<com.example.android.swiperefreshmultipleviews.MultiSwipeRefreshLayout
+      xmlns:android="http://schemas.android.com/apk/res/android"
+      android:id="@+id/swiperefresh"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
 
+    <FrameLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent">
+
+        <GridView
+              android:id="@android:id/list"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:numColumns="2" />
+
+        <TextView
+              android:id="@android:id/empty"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="@string/empty_text"
+              android:layout_gravity="center"/>
+
+    </FrameLayout>
+
+</com.example.android.swiperefreshmultipleviews.MultiSwipeRefreshLayout>
+
+public class MultiSwipeRefreshLayout extends SwipeRefreshLayout{
+	private View[] mSwipeableChildren;
+
+	public MultiSwipeRefreshLayout(Context context){
+		super(context);
+	}
+
+	public MultiSwipeRefreshLayout(Context context,AttributeSet attrs){
+		super(context,attrs);
+	}
+
+	public void setSwipeableChildren(final int... ids){
+		assert ids != null;
+
+		mSwipeableChildren = new View[ids.length];
+		for(int i=0; i<ids.length; i++){
+			mSwipeableChildren[i] = findViewById(ids[i]);
+		}
+	}
+
+	public boolean canChildScrollUp(){
+		if(mSwipeableChildren != null && mSwipeableChildren.length > 0){
+			for( View view: mSwipeableChildren){
+				if( view != null && view.isShown() && !canViewScroollUp(view)){
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	private static boolean canViewScrollUp(View view){
+		if( android.os.Build.VERSION.SDK_INT > 14){
+			return ViewCompat.canScrollVertically(view,-1);
+		}else{
+			if(view instanceof AbsListView){
+				final AbsListView listView = (AbsListView) view;
+				return listView.getChildCount() >0 || listView.getChildAt(0).getTop()< listView.getPaddingTop());
+			}else{
+				return view.getScrollY()>0;
+			}
+
+		}
+	}
+
+}
+
+public class SwipeRefreshMultipleViewsFragment extends Fragment {
+
+	private static final String LOG_TAG = SwipeRefreshMultipleViewsFragment.class.getSimpleName();
+
+	private MultiSwipeRefreshLayout mSwipeRefreshLayout;
+    private GridView mGridView;
+    private ArrayAdapter<String> mListAdapter;
+    private View mEmptyView;
+
+     public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_sample, container, false);
+
+        mSwipeRefreshLayout = (MultiSwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
+        mGridView = (GridView) view.findViewById(android.R.id.list);
+        mEmptyView = view.findViewById(android.R.id.empty);
+
+        return view;
+    }
+
+     @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        mListAdapter = new ArrayAdapter<String>(
+                getActivity(),
+                android.R.layout.simple_list_item_1,
+                android.R.id.text1);
+
+        mGridView.setAdapter(mListAdapter);
+
+        mGridView.setEmptyView(mEmptyView);
+
+        mSwipeRefreshLayout.setSwipeableChildren(android.R.id.list, android.R.id.empty);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                initiateRefresh();
+            }
+        });
+    }
+
+    private void initiateRefresh() {
+        new DummyBackgroundTask().execute();
+    }
+
+    private class DummyBackgroundTask extends AsyncTask<Void,Void,List<String>>{
+    	static final int TASK_DURATION = 3 * 1000; // 3 seconds
+
+    	protected List<String> doInBackground(Void... params){
+    		return Cheeses.randomList(xxx);
+    	}
+
+    	protected void onPostExecute(List<String> result){
+    		super.onPostExecute(result);
+
+    		onRefreshComplete(result);
+    	}
+    }
+
+    private void onRefreshComplete(List<String> result){
+    	mListAdapter.clear();
+    	for(String cheese: result){
+    		mListAdapter.add(cheese);
+    	}
+
+    	mSwipeRefreshLayout.setRefreshing(false);
+    }
+}
+
+public class Cheeses{
+	static final String[] CHEESES = {"aa","bb"};
+
+	public static ArrayList<String> asList(){
+		ArrayList<String> items = new ArrayList<String>();
+		for(int i=0, z= CHEESES.length; i<z; i++){
+			items.add(CHEESES[i]);
+		}
+		return items;
+	}
+}
+
+public static ArrayList<String> randomList(int count){
+	Random random = new Random();
+	HashSet<String> items = new HashSet<String>();
+
+	count = Math.min(count, CHEESES.length);
+
+	while(items.size() < count){
+		items.add(CHEESES[random.nextInt(CHEESES.length)]);
+	}
+
+	return new ArrayList<String>(items);
+}
 
 
 
