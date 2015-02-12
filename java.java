@@ -5410,11 +5410,294 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 	}
 }
 
+// 官方比较菜的tabs + viewpager
+protected void onCreat(Bundle savedInstanceState){
+	super.onCreate(savedinstanceState);
 
+	final ActionBar actionBar = getActionBar();
+	actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
+	mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
+	mViewPager = (ViewPager) findViewById(R.id.pager);
+	mViewPager.setAdapter(mSectionsPagerAdapter);
 
+	mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
+		public void onPageSelected(int position){
+			actionBar.setSelectedNavigationItem(position);
+		}
+	});
 
+	for(int i=0; i<mSectionsPagerAdapter.getCount(); i++){
+		actionBar.addTab(actionBar.newTab().setText(mSelectedPosition.getPageTitle(i)).setTabListener(this));
+	}
+}
+
+public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction){
+	mViewPager.setCurrentItem(tab.getPosition());
+}
+
+public void onTabUnselected(ActionBar.Tab tab,FragmentTransaction fragmentTransaction){
+
+}
+
+public void onTabReselected(ActionBar.Tab tab,FragmentTransaction fragmentTransaction){
+
+}
+
+public class SectionsPagerAdapter extends FragmentPagerAdapter{
+
+	public SectionsPagerAdapter(FragmentManager fm){
+		super(fm);
+	}
+
+	public Fragment getItem(int position){
+		Fragment fragment = new DummySectionFragment();
+		Bundle args = new Bundle();
+		args.putInt(DummySectionFragment.xxx,position + 1);
+		fragment.setArguments(args);
+		return fragment;
+	}
+
+	public int getCount(){
+		return 3;
+	}
+
+	public CharSequence getPageTitle(int position){
+		Locale l = Locale.getDefault();
+		switch(position){
+			case 0:
+				return xx;
+			///
+		}
+
+		return null;
+	}
+
+	public static class DummySectionFragment extends Fragment {
+		
+        public static final String ARG_SECTION_NUMBER = "section_number";
+
+        public DummySectionFragment() {
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.fragment_main_dummy, container, false);
+            TextView dummyTextView = (TextView) rootView.findViewById(R.id.section_label);
+            dummyTextView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
+            return rootView;
+        }
+    }
+}
+
+// actionbar donebar donebutton
+public class MainActivity extends Activity implements AdapterView.OnItemClickListener {
+
+	private Sample[] mSamples;
+    private GridView mGridView;
+
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        // Prepare list of samples in this dashboard.
+        mSamples = new Sample[]{
+                new Sample(R.string.donebaractivity_title, R.string.donebaractivity_description,
+                        DoneBarActivity.class),
+                new Sample(R.string.donebuttonactivity_title, R.string.donebuttonactivity_description,
+                        DoneButtonActivity.class),
+        };
+
+        // Prepare the GridView
+        mGridView = (GridView) findViewById(android.R.id.list);
+        mGridView.setAdapter(new SampleAdapter());
+        mGridView.setOnItemClickListener(this);
+    }
+
+    public void onItemClick(AdapterView<?> container, View view, int position, long id){
+    	startActivity(mSamples[position].intent);
+    }
+
+    private class SampleAdapter extends BaseAdapter{
+
+    	public int getCount(){
+    		return mSamples.length;
+    	}
+
+    	public Object getItem(int position){
+    		return mSamples[position];
+    	}
+
+    	public long getItemId(int position){
+    		return mSamples[position].hashCode();
+    	}
+
+    	public View getView(int position, View convertView, ViewGroup container){
+    		if(convertView == null){
+    			convertView = getLayoutInflater().inflate(R.layout.xxx,container,false);
+    		}
+
+    		((TextView) convertView.findViewById(android.R.id.text1).setText(mSamples[position].titleResId));
+    		((TextView) convertView.findViewById(android.R.id.text2).setText(mSamples[position].titleResId));
+
+    		return convertView;
+    	}
+    }
+
+	private class Sample{
+		int titleResId;
+		int descriptionResId;
+		Intent intent;
+
+		private Sample(int titleResId, int descriptionResId, Intent intent){
+			this.intent = intent;
+			this.titleResId = titleResId;
+			this.descriptionResId = descriptionResId;
+		}
+
+		private Sample(int titleResId, int descriptionResId, Class<? extends Activity> activityClass){
+			this(titleResId, descriptionResId, new Intent(MainActivity.this, activityClass));
+		}
+	}
+}
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <!-- The CardView needs to be wrapped to ensure spacing is applied correctly. -->
+
+    <android.support.v7.widget.CardView
+        style="@style/Widget.SampleDashboard.Card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            style="@style/Widget.SampleDashboard.Item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@android:id/text1"
+                style="@style/Widget.SampleDashboard.Item.Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Hello world" />
+
+            <TextView
+                android:id="@android:id/text2"
+                style="@style/Widget.SampleDashboard.Item.Description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+</FrameLayout>
+
+public class DoneBarActivity extends Activity{
+
+	public void onCreate(Bundle savedInstanceState){
+		super.xxx(xxx);
+
+		final LayoutInflater inflater = (LayoutInflater) getActionBar().getThemedContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+		final View customActionBarView = inflater.inflate(R.layout.xxx,null);
+
+		customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
+			new View.OnClickListener(){
+				public void onClick(View v){
+					finish();
+				}
+			});
+
+		customActionBarView.findViewById(R.id.actionbar_cancel).setOnClickListener(
+			new View.OnClickListener(){
+				public void onClick(View v){
+					finish();
+				}
+			});
+
+		final ActionBar actionBar = getActionBar();
+		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM, 
+			ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE);
+		actionBar.setCustomView(customActionBarView,
+			new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
+
+		setContentView(R.layout.activity_done_bar);
+	}
+}
+
+public class DoneButtonActivity extends Activity{
+
+	    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+		final LayoutInflater inflater = (LayoutInflater) getActionBar().getThemedContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+        final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_done, null);
+        
+        customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // "Done"
+                        finish();
+                    }
+                });
+
+        final ActionBar actionBar = getActionBar();
+
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM,
+                ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME| ActionBar.DISPLAY_SHOW_TITLE);
+        actionBar.setCustomView(customActionBarView);
+        // END_INCLUDE (inflate_set_custom_view)
+
+        setContentView(R.layout.activity_done_button);
+    }
+}
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:divider="?android:attr/dividerVertical"
+    android:showDividers="middle"
+    android:dividerPadding="12dp">
+
+    <include layout="@layout/include_cancel_button" />
+    <include layout="@layout/include_done_button" />
+</LinearLayout>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:divider="?android:attr/dividerVertical"
+    android:showDividers="end"
+    android:dividerPadding="12dp">
+
+    <include layout="@layout/include_done_button" />
+</LinearLayout>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="?android:actionButtonStyle"
+    android:id="@+id/actionbar_cancel"
+    android:layout_width="0dp"
+    android:layout_height="match_parent"
+    android:layout_weight="1">
+
+    <TextView style="?android:actionBarTabTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingRight="20dp"
+        android:drawableLeft="@drawable/ic_action_cancel"
+        android:drawablePadding="8dp"
+        android:gravity="center_vertical"
+        android:text="@string/cancel" />
+</FrameLayout>
 
 
 
