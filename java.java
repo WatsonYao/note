@@ -5700,6 +5700,176 @@ public class DoneButtonActivity extends Activity{
 </FrameLayout>
 
 
+public class Greetings{
+	public static void main(String[] args){
+		for( int i=0; i<3; i++){
+			// ...
+		}
+	}
+}
+
+for(i in 0..2){ ... }
+
+// Groovy
+// • 轻量级Java
+// • 返回声明几乎是可选的 .
+// • 几乎是可选的 虽然可以用于单行声明 
+// • Methods（方法）和 Classes（类） 默认为 public. 
+// • ?.运算符只在对象应用不为空时调用. 
+// • 初始化 JavaBeans 可以使用命名参数. 
+// • 如果你不想，它不会强迫你捕获异常. 他们传递给调用的代码. 
+// • 你可以使用内部 static 方法来引用这个 Class 对象. 
+
+class Wizard{
+	def static learn(trick,action){
+		// ...
+		this
+	}
+}
+
+Wizard.learn('aaa',{/**/})
+.learn('xxx',{/**/})
+.learn('xxx',{/**/})
+
+// 简化匿名内部类
+button.addActionListener{
+	{JOptionPane.showMessageDialog(frame,"xxx")} as ActionListener
+}
+
+displayMouseLocation = {positionLabel.setText("$it.x,$it.y")}
+frame.addMouseListener(displayMouseLocation as MouseListener)
+frame.addMouseMotionListener(displayMouseLocation as MouseMotionListener)
+
+// 简单的创建一个 Map—简单的使用(:)来
+// 分隔方法名和代码块. 
+handleFocus = [
+focusGained:{msgLabel.setText("Good to see u")},
+focusLost:{msgLabel.setText("Come back soon")}
+]
+button.addFocusListener(handleFocus as FoucusListener)
+
+// 如果把一个对象放在一个boolean表达式中，
+// 会检查这个对象是否为null，为null则为true
+
+// 一些方法重载
+lst = ['hello']
+lst<<'there'
+println lst
+["hello","there"]
+
+//
+public void takeHelp(Man man){
+	man.helpMoveThings();
+}
+
+public void takeHelp(Human human){
+	human.helpMoveThings();
+}
+
+public interface Helper{
+	public void helpMoveThings();
+}
+
+public void takeHelp(Helper helper){
+	helper.helpMoveThings();
+}
+
+// Groovy
+def takeHelp(helper){
+	helper.helpMoveThings();
+}
+// 在这里 helper 并没有
+// 显示的实现任何接口,其实是使用了对象隐式接口能力
+
+takeHelp(new Man());
+
+// 闭包相关
+def sum(n){
+	total = 0
+	for(int i=2; i<=n; i+=2){
+		total += i
+	}
+	total
+}
+println "Sum of even numbers from 1 to 10 is ${sum(10)}"
+
+def product(n){
+	prod = 1
+	for(int i=2; i<=n; i+=2){
+		prod *= i
+	}
+	prod
+}
+println "Product of even numbers from 1 to 10 is ${product(10)}"
+
+def sqr(n){
+	squared = []
+	for(int i=2; i<=n; i+=2){
+		squared<< i**2
+	}
+	squared
+}
+println "Squares of even numbers from 1 to 10 is ${sqr(10)}"
+
+//Groovy的方式
+def pickEven(n,block){
+	for(int i=2; i<=n; i+=2){
+		block(i);
+	}
+}
+pickEven(10, {println it})
+// 这个可变的代码块持有
+// 一个对闭包的引用。 正如你传递对象一样，你也可以传递闭包。
+// 如果方法的最后一个参数是闭包，可以简化如下
+pickEven(10){println it}
+
+// Groovy 中的代码块不像 Java，它不能单独存在，
+// 必须依附于一个方法或赋值给一个命名变量。
+
+// 假如你只传递一个参数给代码块，
+// 那么这个参数在代码块中就可以使用 it 来引用。
+// 也可以自己定义名字
+pickEven(10){evenNumber->println evenNumber}
+
+total = 0
+pickEven(10) { total += it }
+println "Sum of even numbers from 1 to 10 is ${total}"
+
+// 闭包就是一个拥有参数的函数被绑定到上下文环境中来运行
+
+// Gradle
+// Gradle是领域驱动设计的构建工具
+// 任何一个Gradle构建，都是由一个或多个project组成的。
+// Project就是你想要用Gradle做什么
+// 一个project由多个task组成
+// 每个task代表了构建过程当中的一个原子性操作
+// 每个task由多个action组成
+// 比如编译 打包 生成javadoc 发布等等
+
+// Task是Gradle里定义的一个接口
+// 它定义了一系列的诸如doLast, doFirst等抽象方法
+// 这其实是Gradle利用了Groovy的操作符重载的特性，
+// 把左位移操作符实现为将action加到task的最后，相当于调用doLast方法
+
+apply plugin: 'com.android.application'  
+// 以上语句中的apply是一个方法，给它传递了一个参数plugin，
+// plugin 的值是'com.android.application'。如果有多个参数，则以逗号隔开
+
+// Groovy中花括号包含的部分成为一个闭包（Closure）
+
+compileOptions {  
+    sourceCompatibility JavaVersion.VERSION_1_7  
+    targetCompatibility JavaVersion.VERSION_1_7  
+} 
+ 
+// compileOptions 是一个 Method， 它的参数是一个闭包
+
+
+
+
+
+
+
 
 
 
