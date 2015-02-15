@@ -5864,6 +5864,319 @@ compileOptions {
  
 // compileOptions 是一个 Method， 它的参数是一个闭包
 
+// 可穿戴
+<android.support.wearable.view.WatchViewStub
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/watch_view_stub"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	app:rectLayout="@layout/rect_activity_wear"
+	app:roundLayout="@layout/round_activity_wear">
+</android.support.wearable.view.WatchViewStub>
+
+// 渲染布局文件不是同步的，所以要设置一个回调来监听WatchViewStub渲染完成。
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+	super.onCreate(savedInstanceState);
+	setContentView(R.layout.activity_wear);
+
+	WatchViewStub stub = (WatchViewStub)findViewById(R.id.watch_view_stub);
+	stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener(){
+		public void onLayoutInflated(WatchViewStub stub){
+			TextView tv = (TextView) stub.findViewById(R.id.text);
+		}
+	});
+}
+
+// Wearable UI库中包含的类BoxInsetLayout继承自FrameLayout，
+// 能让你定义一个单一布局，来同时适用于方形和圆形屏幕
+// 为了显示进这个区域，子view需要设定layout_box属性，
+// top, bottom, left和right可以结合使用，例如"left|top"
+<android.support.wearable.view.BoxInsetLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:background="@drawable/robot_background"
+	android:layout_height="match_parent"
+	android:layout_width="match_parent"
+	android:padding="15dp">
+
+	<FrameLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:padding="5dp"
+		app:layout_box="all">
+			<TextView
+				android:gravity="center"
+				android:layout_height="wrap_content"
+				android:layout_width="match_parent"
+				android:text="@string/sometext"
+				android:textColor="@color/black" />
+
+			<ImageButton
+				android:background="@null"
+				android:layout_gravity="bottom|left"
+				android:layout_height="50dp"
+				android:layout_width="50dp"
+				android:src="@drawable/ok" />
+
+			<ImageButton
+				android:background="@null"
+				android:layout_gravity="bottom|right"
+				android:layout_height="50dp"
+				android:layout_width="50dp"
+				android:src="@drawable/cancel" />
+	</FrameLayout>
+</android.support.wearable.view.BoxInsetLayout>
+
+
+// CardFrame 只能包含一个直接子view，你可以添加其他自定义内容插入到卡片中。
+
+// 创建CardFragment 的步骤：
+// 1、在你的布局中，分配一个id给CardFragment
+// 2、在你的activity中新建一个CardFragment 实例
+// 3、使用fragment manager添加CardFragment 实例
+<android.support.wearable.view.BoxInsetLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:background="@drawable/robot_background"
+	android:layout_height="match_parent"
+	android:layout_width="match_parent">
+
+	<FrameLayout
+		android:id="@+id/frame_layout"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		app:layout_box="bottom">
+	</FrameLayout>
+</android.support.wearable.view.BoxInsetLayout>
+
+protected void onCreate(Bundle savedInstanceState) {
+	super.onCreate(savedInstanceState);
+	setContentView(R.layout.activity_wear_activity2);
+
+	FragmentManger fragmentManager = getFragmentManager();
+	FragmentTransaction fragmentTransaction = fragmentManger.beginTransaction();
+	CardFragment cardFragment = CardFragment.create(getString(R.string.cftitle),getString(R.string.cfdesc),R.drawable.p);
+	fragmentTransaction.add(R.id.frame_layout,cardFragment);
+	fragmentTransaction.commit();
+}
+
+// 如果要使用CardFragment来创建一个自定义布局的卡片，
+// 可以继承这个类然后onCreateContentView方法。
+<android.support.wearable.view.BoxInsetLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:background="@drawable/robot_background"
+	android:layout_height="match_parent"
+	android:layout_width="match_parent">
+
+	<android.support.wearable.view.CardScrollView
+		android:id="@+id/card_scroll_view"
+		android:layout_height="match_parent"
+		android:layout_width="match_parent"
+		app:layout_box="bottom">
+
+		<android.support.wearable.view.CardFrame
+			android:layout_height="wrap_content"
+			android:layout_width="fill_parent">
+
+			<LinearLayout
+				android:layout_height="wrap_content"
+				android:layout_width="match_parent"
+				android:orientation="vertical"
+				android:paddingLeft="5dp">
+				
+				<TextView
+					android:fontFamily="sans-serif-light"
+					android:layout_height="wrap_content"
+					android:layout_width="match_parent"
+					android:text="@string/custom_card"
+					android:textColor="@color/black"
+					android:textSize="20sp"/>
+				
+				<TextView
+					android:fontFamily="sans-serif-light"
+					android:layout_height="wrap_content"
+					android:layout_width="match_parent"
+					android:text="@string/description"
+					android:textColor="@color/black"
+					android:textSize="14sp"/>
+			</LinearLayout>
+		</android.support.wearable.view.CardFrame>
+	</android.support.wearable.view.CardScrollView>
+</android.support.wearable.view.BoxInsetLayout>
+
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+	super.onCreate(savedInstanceState);
+	setContentView(R.layout.activity_wear_activity2);
+
+	CardScrollView cardScrollView =(CardScrollView) findViewById(R.id.card_scroll_view);
+	cardScrollView.setCardGravity(Gravity.BOTTOM);
+}
+
+// Wearable UI库包含WearableListView 类，是专为穿戴设备优化的实现类。
+// 创建列表的步骤：
+// 1、在你activity的布局中添加WearableListView 元素
+// 2、创建一个自定义布局来实现你的list item
+// 3、创建一个adapter装载进这个listview
+<android.support.wearable.view.BoxInsetLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:background="@drawable/robot_background"
+	android:layout_height="match_parent"
+	android:layout_width="match_parent">
+
+		<FrameLayout
+			android:id="@+id/frame_layout"
+			android:layout_height="match_parent"
+			android:layout_width="match_parent"
+			app:layout_box="left|bottom|right">
+
+			<android.support.wearable.view.WearableListView
+				android:id="@+id/wearable_list"
+				android:layout_height="match_parent"
+				android:layout_width="match_parent">
+			</android.support.wearable.view.WearableListView>
+		</FrameLayout>
+</android.support.wearable.view.BoxInsetLayout>
+
+// 下面这个布局实现了WearableListView.Item接口，
+// 并能在列表滚动的时候，让标题和图标带动画效果
+
+// 创建listItem布局
+public class WearableListItemLayout extends LinearLayout implements WearableListView.item{
+
+	private final float mFadedTextAlpha;
+	private final int mFadedCircleColor;
+	private final int mChosenCircleColor;
+
+	private ImageView mCircle;
+	private float mScale;
+	private TextView mName;
+
+	public WearableListItemLayout(Context context){
+		this(context, null);
+	}
+
+	public WearableListItemLayout(Context context, AttributeSet attrs) {
+		this(context, attrs, 0);
+	}
+
+	public WearableListItemLayout(Context context,AttributeSet attrs, int defStyle){
+		super(context,attrs,defStyle);
+
+		mFadedTextAlpha = getResources().getInteger(R.integer.action_text_faded_alpha) / 100f;
+		mFadedCircleColor = getResources().getColor(R.color.grey);
+		mChosenCircleColor = getResources().getColor(R.color.blue);
+	}
+
+	protected void onFinishInflate(){
+		super.onFinishInflate();
+
+		mCircle = (ImageView)findViewById(R.id.circle);
+		mName = (TextView) findViewById(R.id.name);
+	}
+
+	public float getProximityMinValue(){
+		return 1f;
+	}
+
+	public float getProximityMaxValue(){
+		return 1.6f;
+	}
+
+	public float getCurrentProximityValue(){
+		return mScale;
+	}
+
+	public void setScalingAnimatorValue(float scale){
+		mScale = scale;
+		mCircle.setScaleX(scale);
+		mCircle.setScaleY(scale);
+	}
+
+	public void onScaleUpStart(){
+		mName.setAlpha(1f);
+		((GradientDrawable) mCircle.getDrawable()).setColor(mChosenCircleColor);
+	}
+
+	public void onScaleDownStart(){
+		((GradientDrawable) mCircle.getDrawable()).setColor(mFadedCircleColor);
+		mName.setAlpha(mFadedTextAlpha);
+	}
+}
+
+// 创建listitem布局
+<com.example.android.support.wearable.notifications.WearableListItemLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:gravity="center_vertical"
+	android:layout_width="match_parent"
+	android:layout_height="80dp">
+
+		<ImageView
+			android:id="@+id/circle"
+			android:layout_height="20dp"
+			android:layout_margin="16dp"
+			android:layout_width="20dp"
+			android:src="@drawable/wl_circle"/>
+		<TextView
+			android:id="@+id/name"
+			android:gravity="center_vertical|left"
+			android:layout_width="wrap_content"
+			android:layout_marginRight="16dp"
+			android:layout_height="match_parent"
+			android:fontFamily="sans-serif-condensed-light"
+			android:lineSpacingExtra="-4sp"
+			android:textColor="@color/text_color"
+			android:textSize="16sp"/>
+</com.example.android.support.wearable.notifications.WearableListItemLayout>
+
+// 创建adapter
+// adapter用于对listview的内容填充
+
+private static final class Adapter extends WearableListView.Adapter{
+	private String[] mDataset;
+	private final Context mContext;
+	private final LayoutInflater mInflater;
+
+	public Adapter(Context context, String[] dataset){
+		mContext = context;
+		mInflater = LayoutInflater.from(context);
+		mDataset = dataset;
+	}
+
+	pulic static class ItemViewHolder extends WearableListView.ViewHolder{
+		private TextView textView;
+
+		public ItemViewHolder(View itemView){
+			super(itemView);
+			textView = (TextView)itemView.findViewById(R.id.name);
+		}
+	}
+
+	public WearableListView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
+		return new ItemViewHolder(mInflater.infalte(R.layout.list_item), null);
+	}
+
+	public void onBindViewHolder(WearableListView.ViewHolder holder, int position){
+		ItemViewHolder itemHolder = (ItemViewHolder)holder;
+		TextView view = itemHolder.textView;
+		view.setText(mdataset[position]);
+		holder.itemView.setTag(position);
+	}
+
+	public int getItemCount(){
+		return mDataset.lenghth;
+	}
+}
+
+
+
+
+
 
 
 
