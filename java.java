@@ -3822,50 +3822,50 @@ public class UserProfileActivity extends BaseActivity implements RevvealBackgrou
 		}
 	}
 
-	 private void setupUserProfileGrid() {
-        final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
-        rvUserProfile.setLayoutManager(layoutManager);
-        rvUserProfile.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                userPhotosAdapter.setLockedAnimations(true);
-            }
-        });
-    }
- 
-    @Override
-    public void onStateChange(int state) {
-        if (RevealBackgroundView.STATE_FINISHED == state) {
-            rvUserProfile.setVisibility(View.VISIBLE);
-            userPhotosAdapter = new UserProfileAdapter(this);
-            rvUserProfile.setAdapter(userPhotosAdapter);
-        } else {
-            rvUserProfile.setVisibility(View.INVISIBLE);
-        }
-    }
+	private void setupUserProfileGrid() {
+		final StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+		rvUserProfile.setLayoutManager(layoutManager);
+		rvUserProfile.setOnScrollListener(new RecyclerView.OnScrollListener() {
+			@Override
+			public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+				userPhotosAdapter.setLockedAnimations(true);
+			}
+		});
+	}
+
+	@Override
+	public void onStateChange(int state) {
+		if (RevealBackgroundView.STATE_FINISHED == state) {
+			rvUserProfile.setVisibility(View.VISIBLE);
+			userPhotosAdapter = new UserProfileAdapter(this);
+			rvUserProfile.setAdapter(userPhotosAdapter);
+		} else {
+			rvUserProfile.setVisibility(View.INVISIBLE);
+		}
+	}
 }
 
 //SlidingPaneLayout 侧边栏
 spl = (SlidingPaneLayout) this.findViewById(R.id.slidingpanellayout);
 spl.setPanelSlideListener(new PanelSlideListener() {
-    @Override
-    public void onPanelClosed(View view) {
-        MainActivity.this.getFragmentManager()
-                .findFragmentById(R.id.leftfragment)
-                .setHasOptionsMenu(false);
-    }
+	@Override
+	public void onPanelClosed(View view) {
+		MainActivity.this.getFragmentManager()
+		.findFragmentById(R.id.leftfragment)
+		.setHasOptionsMenu(false);
+	}
 
-    @Override
-    public void onPanelOpened(View viw) {
-        MainActivity.this.getFragmentManager()
-                .findFragmentById(R.id.leftfragment)
-                .setHasOptionsMenu(true);
-    }
+	@Override
+	public void onPanelOpened(View viw) {
+		MainActivity.this.getFragmentManager()
+		.findFragmentById(R.id.leftfragment)
+		.setHasOptionsMenu(true);
+	}
 
-    @Override
-    public void onPanelSlide(View arg0, float arg1) {
+	@Override
+	public void onPanelSlide(View arg0, float arg1) {
 
-    }
+	}
 });
 
 // ViewDragHelper
@@ -4002,12 +4002,12 @@ public class GlobalMenuView extends ListView implments View.OnClickListener{
 		View vHeader = LayoutInflater.from(getContext()).inflate(R.layout.xxx);
 		ivUser.ProfilePhoto = (ImageView)vHeader.findViewById(R.id.xxx);
 		Picasso.with(getContext())
-			.load(profilePhoto)
-			.placeholder(R.drawable.xxx)
-			.resize(avatarSize,avatarSize);
-			.centerCrop()
-			.transform(new CircleTransformation())
-			.into(ivUserProfilePhoto);
+		.load(profilePhoto)
+		.placeholder(R.drawable.xxx)
+		.resize(avatarSize,avatarSize);
+		.centerCrop()
+		.transform(new CircleTransformation())
+		.into(ivUserProfilePhoto);
 		addHeaderView(vHeader);
 		vHeader.setOnClickListener(this);
 	}
@@ -4037,12 +4037,12 @@ private void addDrawerToActivity(DrawerLayout drawerLayout){
 	drawerContentRoot.addView(contentView, new ViewGroup.LayoutParams(
 		ViewGroup.LayoutParams.MATCH_PARENT,
 		ViewGroup.LayoutParams.MATCH_PARENT
-	));
+		));
 
 	rootView.addView(drawerLayout, new ViewGroup.LayoutParams(
 		ViewGroup.LayoutParams.MATCH_PARENT,
 		ViewGroup.LayoutParams.MATCH_PARENT
-	));
+		));
 }
 
 private void setupDrawer(){
@@ -4050,11 +4050,11 @@ private void setupDrawer(){
 	menuView.setOnHeaderClickListener(this);
 
 	drawerLayout = DrawerLayoutInstaller.from(this)
-		.drawerRoot(R.layout.xxx)
-		.drawerLeftView(menuView)
-		.drawerLeftWidth(Utils.dpToPx(300))
-		.widthNavigationIconToggler(getToolbar())
-		.build();
+	.drawerRoot(R.layout.xxx)
+	.drawerLeftView(menuView)
+	.drawerLeftWidth(Utils.dpToPx(300))
+	.widthNavigationIconToggler(getToolbar())
+	.build();
 }
 
 
@@ -4067,18 +4067,18 @@ private void setupDrawer(){
 // tools:locale
 
 <ImageView
-  android:layout_width="wrap_content"
-  android:layout_height="wrap_content"
-  android:layout_marginStart="@dimen/margin_main"
-  android:layout_marginTop="@dimen/margin_main"
-  android:scaleType="center"
-  android:src="@drawable/divider"
-  tools:ignore="contentDescription" />
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_marginStart="@dimen/margin_main"
+android:layout_marginTop="@dimen/margin_main"
+android:scaleType="center"
+android:src="@drawable/divider"
+tools:ignore="contentDescription" />
 
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:color="@color/accent_color"
-  tools:targetApi="LOLLIPOP" />
+xmlns:tools="http://schemas.android.com/tools"
+android:color="@color/accent_color"
+tools:targetApi="LOLLIPOP" />
 
 // 八个和UI相关的
 // tools:context
@@ -4090,21 +4090,21 @@ private void setupDrawer(){
 
 
 <LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:id="@+id/container"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:orientation="vertical"
-  tools:context="com.android.example.MainActivity">
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/container"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+tools:context="com.android.example.MainActivity">
 
 tools:menu="menu_main,menu_edit"
 
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
- xmlns:tools="http://schemas.android.com/tools"
- android:layout_width="match_parent"
- android:layout_height="match_parent"
- tools:showIn="@layout/activity_main">
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:showIn="@layout/activity_main">
 
 public void onCreateOptionMenu(Menu menu, MenuInflater inflater){
 	super.onCreateOptionMenu(menu, inflater);
@@ -4113,20 +4113,20 @@ public void onCreateOptionMenu(Menu menu, MenuInflater inflater){
 }
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public void setRefreshActionButtonState(boolean refreshing) {
-        if (mOptionsMenu == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-            return;
-        }
+public void setRefreshActionButtonState(boolean refreshing) {
+	if (mOptionsMenu == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+		return;
+	}
 
-        final MenuItem refreshItem = mOptionsMenu.findItem(R.id.menu_refresh);
-        if (refreshItem != null) {
-            if (refreshing) {
-                refreshItem.setActionView(R.layout.actionbar_indeterminate_progress);
-            } else {
-                refreshItem.setActionView(null);
-            }
-        }
-    }
+	final MenuItem refreshItem = mOptionsMenu.findItem(R.id.menu_refresh);
+	if (refreshItem != null) {
+		if (refreshing) {
+			refreshItem.setActionView(R.layout.actionbar_indeterminate_progress);
+		} else {
+			refreshItem.setActionView(null);
+		}
+	}
+}
 
 // google sample 
 // spinner interpolator path使用
@@ -4147,58 +4147,58 @@ public ObejctAnimator startAnimation(Interpolator interpolator, long duration, P
 	return animator;
 }
 
- mInterpolators = new Interpolator[]{
-                new AnimationUtils().loadInterpolator(getActivity(),
-                        android.R.interpolator.linear),
-                new AnimationUtils().loadInterpolator(getActivity(),
-                        android.R.interpolator.fast_out_linear_in),
-                new AnimationUtils().loadInterpolator(getActivity(),
-                        android.R.interpolator.fast_out_slow_in),
-                new AnimationUtils().loadInterpolator(getActivity(),
-                        android.R.interpolator.linear_out_slow_in)
-        };
+mInterpolators = new Interpolator[]{
+	new AnimationUtils().loadInterpolator(getActivity(),
+		android.R.interpolator.linear),
+	new AnimationUtils().loadInterpolator(getActivity(),
+		android.R.interpolator.fast_out_linear_in),
+	new AnimationUtils().loadInterpolator(getActivity(),
+		android.R.interpolator.fast_out_slow_in),
+	new AnimationUtils().loadInterpolator(getActivity(),
+		android.R.interpolator.linear_out_slow_in)
+};
 
 mPathIn = new Path();
-        mPathIn.moveTo(0.2f, 0.2f);
-        mPathIn.lineTo(1f, 1f);
+mPathIn.moveTo(0.2f, 0.2f);
+mPathIn.lineTo(1f, 1f);
 
         // Path for 'out' animation: shrinking from 100% to 20%
-        mPathOut = new Path();
-        mPathOut.moveTo(1f, 1f);
-        mPathOut.lineTo(0.2f, 0.2f);
+mPathOut = new Path();
+mPathOut.moveTo(1f, 1f);
+mPathOut.lineTo(0.2f, 0.2f);
 
- @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+@Override
+public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate our menu from the resources by using the menu inflater.
-        getMenuInflater().inflate(R.menu.main, menu);
+	getMenuInflater().inflate(R.menu.main, menu);
 
         // It is also possible add items here. Use a generated id from
         // resources (ids.xml) to ensure that all menu ids are distinct.
-        MenuItem locationItem = menu.add(0, R.id.menu_location, 0, R.string.menu_location);
-        locationItem.setIcon(R.drawable.ic_action_location);
+	MenuItem locationItem = menu.add(0, R.id.menu_location, 0, R.string.menu_location);
+	locationItem.setIcon(R.drawable.ic_action_location);
 
         // Need to use MenuItemCompat methods to call any action item related methods
-        MenuItemCompat.setShowAsAction(locationItem, MenuItem.SHOW_AS_ACTION_IF_ROOM);
+	MenuItemCompat.setShowAsAction(locationItem, MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
-        return true;
-    }
+	return true;
+}
 
 
- @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+@Override
+public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate our menu from the resources by using the menu inflater.
-        getMenuInflater().inflate(R.menu.main, menu);
+	getMenuInflater().inflate(R.menu.main, menu);
 
         // It is also possible add items here. Use a generated id from
         // resources (ids.xml) to ensure that all menu ids are distinct.
-        MenuItem locationItem = menu.add(0, R.id.menu_location, 0, R.string.menu_location);
-        locationItem.setIcon(R.drawable.ic_action_location);
+	MenuItem locationItem = menu.add(0, R.id.menu_location, 0, R.string.menu_location);
+	locationItem.setIcon(R.drawable.ic_action_location);
 
         // Need to use MenuItemCompat methods to call any action item related methods
-        MenuItemCompat.setShowAsAction(locationItem, MenuItem.SHOW_AS_ACTION_IF_ROOM);
+	MenuItemCompat.setShowAsAction(locationItem, MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
-        return true;
-    }
+	return true;
+}
 
 public class FloatingActionButton extends FrameLayout implements Checkable{
 
@@ -4228,7 +4228,7 @@ public class FloatingActionButton extends FrameLayout implements Checkable{
 public void setChecked(boolean checked) {
 	// If trying to set the current state, ignore.
 	if (checked == mChecked) {
-	    return;
+		return;
 	}
 	mChecked = checked;
 
@@ -4236,117 +4236,117 @@ public void setChecked(boolean checked) {
 	refreshDrawableState();
 
 	if (mOnCheckedChangeListener != null) {
-	    mOnCheckedChangeListener.onCheckedChanged(this, checked);
+		mOnCheckedChangeListener.onCheckedChanged(this, checked);
 	}
 }
 
-    
-    
- @Override
+
+
+@Override
 public boolean isChecked() {
-    return mChecked;
+	return mChecked;
 }
 
 @Override
 public void toggle() {
-    setChecked(!mChecked);
+	setChecked(!mChecked);
 }
 
 @Override
 public boolean performClick() {
-    toggle();
-    return super.performClick();
+	toggle();
+	return super.performClick();
 }
 
 @Override
 protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-    super.onSizeChanged(w, h, oldw, oldh);
+	super.onSizeChanged(w, h, oldw, oldh);
 
     // As we have changed size, we should invalidate the outline so that is the the
     // correct size
-    invalidateOutline();
+	invalidateOutline();
 }
 
 @Override
 protected int[] onCreateDrawableState(int extraSpace) {
-    final int[] drawableState = super.onCreateDrawableState(extraSpace + 1);
-    if (isChecked()) {
-        mergeDrawableStates(drawableState, CHECKED_STATE_SET);
-    }
-    return drawableState;
+	final int[] drawableState = super.onCreateDrawableState(extraSpace + 1);
+	if (isChecked()) {
+		mergeDrawableStates(drawableState, CHECKED_STATE_SET);
+	}
+	return drawableState;
 }
 
 public class GestureListener extends GestureDetector.SimpleOnGestureListener {
 
-    public static final String TAG = "GestureListener";
+	public static final String TAG = "GestureListener";
 
     // BEGIN_INCLUDE(init_gestureListener)
-    @Override
-    public boolean onSingleTapUp(MotionEvent e) {
+	@Override
+	public boolean onSingleTapUp(MotionEvent e) {
         // Up motion completing a single tap occurred.
-        Log.i(TAG, "Single Tap Up");
-        return false;
-    }
+		Log.i(TAG, "Single Tap Up");
+		return false;
+	}
 
-    @Override
-    public void onLongPress(MotionEvent e) {
+	@Override
+	public void onLongPress(MotionEvent e) {
         // Touch has been long enough to indicate a long press.
         // Does not indicate motion is complete yet (no up event necessarily)
-        Log.i(TAG, "Long Press");
-    }
+		Log.i(TAG, "Long Press");
+	}
 
-    @Override
-    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
-    float distanceY) {
+	@Override
+	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
+		float distanceY) {
         // User attempted to scroll
-        Log.i(TAG, "Scroll");
-        return false;
-    }
+		Log.i(TAG, "Scroll");
+		return false;
+	}
 
-    @Override
-    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-    float velocityY) {
+	@Override
+	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+		float velocityY) {
         // Fling event occurred.  Notification of this one happens after an "up" event.
-        Log.i(TAG, "Fling");
-        return false;
-    }
+		Log.i(TAG, "Fling");
+		return false;
+	}
 
-    @Override
-    public void onShowPress(MotionEvent e) {
+	@Override
+	public void onShowPress(MotionEvent e) {
         // User performed a down event, and hasn't moved yet.
-        Log.i(TAG, "Show Press");
-    }
+		Log.i(TAG, "Show Press");
+	}
 
-    @Override
-    public boolean onDown(MotionEvent e) {
+	@Override
+	public boolean onDown(MotionEvent e) {
         // "Down" event - User touched the screen.
-        Log.i(TAG, "Down");
-        return false;
-    }
+		Log.i(TAG, "Down");
+		return false;
+	}
 
-    @Override
-    public boolean onDoubleTap(MotionEvent e) {
+	@Override
+	public boolean onDoubleTap(MotionEvent e) {
         // User tapped the screen twice.
-        Log.i(TAG, "Double tap");
-        return false;
-    }
+		Log.i(TAG, "Double tap");
+		return false;
+	}
 
-    @Override
-    public boolean onDoubleTapEvent(MotionEvent e) {
+	@Override
+	public boolean onDoubleTapEvent(MotionEvent e) {
         // Since double-tap is actually several events which are considered one aggregate
         // gesture, there's a separate callback for an individual event within the doubletap
         // occurring.  This occurs for down, up, and move.
-        Log.i(TAG, "Event within double tap");
-        return false;
-    }
+		Log.i(TAG, "Event within double tap");
+		return false;
+	}
 
-    @Override
-    public boolean onSingleTapConfirmed(MotionEvent e) {
+	@Override
+	public boolean onSingleTapConfirmed(MotionEvent e) {
         // A confirmed single-tap event has occurred.  Only called when the detector has
         // determined that the first tap stands alone, and is not part of a double tap.
-        Log.i(TAG, "Single tap confirmed");
-        return false;
-    }
+		Log.i(TAG, "Single tap confirmed");
+		return false;
+	}
     // END_INCLUDE(init_gestureListener)
 }
 
@@ -4457,13 +4457,13 @@ public class MainActivity extends Activity implements OnClickListener,IUserView{
 	public void onClick(View v){
 		switch(v.getId()){
 			case R.id.save:
-				presenter.saveUser(getID(),getFristName(),getLastName());
-				break;
+			presenter.saveUser(getID(),getFristName(),getLastName());
+			break;
 			case R.id.load:
-				presenter.loadUser(getID());
-				break;
+			presenter.loadUser(getID());
+			break;
 			default:
-				break;
+			break;
 
 		}
 	}
@@ -4590,7 +4590,7 @@ public class TouchDisplayView extends View{
 
 		private static final int MAX_POOL_SIZE = 10;
 		private static final SimplePool<TouchHistory> sPool 
-			= new SimplePool<TouchHistory>(MAX_POOL_SIZE);
+		= new SimplePool<TouchHistory>(MAX_POOL_SIZE);
 
 		public static TouchHistory obtain(float x, float y, float pressure){
 			TouchHistory data = sPool.acquire();
@@ -4641,9 +4641,9 @@ public class TouchDisplayView extends View{
 	}
 
 	@Override
-    public boolean onTouchEvent(MotionEvent event) {
+	public boolean onTouchEvent(MotionEvent event) {
 
-        final int action = event.getAction();
+		final int action = event.getAction();
 
         /*
          * Switch on the action. The action is extracted from the event by
@@ -4652,7 +4652,7 @@ public class TouchDisplayView extends View{
          */
         switch (action & MotionEvent.ACTION_MASK) {
 
-            case MotionEvent.ACTION_DOWN: {
+        	case MotionEvent.ACTION_DOWN: {
                 // first pressed gesture has started
 
                 /*
@@ -4664,7 +4664,7 @@ public class TouchDisplayView extends View{
                 Log.i("temp","ACTION_DOWN-id->" + id);
 
                 TouchHistory data = TouchHistory.obtain(event.getX(0), event.getY(0),
-                        event.getPressure(0));
+                	event.getPressure(0));
                 data.label = "id: " + 0;
 
 
@@ -4696,7 +4696,7 @@ public class TouchDisplayView extends View{
                 Log.i("temp","ACTION_POINTER_DOWN-id->" + id + ",index->" + index);
 
                 TouchHistory data = TouchHistory.obtain(event.getX(index), event.getY(index),
-                        event.getPressure(index));
+                	event.getPressure(index));
                 data.label = "id: " + id;
 
                 /*
@@ -4774,15 +4774,15 @@ public class TouchDisplayView extends View{
                 Log.i("temp","ACTION_MOVE-PointerCount->" + event.getPointerCount());
                 for (int index = 0; index < event.getPointerCount(); index++) {
                     // get pointer id for data stored at this index
-                    int id = event.getPointerId(index);
+                	int id = event.getPointerId(index);
 
                     // get the data stored externally about this pointer.
-                    TouchHistory data = mTouches.get(id);
+                	TouchHistory data = mTouches.get(id);
 
                     // add previous position to history and add new values
-                    data.addHistory(data.x, data.y);
-                    data.setTouch(event.getX(index), event.getY(index),
-                            event.getPressure(index));
+                	data.addHistory(data.x, data.y);
+                	data.setTouch(event.getX(index), event.getY(index),
+                		event.getPressure(index));
 
                 }
 
@@ -4797,19 +4797,19 @@ public class TouchDisplayView extends View{
     }
 
 
-	protected void onDraw(Canvas canvas){
-		if(mHasTouch){
-			canvas.drawColor();
-		}else{
-			canvas.drawRect();
-		}
+    protected void onDraw(Canvas canvas){
+    	if(mHasTouch){
+    		canvas.drawColor();
+    	}else{
+    		canvas.drawRect();
+    	}
 
-		for(int i=0; i< mTouches.size(); i++){
-			int id = mTouches.keyAt(i);
-			TouchHistory data = mTouches.valueAt(i);
-			drawCircle(canvas, id, data);
-		}
-	}
+    	for(int i=0; i< mTouches.size(); i++){
+    		int id = mTouches.keyAt(i);
+    		TouchHistory data = mTouches.valueAt(i);
+    		drawCircle(canvas, id, data);
+    	}
+    }
 }
 
 // list pop item
@@ -5049,16 +5049,16 @@ public abstract class SingleFragmentActivity extends FragmentActivity{
 
 public class ContentActivity extends SingleFragmentActivity  
 {  
-    private ContentFragment mContentFragment;  
-  
-    @Override  
-    protected Fragment createFragment()  
-    {  
-        String title = getIntent().getStringExtra(ContentFragment.ARGUMENT);  
-  
-        mContentFragment = ContentFragment.newInstance(title);  
-        return mContentFragment;  
-    }  
+	private ContentFragment mContentFragment;  
+
+	@Override  
+	protected Fragment createFragment()  
+	{  
+		String title = getIntent().getStringExtra(ContentFragment.ARGUMENT);  
+
+		mContentFragment = ContentFragment.newInstance(title);  
+		return mContentFragment;  
+	}  
 }
 
 // fragment 里面的dialog
@@ -5078,13 +5078,13 @@ public class EvaluateDialog extends DialogFragment{
 	public Dialog onCreateDialog(Bundle savedinstanceState){
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle("Evaluate")
-			.setItems(mEvaluateVals,
-				new OnClickListener(){
-					public void onClick(DialogInterface dialog, int which){
-						setResult(which);
-					}
-				})
-			return builder.create();
+		.setItems(mEvaluateVals,
+			new OnClickListener(){
+				public void onClick(DialogInterface dialog, int which){
+					setResult(which);
+				}
+			})
+		return builder.create();
 	}
 
 	protected void setResult(int which){
@@ -5168,29 +5168,29 @@ public class GameFlabbyBird extends SurfaceView implements Callback,Runnable{
 // multiSwipeRefresh
 
 <com.example.android.swiperefreshmultipleviews.MultiSwipeRefreshLayout
-      xmlns:android="http://schemas.android.com/apk/res/android"
-      android:id="@+id/swiperefresh"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent">
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@+id/swiperefresh"
+android:layout_width="match_parent"
+android:layout_height="match_parent">
 
-    <FrameLayout
-          android:layout_width="match_parent"
-          android:layout_height="match_parent">
+<FrameLayout
+android:layout_width="match_parent"
+android:layout_height="match_parent">
 
-        <GridView
-              android:id="@android:id/list"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:numColumns="2" />
+<GridView
+android:id="@android:id/list"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:numColumns="2" />
 
-        <TextView
-              android:id="@android:id/empty"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:text="@string/empty_text"
-              android:layout_gravity="center"/>
+<TextView
+android:id="@android:id/empty"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="@string/empty_text"
+android:layout_gravity="center"/>
 
-    </FrameLayout>
+</FrameLayout>
 
 </com.example.android.swiperefreshmultipleviews.MultiSwipeRefreshLayout>
 
@@ -5232,12 +5232,12 @@ public class MultiSwipeRefreshLayout extends SwipeRefreshLayout{
 			if(view instanceof AbsListView){
 				final AbsListView listView = (AbsListView) view;
 				return listView.getChildCount() >0 || listView.getChildAt(0).getTop()< listView.getPaddingTop());
-			}else{
-				return view.getScrollY()>0;
-			}
+}else{
+	return view.getScrollY()>0;
+}
 
-		}
-	}
+}
+}
 
 }
 
@@ -5246,48 +5246,48 @@ public class SwipeRefreshMultipleViewsFragment extends Fragment {
 	private static final String LOG_TAG = SwipeRefreshMultipleViewsFragment.class.getSimpleName();
 
 	private MultiSwipeRefreshLayout mSwipeRefreshLayout;
-    private GridView mGridView;
-    private ArrayAdapter<String> mListAdapter;
-    private View mEmptyView;
+	private GridView mGridView;
+	private ArrayAdapter<String> mListAdapter;
+	private View mEmptyView;
 
-     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_sample, container, false);
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+		Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.fragment_sample, container, false);
 
-        mSwipeRefreshLayout = (MultiSwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
-        mGridView = (GridView) view.findViewById(android.R.id.list);
-        mEmptyView = view.findViewById(android.R.id.empty);
+		mSwipeRefreshLayout = (MultiSwipeRefreshLayout) view.findViewById(R.id.swiperefresh);
+		mGridView = (GridView) view.findViewById(android.R.id.list);
+		mEmptyView = view.findViewById(android.R.id.empty);
 
-        return view;
-    }
+		return view;
+	}
 
-     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
 
-        mListAdapter = new ArrayAdapter<String>(
-                getActivity(),
-                android.R.layout.simple_list_item_1,
-                android.R.id.text1);
+		mListAdapter = new ArrayAdapter<String>(
+			getActivity(),
+			android.R.layout.simple_list_item_1,
+			android.R.id.text1);
 
-        mGridView.setAdapter(mListAdapter);
+		mGridView.setAdapter(mListAdapter);
 
-        mGridView.setEmptyView(mEmptyView);
+		mGridView.setEmptyView(mEmptyView);
 
-        mSwipeRefreshLayout.setSwipeableChildren(android.R.id.list, android.R.id.empty);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                initiateRefresh();
-            }
-        });
-    }
+		mSwipeRefreshLayout.setSwipeableChildren(android.R.id.list, android.R.id.empty);
+		mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+			@Override
+			public void onRefresh() {
+				initiateRefresh();
+			}
+		});
+	}
 
-    private void initiateRefresh() {
-        new DummyBackgroundTask().execute();
-    }
+	private void initiateRefresh() {
+		new DummyBackgroundTask().execute();
+	}
 
-    private class DummyBackgroundTask extends AsyncTask<Void,Void,List<String>>{
+	private class DummyBackgroundTask extends AsyncTask<Void,Void,List<String>>{
     	static final int TASK_DURATION = 3 * 1000; // 3 seconds
 
     	protected List<String> doInBackground(Void... params){
@@ -5339,34 +5339,34 @@ public static ArrayList<String> randomList(int count){
 // recyclerView 
 public class RecyclerViewFragment extends Fragment {
 
-	 @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.recycler_view_frag, container, false);
-        rootView.setTag(TAG);
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+		Bundle savedInstanceState) {
+		View rootView = inflater.inflate(R.layout.recycler_view_frag, container, false);
+		rootView.setTag(TAG);
 
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
-        mAdapter = new CustomAdapter(mDataset);
-        mRecyclerView.setAdapter(mAdapter);
-    }
+		mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
+		mLayoutManager = new LinearLayoutManager(getActivity());
+		setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
+		mAdapter = new CustomAdapter(mDataset);
+		mRecyclerView.setAdapter(mAdapter);
+	}
 
-    public void setRecyclerViewLayoutManager(LayoutManagerType layoutManagerType){
-    	int scrollPosition = 0;
+	public void setRecyclerViewLayoutManager(LayoutManagerType layoutManagerType){
+		int scrollPosition = 0;
 
-    	if(mRecyclerView.getLayoutManager() != null){
-    		scrollPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFristCompletelyVisibleItemPosition();
-    	}
+		if(mRecyclerView.getLayoutManager() != null){
+			scrollPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager()).findFristCompletelyVisibleItemPosition();
+		}
 
     	// swithc() ...
 
-    	mLayoutManager = new GridLayoutManager(getActivity(), SPAN_COUNT);
-    	mLayoutManager = new LinearLayoutManager(getActivity());
+		mLayoutManager = new GridLayoutManager(getActivity(), SPAN_COUNT);
+		mLayoutManager = new LinearLayoutManager(getActivity());
 
-    	mRecyclerView.setLayoutManager(mLayoutManager);
-    	mRecyclerView.scrollToPosition(scrollPosition);
-    }
+		mRecyclerView.setLayoutManager(mLayoutManager);
+		mRecyclerView.scrollToPosition(scrollPosition);
+	}
 }
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder>{
@@ -5467,7 +5467,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter{
 		Locale l = Locale.getDefault();
 		switch(position){
 			case 0:
-				return xx;
+			return xx;
 			///
 		}
 
@@ -5476,75 +5476,75 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter{
 
 	public static class DummySectionFragment extends Fragment {
 		
-        public static final String ARG_SECTION_NUMBER = "section_number";
+		public static final String ARG_SECTION_NUMBER = "section_number";
 
-        public DummySectionFragment() {
-        }
+		public DummySectionFragment() {
+		}
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main_dummy, container, false);
-            TextView dummyTextView = (TextView) rootView.findViewById(R.id.section_label);
-            dummyTextView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
-            return rootView;
-        }
-    }
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+			View rootView = inflater.inflate(R.layout.fragment_main_dummy, container, false);
+			TextView dummyTextView = (TextView) rootView.findViewById(R.id.section_label);
+			dummyTextView.setText(Integer.toString(getArguments().getInt(ARG_SECTION_NUMBER)));
+			return rootView;
+		}
+	}
 }
 
 // actionbar donebar donebutton
 public class MainActivity extends Activity implements AdapterView.OnItemClickListener {
 
 	private Sample[] mSamples;
-    private GridView mGridView;
+	private GridView mGridView;
 
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
 
         // Prepare list of samples in this dashboard.
-        mSamples = new Sample[]{
-                new Sample(R.string.donebaractivity_title, R.string.donebaractivity_description,
-                        DoneBarActivity.class),
-                new Sample(R.string.donebuttonactivity_title, R.string.donebuttonactivity_description,
-                        DoneButtonActivity.class),
-        };
+		mSamples = new Sample[]{
+			new Sample(R.string.donebaractivity_title, R.string.donebaractivity_description,
+				DoneBarActivity.class),
+			new Sample(R.string.donebuttonactivity_title, R.string.donebuttonactivity_description,
+				DoneButtonActivity.class),
+		};
 
         // Prepare the GridView
-        mGridView = (GridView) findViewById(android.R.id.list);
-        mGridView.setAdapter(new SampleAdapter());
-        mGridView.setOnItemClickListener(this);
-    }
+		mGridView = (GridView) findViewById(android.R.id.list);
+		mGridView.setAdapter(new SampleAdapter());
+		mGridView.setOnItemClickListener(this);
+	}
 
-    public void onItemClick(AdapterView<?> container, View view, int position, long id){
-    	startActivity(mSamples[position].intent);
-    }
+	public void onItemClick(AdapterView<?> container, View view, int position, long id){
+		startActivity(mSamples[position].intent);
+	}
 
-    private class SampleAdapter extends BaseAdapter{
+	private class SampleAdapter extends BaseAdapter{
 
-    	public int getCount(){
-    		return mSamples.length;
-    	}
+		public int getCount(){
+			return mSamples.length;
+		}
 
-    	public Object getItem(int position){
-    		return mSamples[position];
-    	}
+		public Object getItem(int position){
+			return mSamples[position];
+		}
 
-    	public long getItemId(int position){
-    		return mSamples[position].hashCode();
-    	}
+		public long getItemId(int position){
+			return mSamples[position].hashCode();
+		}
 
-    	public View getView(int position, View convertView, ViewGroup container){
-    		if(convertView == null){
-    			convertView = getLayoutInflater().inflate(R.layout.xxx,container,false);
-    		}
+		public View getView(int position, View convertView, ViewGroup container){
+			if(convertView == null){
+				convertView = getLayoutInflater().inflate(R.layout.xxx,container,false);
+			}
 
-    		((TextView) convertView.findViewById(android.R.id.text1).setText(mSamples[position].titleResId));
-    		((TextView) convertView.findViewById(android.R.id.text2).setText(mSamples[position].titleResId));
+			((TextView) convertView.findViewById(android.R.id.text1).setText(mSamples[position].titleResId));
+			((TextView) convertView.findViewById(android.R.id.text2).setText(mSamples[position].titleResId));
 
-    		return convertView;
-    	}
-    }
+			return convertView;
+		}
+	}
 
 	private class Sample{
 		int titleResId;
@@ -5564,37 +5564,37 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 }
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <!-- The CardView needs to be wrapped to ensure spacing is applied correctly. -->
+android:layout_width="match_parent"
+android:layout_height="wrap_content">
+<!-- The CardView needs to be wrapped to ensure spacing is applied correctly. -->
 
-    <android.support.v7.widget.CardView
-        style="@style/Widget.SampleDashboard.Card"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+<android.support.v7.widget.CardView
+style="@style/Widget.SampleDashboard.Card"
+android:layout_width="match_parent"
+android:layout_height="wrap_content">
 
-        <LinearLayout
-            style="@style/Widget.SampleDashboard.Item"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+<LinearLayout
+style="@style/Widget.SampleDashboard.Item"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:orientation="vertical">
 
-            <TextView
-                android:id="@android:id/text1"
-                style="@style/Widget.SampleDashboard.Item.Title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Hello world" />
+<TextView
+android:id="@android:id/text1"
+style="@style/Widget.SampleDashboard.Item.Title"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:text="Hello world" />
 
-            <TextView
-                android:id="@android:id/text2"
-                style="@style/Widget.SampleDashboard.Item.Description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+<TextView
+android:id="@android:id/text2"
+style="@style/Widget.SampleDashboard.Item.Description"
+android:layout_width="match_parent"
+android:layout_height="wrap_content" />
 
-        </LinearLayout>
+</LinearLayout>
 
-    </android.support.v7.widget.CardView>
+</android.support.v7.widget.CardView>
 
 </FrameLayout>
 
@@ -5632,71 +5632,71 @@ public class DoneBarActivity extends Activity{
 
 public class DoneButtonActivity extends Activity{
 
-	    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
 		final LayoutInflater inflater = (LayoutInflater) getActionBar().getThemedContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-        final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_done, null);
-        
-        customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+		final View customActionBarView = inflater.inflate(R.layout.actionbar_custom_view_done, null);
+
+		customActionBarView.findViewById(R.id.actionbar_done).setOnClickListener(
+			new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
                         // "Done"
-                        finish();
-                    }
-                });
+					finish();
+				}
+			});
 
-        final ActionBar actionBar = getActionBar();
+		final ActionBar actionBar = getActionBar();
 
-        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM,
-                ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME| ActionBar.DISPLAY_SHOW_TITLE);
-        actionBar.setCustomView(customActionBarView);
+		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM,
+			ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME| ActionBar.DISPLAY_SHOW_TITLE);
+		actionBar.setCustomView(customActionBarView);
         // END_INCLUDE (inflate_set_custom_view)
 
-        setContentView(R.layout.activity_done_button);
-    }
+		setContentView(R.layout.activity_done_button);
+	}
 }
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:divider="?android:attr/dividerVertical"
-    android:showDividers="middle"
-    android:dividerPadding="12dp">
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="horizontal"
+android:divider="?android:attr/dividerVertical"
+android:showDividers="middle"
+android:dividerPadding="12dp">
 
-    <include layout="@layout/include_cancel_button" />
-    <include layout="@layout/include_done_button" />
+<include layout="@layout/include_cancel_button" />
+<include layout="@layout/include_done_button" />
 </LinearLayout>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:divider="?android:attr/dividerVertical"
-    android:showDividers="end"
-    android:dividerPadding="12dp">
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="horizontal"
+android:divider="?android:attr/dividerVertical"
+android:showDividers="end"
+android:dividerPadding="12dp">
 
-    <include layout="@layout/include_done_button" />
+<include layout="@layout/include_done_button" />
 </LinearLayout>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="?android:actionButtonStyle"
-    android:id="@+id/actionbar_cancel"
-    android:layout_width="0dp"
-    android:layout_height="match_parent"
-    android:layout_weight="1">
+style="?android:actionButtonStyle"
+android:id="@+id/actionbar_cancel"
+android:layout_width="0dp"
+android:layout_height="match_parent"
+android:layout_weight="1">
 
-    <TextView style="?android:actionBarTabTextStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:paddingRight="20dp"
-        android:drawableLeft="@drawable/ic_action_cancel"
-        android:drawablePadding="8dp"
-        android:gravity="center_vertical"
-        android:text="@string/cancel" />
+<TextView style="?android:actionBarTabTextStyle"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_gravity="center"
+android:paddingRight="20dp"
+android:drawableLeft="@drawable/ic_action_cancel"
+android:drawablePadding="8dp"
+android:gravity="center_vertical"
+android:text="@string/cancel" />
 </FrameLayout>
 
 
@@ -5720,12 +5720,12 @@ for(i in 0..2){ ... }
 // • 如果你不想，它不会强迫你捕获异常. 他们传递给调用的代码. 
 // • 你可以使用内部 static 方法来引用这个 Class 对象. 
 
-class Wizard{
-	def static learn(trick,action){
+	class Wizard{
+		def static learn(trick,action){
 		// ...
-		this
+			this
+		}
 	}
-}
 
 Wizard.learn('aaa',{/**/})
 .learn('xxx',{/**/})
@@ -5858,22 +5858,22 @@ apply plugin: 'com.android.application'
 // Groovy中花括号包含的部分成为一个闭包（Closure）
 
 compileOptions {  
-    sourceCompatibility JavaVersion.VERSION_1_7  
-    targetCompatibility JavaVersion.VERSION_1_7  
+	sourceCompatibility JavaVersion.VERSION_1_7  
+	targetCompatibility JavaVersion.VERSION_1_7  
 } 
- 
+
 // compileOptions 是一个 Method， 它的参数是一个闭包
 
 // 可穿戴
 <android.support.wearable.view.WatchViewStub
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
-	xmlns:tools="http://schemas.android.com/tools"
-	android:id="@+id/watch_view_stub"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	app:rectLayout="@layout/rect_activity_wear"
-	app:roundLayout="@layout/round_activity_wear">
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/watch_view_stub"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+app:rectLayout="@layout/rect_activity_wear"
+app:roundLayout="@layout/round_activity_wear">
 </android.support.wearable.view.WatchViewStub>
 
 // 渲染布局文件不是同步的，所以要设置一个回调来监听WatchViewStub渲染完成。
@@ -5895,39 +5895,39 @@ protected void onCreate(Bundle savedInstanceState) {
 // 为了显示进这个区域，子view需要设定layout_box属性，
 // top, bottom, left和right可以结合使用，例如"left|top"
 <android.support.wearable.view.BoxInsetLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
-	android:background="@drawable/robot_background"
-	android:layout_height="match_parent"
-	android:layout_width="match_parent"
-	android:padding="15dp">
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:background="@drawable/robot_background"
+android:layout_height="match_parent"
+android:layout_width="match_parent"
+android:padding="15dp">
 
-	<FrameLayout
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:padding="5dp"
-		app:layout_box="all">
-			<TextView
-				android:gravity="center"
-				android:layout_height="wrap_content"
-				android:layout_width="match_parent"
-				android:text="@string/sometext"
-				android:textColor="@color/black" />
+<FrameLayout
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:padding="5dp"
+app:layout_box="all">
+<TextView
+android:gravity="center"
+android:layout_height="wrap_content"
+android:layout_width="match_parent"
+android:text="@string/sometext"
+android:textColor="@color/black" />
 
-			<ImageButton
-				android:background="@null"
-				android:layout_gravity="bottom|left"
-				android:layout_height="50dp"
-				android:layout_width="50dp"
-				android:src="@drawable/ok" />
+<ImageButton
+android:background="@null"
+android:layout_gravity="bottom|left"
+android:layout_height="50dp"
+android:layout_width="50dp"
+android:src="@drawable/ok" />
 
-			<ImageButton
-				android:background="@null"
-				android:layout_gravity="bottom|right"
-				android:layout_height="50dp"
-				android:layout_width="50dp"
-				android:src="@drawable/cancel" />
-	</FrameLayout>
+<ImageButton
+android:background="@null"
+android:layout_gravity="bottom|right"
+android:layout_height="50dp"
+android:layout_width="50dp"
+android:src="@drawable/cancel" />
+</FrameLayout>
 </android.support.wearable.view.BoxInsetLayout>
 
 
@@ -5938,18 +5938,18 @@ protected void onCreate(Bundle savedInstanceState) {
 // 2、在你的activity中新建一个CardFragment 实例
 // 3、使用fragment manager添加CardFragment 实例
 <android.support.wearable.view.BoxInsetLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
-	android:background="@drawable/robot_background"
-	android:layout_height="match_parent"
-	android:layout_width="match_parent">
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:background="@drawable/robot_background"
+android:layout_height="match_parent"
+android:layout_width="match_parent">
 
-	<FrameLayout
-		android:id="@+id/frame_layout"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		app:layout_box="bottom">
-	</FrameLayout>
+<FrameLayout
+android:id="@+id/frame_layout"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+app:layout_box="bottom">
+</FrameLayout>
 </android.support.wearable.view.BoxInsetLayout>
 
 protected void onCreate(Bundle savedInstanceState) {
@@ -5966,46 +5966,46 @@ protected void onCreate(Bundle savedInstanceState) {
 // 如果要使用CardFragment来创建一个自定义布局的卡片，
 // 可以继承这个类然后onCreateContentView方法。
 <android.support.wearable.view.BoxInsetLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
-	android:background="@drawable/robot_background"
-	android:layout_height="match_parent"
-	android:layout_width="match_parent">
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:background="@drawable/robot_background"
+android:layout_height="match_parent"
+android:layout_width="match_parent">
 
-	<android.support.wearable.view.CardScrollView
-		android:id="@+id/card_scroll_view"
-		android:layout_height="match_parent"
-		android:layout_width="match_parent"
-		app:layout_box="bottom">
+<android.support.wearable.view.CardScrollView
+android:id="@+id/card_scroll_view"
+android:layout_height="match_parent"
+android:layout_width="match_parent"
+app:layout_box="bottom">
 
-		<android.support.wearable.view.CardFrame
-			android:layout_height="wrap_content"
-			android:layout_width="fill_parent">
+<android.support.wearable.view.CardFrame
+android:layout_height="wrap_content"
+android:layout_width="fill_parent">
 
-			<LinearLayout
-				android:layout_height="wrap_content"
-				android:layout_width="match_parent"
-				android:orientation="vertical"
-				android:paddingLeft="5dp">
-				
-				<TextView
-					android:fontFamily="sans-serif-light"
-					android:layout_height="wrap_content"
-					android:layout_width="match_parent"
-					android:text="@string/custom_card"
-					android:textColor="@color/black"
-					android:textSize="20sp"/>
-				
-				<TextView
-					android:fontFamily="sans-serif-light"
-					android:layout_height="wrap_content"
-					android:layout_width="match_parent"
-					android:text="@string/description"
-					android:textColor="@color/black"
-					android:textSize="14sp"/>
-			</LinearLayout>
-		</android.support.wearable.view.CardFrame>
-	</android.support.wearable.view.CardScrollView>
+<LinearLayout
+android:layout_height="wrap_content"
+android:layout_width="match_parent"
+android:orientation="vertical"
+android:paddingLeft="5dp">
+
+<TextView
+android:fontFamily="sans-serif-light"
+android:layout_height="wrap_content"
+android:layout_width="match_parent"
+android:text="@string/custom_card"
+android:textColor="@color/black"
+android:textSize="20sp"/>
+
+<TextView
+android:fontFamily="sans-serif-light"
+android:layout_height="wrap_content"
+android:layout_width="match_parent"
+android:text="@string/description"
+android:textColor="@color/black"
+android:textSize="14sp"/>
+</LinearLayout>
+</android.support.wearable.view.CardFrame>
+</android.support.wearable.view.CardScrollView>
 </android.support.wearable.view.BoxInsetLayout>
 
 @Override
@@ -6023,24 +6023,24 @@ protected void onCreate(Bundle savedInstanceState) {
 // 2、创建一个自定义布局来实现你的list item
 // 3、创建一个adapter装载进这个listview
 <android.support.wearable.view.BoxInsetLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
-	android:background="@drawable/robot_background"
-	android:layout_height="match_parent"
-	android:layout_width="match_parent">
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:background="@drawable/robot_background"
+android:layout_height="match_parent"
+android:layout_width="match_parent">
 
-		<FrameLayout
-			android:id="@+id/frame_layout"
-			android:layout_height="match_parent"
-			android:layout_width="match_parent"
-			app:layout_box="left|bottom|right">
+<FrameLayout
+android:id="@+id/frame_layout"
+android:layout_height="match_parent"
+android:layout_width="match_parent"
+app:layout_box="left|bottom|right">
 
-			<android.support.wearable.view.WearableListView
-				android:id="@+id/wearable_list"
-				android:layout_height="match_parent"
-				android:layout_width="match_parent">
-			</android.support.wearable.view.WearableListView>
-		</FrameLayout>
+<android.support.wearable.view.WearableListView
+android:id="@+id/wearable_list"
+android:layout_height="match_parent"
+android:layout_width="match_parent">
+</android.support.wearable.view.WearableListView>
+</FrameLayout>
 </android.support.wearable.view.BoxInsetLayout>
 
 // 下面这个布局实现了WearableListView.Item接口，
@@ -6111,27 +6111,27 @@ public class WearableListItemLayout extends LinearLayout implements WearableList
 
 // 创建listitem布局
 <com.example.android.support.wearable.notifications.WearableListItemLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:gravity="center_vertical"
-	android:layout_width="match_parent"
-	android:layout_height="80dp">
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:gravity="center_vertical"
+android:layout_width="match_parent"
+android:layout_height="80dp">
 
-		<ImageView
-			android:id="@+id/circle"
-			android:layout_height="20dp"
-			android:layout_margin="16dp"
-			android:layout_width="20dp"
-			android:src="@drawable/wl_circle"/>
-		<TextView
-			android:id="@+id/name"
-			android:gravity="center_vertical|left"
-			android:layout_width="wrap_content"
-			android:layout_marginRight="16dp"
-			android:layout_height="match_parent"
-			android:fontFamily="sans-serif-condensed-light"
-			android:lineSpacingExtra="-4sp"
-			android:textColor="@color/text_color"
-			android:textSize="16sp"/>
+<ImageView
+android:id="@+id/circle"
+android:layout_height="20dp"
+android:layout_margin="16dp"
+android:layout_width="20dp"
+android:src="@drawable/wl_circle"/>
+<TextView
+android:id="@+id/name"
+android:gravity="center_vertical|left"
+android:layout_width="wrap_content"
+android:layout_marginRight="16dp"
+android:layout_height="match_parent"
+android:fontFamily="sans-serif-condensed-light"
+android:lineSpacingExtra="-4sp"
+android:textColor="@color/text_color"
+android:textSize="16sp"/>
 </com.example.android.support.wearable.notifications.WearableListItemLayout>
 
 // 创建adapter
@@ -6200,10 +6200,10 @@ public class WearActivity extends Activity implements WearableListView.ClickList
 // 需要在你的activity布局中添加GridViewPager 元素，
 // 并继承FragmentGridPagerAdapter 类来实现一个adapter提供页面内容
 <android.support.wearable.view.GridViewPager
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/pager"
-	android:layout_width="match_parent"
-	android:layout_height="match_parent" />
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@+id/pager"
+android:layout_width="match_parent"
+android:layout_height="match_parent" />
 
 public class SampleGridPagerAdapter extends FragmentGridPagerAdapter{
 
@@ -6270,13 +6270,13 @@ public class MainActivity extends Activity{
 // 3、设置定时器时长并在用户完成操作的时候启动它
 
 <android.support.wearable.view.DelayedConfirmationView
-	android:id="@+id/delayed_confirm"
-	android:layout_width="40dp"
-	android:layout_height="40dp"
-	android:src="@drawable/cancel_circle"
-	app:circle_border_color="@color/lightblue"
-	app:circle_border_width="4dp"
-	app:circle_radius="16dp">
+android:id="@+id/delayed_confirm"
+android:layout_width="40dp"
+android:layout_height="40dp"
+android:src="@drawable/cancel_circle"
+app:circle_border_color="@color/lightblue"
+app:circle_border_width="4dp"
+app:circle_radius="16dp">
 </android.support.wearable.view.DelayedConfirmationView>
 
 public class WearActivity extends Activity implements DelayedConfirmationView.DelayedConfirmationListener{
@@ -6315,15 +6315,15 @@ startActivity(intent);
 
 // 实现长按消失模式
 <FrameLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_height="match_parent"
-	android:layout_width="match_parent">
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_height="match_parent"
+android:layout_width="match_parent">
 
 <!-- other views go here -->
 <android.support.wearable.view.DismissOverlayView
-	android:id="@+id/dismiss_overlay"
-	android:layout_height="match_parent"
-	android:layout_width="match_parent"/>
+android:id="@+id/dismiss_overlay"
+android:layout_height="match_parent"
+android:layout_width="match_parent"/>
 <FrameLayout>
 
 public class WearActivity extends Activity {
@@ -6342,16 +6342,332 @@ public class WearActivity extends Activity {
 
 		// Configure a gesture detector
 		mDetector = new GestureDetector(this, new SimpleOnGestureListener() {
-				public void onLongPress(MotionEvent ev) {
+			public void onLongPress(MotionEvent ev) {
 				mDismissOverlay.show();
-				}
+			}
 		});
-}
+	}
 
 	// Capture long presses
 	@Override
 	public boolean onTouchEvent(MotionEvent ev) {
-			return mDetector.onTouchEvent(ev) || super.onTouchEvent(ev);
+		return mDetector.onTouchEvent(ev) || super.onTouchEvent(ev);
 	}
 }
+
+// 数据层
+GoogleApiCient mGoogleApiClient = new GoogleApiCient.Builder(this)
+.addConnectionCallbacks(new ConnectionCallbacks){
+	public void onConnected(Bundle connectionHint){
+			// you can use the data layer api
+	}
+
+	public void onConnectionSuspended(int cause){
+
+	}
+})
+.addOnConnectionFailedListener(new OnConnectionFailedListener(){
+	public void onConnectionFailed(ConnectionResult result){
+
+	}
+})
+.addApi(Wearable.API)
+.build();
+
+// 再调用实例的connect() 方法，系统就会在客户端已连接的时候回调onConnected() 函数。
+
+// 一个DataItem定义了系统用于同步手机端和可穿戴设备间数据的接口，
+// 1. Payload 一个字节数组，可以设置为任何你想要的数据，允许你将对象序列化和反序列化，但长度限制为100KB
+// 2. Path 一个唯一的字符串，必须以 /开头
+
+// 通常不用直接实现DataItem，而是应该这样：
+// 1、创建一个PutDataRequest对象，定义一个path路径字符串来唯一识别这个item
+// 2、调用setData()来设置payload
+// 3、调用DataApi.putDataItem()来请求系统创建这个数据项。
+// 4、当请求数据项的时候，系统会返回实现了DataItem接口的对象
+// 如果不使用setData()，也推荐可以使用DataMap，来实现包含DataItem的一个类似Bundle的接口。
+
+// 如果你想使用类似Android Bundle的形式组织DataItems，可以使用DataMap。
+// 对象做好序列化和反序列化，将数据处理成键值对的形式。
+// 使用DataMap的方式： 
+// 1、创建一个PutDataMapRequest对象，设置DataItem路径path。
+// 2、调用PutDataMapRequest.getDataMap() 方法来获取一个DataMap
+// 3、调用DataMap的各种put...()方法来设置值。
+// 4、调用PutDataMapRequest.asPutDataRequest()方法来获得一个PutDataRequest对象。
+// 5、调用DataApi.putDataItem()方法来请求系统创建DataItem。 
+// 如果手机和可穿戴设备断开了连接，那么数据会被缓存并在下次重建连接的时候同步数据。
+
+PutDataMapRequest dataMap = PutDataMaprequest.create("/count");
+dataMap.getDataMap().putInt(xxx,xxx);
+PutDataRequest request = dataMap.asPutDataRequest();
+PendingResult<DataApi.DataItemResult> pendingResult = Wearable.DataApi.putDataItem(mGoogleApiClient,request);
+
+// 如果一方的数据层连接改变了DataItem，在另一方的连接可能希望得到数据改变的通知，
+// 你可以通过实现一个DataItem事件监听器来做到
+public void onDataChanged(DataEventBuffer dataEvents){
+	for(DataEvent event: dataEvents){
+		if(event.getType() == DataEvent.TYPE_DELETED){
+			event.getDataItem().getUri();
+		}else if(event.getType() == DataEvent.TYPE_CHANGED){
+			event.getDataItem().getUri();
+		}
+	}
+}
+
+// 为了通过蓝牙传送来发送大量二进制数据，例如图片什么的，可以为DataItem附加一个Asset资源。
+
+// 创建asset可以使用Asset类的一些create...()方法，
+// 比如将图片作为字节流发送就可以调用createFromBytes() 方法：
+private static Asset createAssetFromBitmap(Bitmap bitmap) {
+	final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+	bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteStream);
+	return Asset.createFromBytes(byteStream.toByteArray());
+}
+
+//当创建了asset之后，可以调用 putAsset()方法将它附加给DataItem，并且将DataItem放进数据存储中：
+Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.image);
+Asset asset = createAssetFromBitmap(bitmap);
+PutDataRequest request = PutDataRequest.create("/image");
+request.putAsset("profileImage", asset);
+Wearable.DataApi.putDataItem(mGoogleApiClient, request);
+
+Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.image);
+Asset asset = createAssetFromBitmap(bitmap);
+PutDataMapRequest dataMap = PutDataMapRequest.create("/image");
+dataMap.getDataMap().putAsset("profileImage", asset)
+PutDataRequest request = dataMap.asPutDataRequest();
+PendingResult<DataApi.DataItemResult> pendingResult = Wearable.DataApi
+.putDataItem(mGoogleApiClient, request);
+
+
+// 实现一个asset变化的回调来读取它：
+@Override
+public void onDataChanged(DataEventBuffer dataEvents) {
+	for (DataEvent event : dataEvents) {
+		if (event.getType() == DataEvent.TYPE_CHANGED && event.getDataItem().getUri().getPath().equals("/image")) {
+			DataMapItem dataMapItem = DataMapItem.fromDataItem(dataItem); 
+			Asset profileAsset = dataMapItem.getDataMap().getAsset("profileImage");
+			Bitmap bitmap = loadBitmapFromAsset(profileAsset);
+		  // Do something with the bitmap
+		}
+	}
+}
+
+public Bitmap loadBitmapFromAsset(Asset asset) {
+	if (asset == null) {
+		throw new IllegalArgumentException("Asset must be non-null");
+	}
+
+	ConnectionResult result = mGoogleApiClient.blockingConnect(TIMEOUT_MS, TimeUnit.MILLISECONDS);
+	if (!result.isSuccess()) {
+		return null;
+	}
+	// convert asset into a file descriptor and block until it's ready
+	InputStream assetInputStream = Wearable.DataApi.getFdForAsset(mGoogleApiClient, asset).await().getInputStream();
+	mGoogleApiClient.disconnect();
+
+	if (assetInputStream == null) {
+		Log.w(TAG, "Requested an unknown Asset.");
+		return null;
+	}
+	// decode the stream into a bitmap
+	return BitmapFactory.decodeStream(assetInputStream);
+}
+
+// 并且消息可以附加两个东西： 1、一个任意的payload（可选） 2、唯一识别消息行为的路径
+// 消息是个单向的沟通机制，即“fire-and-forget”（自主导）任务，例如发送一个消息给可穿戴设备来启动一个activity。
+// 你也可以使用消息作为请求/响应模型，比如一方发送消息做些事，然后回发一个响应消息。
+
+SendMessageResult result = Wearable.MessageApi.sendMessage(mGApiClient, node, START_ACTIVITY_PATH, null).await();
+if(!result.getStatus().isSuccess()){
+	// ...
+}
+
+// 有一种方式可以获取已连接设备节点的列表，可以给这些设备发送消息：
+private Collection<String> getNodes() {
+	HashSet<String> results = new HashSet<String>();
+	NodeApi.GetConnectedNodesResult nodes = Wearable.NodeApi.getConnectedNodes(mGoogleApiClient).await();
+	for (Node node : nodes.getNodes()) {
+		results.add(node.getId());
+	}
+	return results;
+}
+
+// 为了得到接收消息的通知，可以实现一个消息事件的监听。
+@Override
+public void onMessageReceived(MessageEvent messageEvent) {
+	if (messageEvent.getPath().equals(START_ACTIVITY_PATH)) {
+		Intent startIntent = new Intent(this, MainActivity.class);
+		startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(startIntent);
+	}
+}
+
+// 如果你是在UI主线程调用，可以给pendingResult对象设置一个callback回调，来异步等待操作完成：
+queuedpendingResult.setResultCallback(new ResutlCallbackDataItemResult>(){
+	public void onResult(final DataItemResult result){
+		if(result.getStatus().isSuccess()){
+			result.getDataItem().getUri();
+		}
+	}
+});
+
+// 如果你在一个后台服务（例如WearableListenerService)的独立线程中运行，
+// 可以直接调用pendingResult对象的await（）方法来同步等待操作结果并会返回一个DataItemResult对象。
+DataItemResult result = pendingResult.await();
+if(result.getStatus().isSuccess()) {
+	Log.d(TAG, "Data item set: " + result.getDataItem().getUri());
+}
+
+// 监听数据层事件有两种方式可选：
+// 1、创建一个service继承WearableListenerService.
+// 2、创建一个activity实现DataApi.DataListener.
+
+<service android:name=".DataLayerListenerService">
+  <intent-filter>
+  	<action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
+  </intent-filter>
+</service>
+
+public class DataLayerListenerService extends WearableListenerService {
+
+	private static final String TAG = "DataLayerSample";
+	private static final String START_ACTIVITY_PATH = "/start-activity";
+	private static final String DATA_ITEM_RECEIVED_PATH = "/data-item-received";
+
+	@Override
+	public void onDataChanged(DataEventBuffer dataEvents) {
+		
+		if (Log.isLoggable(TAG, Log.DEBUG)) {
+			Log.d(TAG, "onDataChanged: " + dataEvents);
+		}
+
+		final List events = FreezableUtils.freezeIterable(dataEvents);
+
+		GoogleApiClient googleApiClient = new GoogleApiClient.Builder(this)
+			.addApi(Wearable.API)
+			.build();
+
+		ConnectionResult connectionResult = googleApiClient.blockingConnect(30, TimeUnit.SECONDS);
+
+		if (!connectionResult.isSuccess()) {
+			Log.e(TAG, "Failed to connect to GoogleApiClient.");
+			return;
+		}
+
+		// Loop through the events and send a message
+		// to the node that created the data item.
+		for (DataEvent event : events) {
+			Uri uri = event.getDataItem().getUri();
+
+			// Get the node id from the host value of the URI
+			String nodeId = uri.getHost();
+			// Set the data of the message to be the bytes of the URI.
+			byte[] payload = uri.toString().getBytes();
+
+			// Send the RPC
+			Wearable.MessageApi.sendMessage(googleApiClient, nodeId,DATA_ITEM_RECEIVED_PATH, payload);
+		}
+	}
+}
+
+// 为了解决这个，需要调用clearCallingIdentity()方法来重置进程身份，
+// 并且在完成特殊操作后，调用restoreCallingIdentity方法来恢复进程身份。
+long token = Binder.clearCallingIdentity();
+try {
+	performOperationRequiringPermissions();
+} finally {
+	Binder.restoreCallingIdentity(token);
+}
+
+
+// 创建Activity来监听数据事件的步骤：
+// 1、实现某个想要的接口
+// 2、在oncreate方法中，创建一个GoogleApiClient实例。
+// 3、在onStart()方法中，调用GoogleApiClient实例的connect() 方法来连接Google Play services
+// 4、当连接上了Google Play services之后，系统会回调onConnected()。
+// 这个回调可以通过调用DataApi.addListener(), MessageApi.addListener(), 或 NodeApi.addListener() 来注册。
+// 5、在onStop()方法中，调用 DataApi.removeListener(), MessageApi.removeListener(),或 NodeApi.removeListener()来取消注册的监听。
+// 6、实现你想关心相关接口，比如onDataChanged(), onMessageReceived(), onPeerConnected(), 或onPeerDisconnected()。
+public class MainActivity extends Activity implements DataApi.DataListener, ConnectionCallbacks, OnConnectionFailedListener {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.main);
+
+		mGoogleApiClient = new GoogleApiClient.Builder(this)
+			.addApi(Wearable.API)
+			.addConnectionCallbacks(this)
+			.addOnConnectionFailedListener(this)
+			.build();
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		if (!mResolvingError) {
+			mGoogleApiClient.connect();
+		}
+	}
+
+	   @Override
+	public void onConnected(Bundle connectionHint) {
+		if (Log.isLoggable(TAG, Log.DEBUG)) {
+			Log.d(TAG, "Connected to Google Api Service");
+		}
+		Wearable.DataApi.addListener(mGoogleApiClient, this);
+	}
+
+	@Override
+	protected void onStop() {
+		if (null != mGoogleApiClient && mGoogleApiClient.isConnected()) {
+			Wearable.DataApi.removeListener(mGoogleApiClient, this);
+			mGoogleApiClient.disconnect();
+		}
+		super.onStop();
+	}
+
+	@Override
+	public void onDataChanged(DataEventBuffer dataEvents) {
+		for (DataEvent event : dataEvents) {
+			if (event.getType() == DataEvent.TYPE_DELETED) {
+				Log.d(TAG, "DataItem deleted: " + event.getDataItem().getUri());
+			} else if (event.getType() == DataEvent.TYPE_CHANGED) {
+				Log.d(TAG, "DataItem changed: " + event.getDataItem().getUri());
+			}
+		}
+	}
+}
+
+// 为Notification添加wearable特性
+// 如果你需要为Notification添加一些可穿戴的特性设置，比如制定额外的内容页，或者让用户通过语音输入一些文字，
+// 那么你可以使用 NotificationCompat.WearableExtender来制定这些设置。
+// 请使用如下的API： 
+// 创建一个WearableExtender的实例，设置可穿戴独有的Notification的选项。
+// 创建一个NotificationCompat.Builder的实例，就像本课程先前所说的，设置需要的Notification属性。
+// 执行Notification的extend())方法，参数是WearableExtender实例。
+// Create a WearableExtender to add functionality for wearables
+NotificationCompat.WearableExtender wearableExtender = new NotificationCompat.WearableExtender().setHintHideIcon(true);
+
+// Create a NotificationCompat.Builder to build a standard notification
+// then extend it with the WearableExtender
+Notification notif = new NotificationCompat.Builder(mContext)
+	.setContentTitle("New mail from " + sender)
+	.setContentText(subject)
+	.setSmallIcon(R.drawable.new_mail);
+	.extend(wearableExtender)
+	.build();
+// 如果你需要获取可穿戴特性的内容，可以使用相应的get方法，
+// 该例子通过调用getHintHideIcon()去获取当前Notification是否隐藏了icon
+NotificationCompat.WearableExtender wearableExtender = new NotificationCompat.WearableExtender(notif);
+boolean hintHideIcon = wearableExtender.getHintHideIcon();
+
+// 为了创建一个多页的Notification，你需要： 
+// 通过NotificationCompat.Builder创建主Notification（首页），这个首页也是你想要呈现在手持设备上的。
+// 通过NotificationCompat.Builder为wear添加更多的页面.
+// 通过addPage()方法为主Notification应用这些添加的页面，或者通过addPage()添加一个Collection的多个页面。
+
+
+
 
