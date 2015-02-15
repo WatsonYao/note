@@ -6173,17 +6173,185 @@ private static final class Adapter extends WearableListView.Adapter{
 	}
 }
 
+// 关联adapter并设置点击事件
+public class WearActivity extends Activity implements WearableListView.ClickListener{
+	string[] elements = {"List Item 1", "List Item 2", ...};
+
+	protected void onCreate(Bundle savedinstanceState){
+		super.onCreate(savedinstanceState);
+		setContentView(R.layout.my_list.activity);
+
+		WearableListView listView = (WearableListView)findViewById(R.id.wearable_list);
+		listView.setAdapter(new Adapter(this, elements));
+
+		listView.setClickListener(this);
+	}
+
+	public void onClick(WearableListView.ViewHolder v){
+		Integer tag = (Integer) v.itemView.getTag();
+		// ...
+	}
+
+	public void onTopEmptyRegionClick(){
+
+	}
+}
+
+// 需要在你的activity布局中添加GridViewPager 元素，
+// 并继承FragmentGridPagerAdapter 类来实现一个adapter提供页面内容
+<android.support.wearable.view.GridViewPager
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/pager"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent" />
+
+public class SampleGridPagerAdapter extends FragmentGridPagerAdapter{
+
+	private final Context mContext;
+
+	public SampleGridPagerAdapter(Context ctx,FragmentManager fm){
+		super(fm);
+		mContext = ctx;
+	}
+
+	static final int[] BG_IMAGES = new int[]{
+		R.drawable.xx,...
+		R.drawable.yy
+	};
+
+	private static class Page{
+		int titleRes;
+		int textRes;
+		int iconRes;
+	}
+
+	private final Page[][] PAGES = {...};
+
+	// Override methods in FragmentGridPagerAdapter
+	public Fragment getFragment(int row, int col){
+		Page page = PAGES[row][col];
+		String title = page.textRes !=0 ? mContext.getString(page.titleRes):null;
+		String text = page.textRes != 0 ? mContext.getString(page.textRes) : null;
+		CardFragment fragment = CardFragment.create(title,text,page.iconRes);
+
+		fragment.setCardGravity(page.cardGravity);
+		fragment.setExpansionEnabled(page.expansionDirection);
+		fragment.setExpansionFactor(page.expansionFactor);
+		return fragment;
+	}
+
+	public ImageReference getBackground(int row, int column){
+		return ImageReference.forDrawable(BG_IMAGES[row % BG_IMAGES.length]);
+	}
+
+	public int getRowCount(){
+		return PAGES.length;
+	}
+
+	public int getColumnCount(int rowNum){
+		return PAGES[rowNum].length;
+	}
+}
+
+// picker通过调用getFragment 和getBackground 方法
+// 来获取grid中相应位置的视图和背景。
+public class MainActivity extends Activity{
+	super.onCreate(savedInstanceState);
+	setContentView(R.layout.activity_main);
+
+	final GridViewPager pager = (GridViewPager) findViewById(R.id.pager);
+	pager.setAdapter(new  SampleGridPagerAdapter(this,getFragmentManager()));
+}
 
 
+// 添加定时器的步骤：
+// 1、在你的布局中添加一个DelayedConfirmationView 元素
+// 2、在你的activity中实现DelayedConfirmationListener 接口
+// 3、设置定时器时长并在用户完成操作的时候启动它
 
+<android.support.wearable.view.DelayedConfirmationView
+	android:id="@+id/delayed_confirm"
+	android:layout_width="40dp"
+	android:layout_height="40dp"
+	android:src="@drawable/cancel_circle"
+	app:circle_border_color="@color/lightblue"
+	app:circle_border_width="4dp"
+	app:circle_radius="16dp">
+</android.support.wearable.view.DelayedConfirmationView>
 
+public class WearActivity extends Activity implements DelayedConfirmationView.DelayedConfirmationListener{
 
+	private DelayedConfirmationView mDelayedView;
 
+	protected void onCreate(Bundle savedinstanceState){
+		super.xx;
+		setContextView(xx);
 
+		mDelayedView = (DelayedConfirmationView) findViewById(R.id.delayed_confirm);
+		mDelayedView.setListener(this);
+	}
 
+	public void onTimerFinished(View view){
 
+	}
 
+	public void onTimerSelected(View view){
 
+	}
 
+	// 启动定时器
+	mDelayedView.setTotalTimeMs(2000);
+	mDelayedView.start();
+}
 
+// 当用户在你的应用中完成操作的时候，创建一个intent来启动ConfirmationActivity 。
+// 你可以设置EXTRA_ANIMATION_TYPE 来定义动画类型：
+// SUCCESS_ANIMATION FAILURE_ANIMATION OPEN_ON_PHONE_ANIMATION
+
+Intent intent = new Intent(this, ConfirmationActivity.class);
+intent.putExtra(ConfirmationActivity.EXTRA_ANIMATION_TYPE,ConfirmationActivity.SUCCESS_ANIMATION);
+intent.putExtra(ConfirmationActivity.EXTRA_MESSAGE,getString(R.string.msg_sent));
+startActivity(intent);
+
+// 实现长按消失模式
+<FrameLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="match_parent"
+	android:layout_width="match_parent">
+
+<!-- other views go here -->
+<android.support.wearable.view.DismissOverlayView
+	android:id="@+id/dismiss_overlay"
+	android:layout_height="match_parent"
+	android:layout_width="match_parent"/>
+<FrameLayout>
+
+public class WearActivity extends Activity {
+
+	private DismissOverlayView mDismissOverlay;
+	private GestureDetector mDetector;
+
+	public void onCreate(Bundle savedState) {
+		super.onCreate(savedState);
+		setContentView(R.layout.wear_activity);
+
+		// Obtain the DismissOverlayView element
+		mDismissOverlay = (DismissOverlayView) findViewById(R.id.dismiss_overlay);
+		mDismissOverlay.setIntroText(R.string.long_press_intro);
+		mDismissOverlay.showIntroIfNecessary();
+
+		// Configure a gesture detector
+		mDetector = new GestureDetector(this, new SimpleOnGestureListener() {
+				public void onLongPress(MotionEvent ev) {
+				mDismissOverlay.show();
+				}
+		});
+}
+
+	// Capture long presses
+	@Override
+	public boolean onTouchEvent(MotionEvent ev) {
+			return mDetector.onTouchEvent(ev) || super.onTouchEvent(ev);
+	}
+}
 
