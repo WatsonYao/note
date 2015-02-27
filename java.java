@@ -6524,9 +6524,9 @@ if(result.getStatus().isSuccess()) {
 // 2、创建一个activity实现DataApi.DataListener.
 
 <service android:name=".DataLayerListenerService">
-  <intent-filter>
-  	<action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
-  </intent-filter>
+<intent-filter>
+<action android:name="com.google.android.gms.wearable.BIND_LISTENER" />
+</intent-filter>
 </service>
 
 public class DataLayerListenerService extends WearableListenerService {
@@ -6545,8 +6545,8 @@ public class DataLayerListenerService extends WearableListenerService {
 		final List events = FreezableUtils.freezeIterable(dataEvents);
 
 		GoogleApiClient googleApiClient = new GoogleApiClient.Builder(this)
-			.addApi(Wearable.API)
-			.build();
+		.addApi(Wearable.API)
+		.build();
 
 		ConnectionResult connectionResult = googleApiClient.blockingConnect(30, TimeUnit.SECONDS);
 
@@ -6597,10 +6597,10 @@ public class MainActivity extends Activity implements DataApi.DataListener, Conn
 		setContentView(R.layout.main);
 
 		mGoogleApiClient = new GoogleApiClient.Builder(this)
-			.addApi(Wearable.API)
-			.addConnectionCallbacks(this)
-			.addOnConnectionFailedListener(this)
-			.build();
+		.addApi(Wearable.API)
+		.addConnectionCallbacks(this)
+		.addOnConnectionFailedListener(this)
+		.build();
 	}
 
 	@Override
@@ -6611,7 +6611,7 @@ public class MainActivity extends Activity implements DataApi.DataListener, Conn
 		}
 	}
 
-	   @Override
+	@Override
 	public void onConnected(Bundle connectionHint) {
 		if (Log.isLoggable(TAG, Log.DEBUG)) {
 			Log.d(TAG, "Connected to Google Api Service");
@@ -6653,11 +6653,11 @@ NotificationCompat.WearableExtender wearableExtender = new NotificationCompat.We
 // Create a NotificationCompat.Builder to build a standard notification
 // then extend it with the WearableExtender
 Notification notif = new NotificationCompat.Builder(mContext)
-	.setContentTitle("New mail from " + sender)
-	.setContentText(subject)
-	.setSmallIcon(R.drawable.new_mail);
-	.extend(wearableExtender)
-	.build();
+.setContentTitle("New mail from " + sender)
+.setContentText(subject)
+.setSmallIcon(R.drawable.new_mail);
+.extend(wearableExtender)
+.build();
 // 如果你需要获取可穿戴特性的内容，可以使用相应的get方法，
 // 该例子通过调用getHintHideIcon()去获取当前Notification是否隐藏了icon
 NotificationCompat.WearableExtender wearableExtender = new NotificationCompat.WearableExtender(notif);
@@ -6669,5 +6669,229 @@ boolean hintHideIcon = wearableExtender.getHintHideIcon();
 // 通过addPage()方法为主Notification应用这些添加的页面，或者通过addPage()添加一个Collection的多个页面。
 
 
+
+// scrolling and hide toolbar
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="match_parent">
+
+<android.support.v7.widget.RecyclerView
+android:id="@+id/recyclerView"
+android:layout_width="match_parent"
+android:layout_height="match_parent"/>
+
+<android.support.v7.widget.Toolbar
+android:id="@+id/toolbar"
+android:layout_width="match_parent"
+android:layout_height="?attr/actionBarSize"
+android:background="?attr/colorPrimary"/>
+
+<ImageButton
+android:id="@+id/fabButton"
+android:layout_width="56dp"
+android:layout_height="56dp"
+android:layout_gravity="bottom|right"
+android:layout_marginBottom="16dp"
+android:layout_marginRight="16dp"
+android:background="@drawable/fab_background"
+android:src="@drawable/ic_favorite_outline_white_24dp"
+android:contentDescription="@null"/>
+
+</FrameLayout>
+
+// put them in a framelayout because toolbar needs to be overlayed on RecyclerView.
+public class MainActivity extends ActionBarActivity {
+
+	private Toolbar mToolbar;
+	private ImageButton mFabButton;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		initToolbar();
+		mFabButton = (ImageButton) findViewById(R.id.fabButton);
+		initRecyclerView();
+	}
+
+	private void initToolbar() {
+		mToolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(mToolbar);
+		setTitle(getString(R.string.app_name));
+		mToolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
+	}
+
+	private void initRecyclerView() {
+		RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+		recyclerView.setLayoutManager(new LinearLayoutManager(this));
+		RecyclerAdapter recyclerAdapter = new RecyclerAdapter(createItemList());
+		recyclerView.setAdapter(recyclerAdapter);
+		recyclerView.setOnScrollListener( new HidingScrollListener(){
+
+			public void onHide(){
+				hideViews();
+			}
+
+			public void onShow(){
+				showViews();
+			}
+		});
+
+		private void hideViews(){
+			mToolbar.animate().translationY(-mToolbar.getHeight()).setInterpolator(new AccelerateInterpolator(2) );
+			FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) mFabButton.getLayoutParams();
+			int fabBottomMargin = lp.bottomMargin;
+			mFabButton.animate().translationY(mFabButton.getHeight()+fabBottomMargin).setInterpolator(new AccelerateInterpolator(2)).start();
+		}
+
+		private void showViews() {
+			mToolbar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+			mFabButton.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2)).start();
+		}
+	}
+
+
+}
+
+public class RecyclerItemViewHolder extends RecyclerView.ViewHolder{
+
+	private final TextView mItemTextView;
+
+	public RecyclerItemViewHolder(final View parent, TextView itemTextView){
+		super(parent);
+		mItemTextView = itemTextView;
+	}
+
+	public static RecyclerItemViewHolder newInstance(View parent){
+		TextView itemTextView = (TextView) parent.findViewById(R.id.xxx);
+		return new RecyclerItemViewHolder(parent, itemTextView);
+	}
+
+	public void setItemText(CharSequence text){
+		mItemTextView.setText(text);
+	}
+}
+
+public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+
+	private static final int TYPE_HEADER = 2;
+	private static final int TYPE_ITEM = 1;
+
+	private List<String> mItemlist;
+
+	public RecyclerAdapter(List<String> itemList){
+		mItemlist = itemList;
+	}
+
+	// public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
+	// 	final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.xxx,false);
+	// 	return RecyclerItemViewHolder.newInstance(view);
+	// }
+
+	public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
+		Context context = parent.getContext();
+		if( viewType == TYPE_ITEM){
+			final View view = LayoutInflater.from(context).inflate(R.layout.recycler_item, parent, false);
+			return RecyclerItemViewHolder.newInstance(view);
+		}else if(viewType == TYPE_HEADER){
+			final View view = LayoutInflater.from(context).inflate(R.layout.recycler_header, parent, false);
+			return new RecyclerHeaderViewHolder(view);
+		}
+		throw new RuntimeException("xxxx");
+	}
+
+	// public void onBindViewHolder(RecyclerView.ViewHolder viewholder, int position){
+	// 	RecyclerItemViewHolder holder = (RecyclerItemViewHolder) viewholder;
+	// 	String itemText = mItemlist.get(position);
+	// 	holder.setItemText(itemText);
+	// }
+	public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position){
+		if(!isPositionHeader(positioin)){
+			RecyclerItemViewHolder holder = (RecyclerItemViewHolder) viewholder;
+			String itemText = mItemlist.get(position - 1);
+			holder.setItemText(itemText);
+		}
+	}
+
+	// public int getItemCount(){
+	// 	return mItemlist == null ? 0 : mItemlist.size();
+	// }
+
+	public int getBasicItemCount(){
+		return mItemlist == null ? 0 : mItemlist.size();
+	}
+
+	public int getItemCount(){
+		return getBasicItemCount() + 1;
+	}
+
+	public int getItemViewType(int position){
+		if(isPositionHeader(position)){
+			return TYPE_HEADER;
+		}
+		return TYPE_ITEM;
+	}
+
+	private boolean isPositionHeader(int position){
+		return position == 0;
+	}
+
+}
+
+public abstract class HidingScrollListener extends RecyclerView.OnScrollListenr{
+
+	private static final int HIDE_THRESHOLD = 20;
+	private int scrolledDistance = 0;
+	private boolean controlsVisible = true;
+
+
+	// public void onScrolled(RecyclerView recyclerView, int dx, int dy){
+	// 	super.onScrolled(recyclerView, dx, dy);
+
+	// 	if( scrolledDistance > HIDE_THRESHOLD && controlsVisible){
+	// 		onHide();
+	// 		controlsVisible = false;
+	// 		scrolledDistance = 0;
+	// 	}else if( scrolledDistance < -HIDE_THRESHOLD && !controlsVisible){
+	// 		onShow();
+	// 		controlsVisible = true;
+	// 		scrolledDistance = 0;
+	// 	}
+
+	// 	if( (controlsVisible && dy > 0) || (!controlsVisible && dy < 0)){
+	// 		scrolledDistance += dy;
+	// 	}
+	// }
+	@Override
+	public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+		super.onScrolled(recyclerView, dx, dy);
+		
+		int firstVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+  //show views if first item is first visible position and views are hidden
+		if (firstVisibleItem == 0) {
+			if(!controlsVisible) {
+				onShow();
+				controlsVisible = true;
+			}
+		} else {
+			if (scrolledDistance > HIDE_THRESHOLD && controlsVisible) {
+				onHide();
+				controlsVisible = false;
+				scrolledDistance = 0;
+			} else if (scrolledDistance < -HIDE_THRESHOLD && !controlsVisible) {
+				onShow();
+				controlsVisible = true;
+				scrolledDistance = 0;
+			}
+		}
+		
+		if((controlsVisible && dy>0) || (!controlsVisible && dy<0)) {
+			scrolledDistance += dy;
+		}
+	}
+
+	public abstract void onHide();
+	public abstract void onShow();
+}
 
 
