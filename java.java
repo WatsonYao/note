@@ -6895,3 +6895,34 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListenr{
 }
 
 
+// toolbar 隐藏
+private RecyclerView.OnScrollListener recyclerScrollListener =
+	new RecyclerView.OnScrollListener(){
+
+		public boolean flag;
+
+		public void onScrolled(RecyclerView recyclerView, int dx, int dy){
+			super.onScrolled(recyclerView, dx, dy);
+
+			if(dy > 10){
+				if( !flag ){
+					showToolbar();
+					flag = true;
+				}
+			}else if( dy < 10){
+				if(flag){
+					hideToolbar();
+					flag  = false;
+				}
+			}
+		}
+	}
+
+private void showToolbar(){
+
+}
+
+private void hideToolbar(){
+	
+}
+
