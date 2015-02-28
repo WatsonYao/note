@@ -1,9 +1,6 @@
 package com.example.administrator.mvp.presenter;
 
-import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
-import android.view.View;
 
 import com.example.administrator.mvp.model.UserModel;
 import com.example.administrator.mvp.model.bean.User;
@@ -31,16 +28,14 @@ public class UserPresenterImpl implements UserPresenter, UserModel.LoginListener
     @Override
     public void login() {
         // submit the user;
-        // 拿到usermodel的数据 提交
         userView.setUser();
-        Log.i("temp", "submit(" + userModel.getUser().getName() + "," + userModel.getUser().getPswd() + ");");
         userView.showLoading();
         userModel.login();
     }
 
     @Override
-    public void onLoginListener(String flag) {
-        userView.showData(flag);
+    public void onLoginListener(String msg) {
+        userView.showData(msg);
         userView.hideLoading();
     }
 

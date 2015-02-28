@@ -113,4 +113,6 @@ public class MainActivity extends ActionBarActivity implements UserView {
         mUserPresenter.setUser(user);
     }
 
+
+
 }

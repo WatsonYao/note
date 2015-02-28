@@ -17,21 +17,27 @@ public class UserModel {
     private LoginListener loginListener;
 
 
-    public UserModel(LoginListener loginListener){
+    public UserModel(LoginListener loginListener) {
         handler = new UserHandler();
         this.loginListener = loginListener;
     }
 
-    public User getUser(){
+    public User getUser() {
         return user;
     }
 
-    public void setUser(User user){
+    public void setUser(User user) {
         this.user = user;
-    };
+    }
 
-    public void login(){
-        handler.sendEmptyMessageDelayed(0x123, 2000);
+    ;
+
+    public void login() {
+        if(checkUser()){
+            handler.sendEmptyMessageDelayed(0x123, 2000);
+        }else{
+            handler.sendEmptyMessageDelayed(0x124, 2000);
+        }
     }
 
     private class UserHandler extends Handler {
@@ -51,7 +57,19 @@ public class UserModel {
         }
     }
 
-    public interface LoginListener{
-        void onLoginListener(String flag);
+    public interface LoginListener {
+        void onLoginListener(String msg);
+    }
+
+    private boolean checkUser() {
+        if ("".equals(user.getName())) {
+            return false;
+        }
+
+        if ("".equals(user.getPswd())) {
+            return false;
+        }
+
+        return true;
     }
 }
