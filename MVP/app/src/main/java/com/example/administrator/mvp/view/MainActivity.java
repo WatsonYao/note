@@ -86,7 +86,7 @@ public class MainActivity extends ActionBarActivity implements UserView {
     @Override
     public void showData(String msg) {
         Log.i("temp", "showData");
-        submit.setText("submit(OK!)");
+        submit.setText(msg);
     }
 
     @Override

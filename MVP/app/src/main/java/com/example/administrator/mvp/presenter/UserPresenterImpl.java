@@ -3,6 +3,7 @@ package com.example.administrator.mvp.presenter;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.View;
 
 import com.example.administrator.mvp.model.UserModel;
 import com.example.administrator.mvp.model.bean.User;
@@ -11,16 +12,14 @@ import com.example.administrator.mvp.view.UserView;
 /**
  * Created by Administrator on 2/27.
  */
-public class UserPresenterImpl implements UserPresenter {
+public class UserPresenterImpl implements UserPresenter, UserModel.LoginListener {
 
     private UserModel userModel;
     private UserView userView;
-    private Handler handler;
 
     public UserPresenterImpl(UserView view) {
-        userModel = new UserModel();
+        userModel = new UserModel(this);
         userView = view;
-        handler = new UserHandler();
     }
 
 
@@ -36,29 +35,14 @@ public class UserPresenterImpl implements UserPresenter {
         userView.setUser();
         Log.i("temp", "submit(" + userModel.getUser().getName() + "," + userModel.getUser().getPswd() + ");");
         userView.showLoading();
-        //handler.sendEmptyMessageDelayed(0x123, 2000);
-        handler.sendEmptyMessageDelayed(0x124, 2000);
+        userModel.login();
     }
 
-
-    private class UserHandler extends Handler {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            Log.i("temp", "handleMessage(" + msg.what + ");");
-
-            switch (msg.what) {
-                case 0x123:
-                    userView.showData("showdata");
-                    userView.hideLoading();
-                    break;
-                case 0x124:
-                    userView.showError("submit(error!)");
-                    userView.hideLoading();
-                    break;
-
-            }
-        }
+    @Override
+    public void onLoginListener(String flag) {
+        userView.showData(flag);
+        userView.hideLoading();
     }
+
 
 }
