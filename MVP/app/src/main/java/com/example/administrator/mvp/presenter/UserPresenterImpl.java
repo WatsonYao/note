@@ -21,7 +21,10 @@ public class UserPresenterImpl implements UserPresenter, UserModel.LoginListener
 
 
     @Override
-    public void setUser(User user) {
+    public void setUser(String name, String pswd) {
+        User user = new User();
+        user.setName(name);
+        user.setPswd(pswd);
         userModel.setUser(user);
     }
 

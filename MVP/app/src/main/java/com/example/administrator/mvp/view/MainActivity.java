@@ -1,9 +1,7 @@
 package com.example.administrator.mvp.view;
 
-import android.os.Handler;
-import android.os.Message;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,7 +11,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import com.example.administrator.mvp.R;
-import com.example.administrator.mvp.model.bean.User;
 import com.example.administrator.mvp.presenter.UserPresenter;
 import com.example.administrator.mvp.presenter.UserPresenterImpl;
 
@@ -107,10 +104,7 @@ public class MainActivity extends ActionBarActivity implements UserView {
 
     @Override
     public void setUser() {
-        User user = new User();
-        user.setName(name.getText().toString());
-        user.setPswd(pswd.getText().toString());
-        mUserPresenter.setUser(user);
+        mUserPresenter.setUser(name.getText().toString(),pswd.getText().toString());
     }
 
 

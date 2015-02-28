@@ -7,7 +7,7 @@ import com.example.administrator.mvp.model.bean.User;
  */
 public interface UserPresenter {
 
-    void setUser(User user);
+    void setUser(String name, String pswd);
 
     // 业务逻辑 登录
     void login();
