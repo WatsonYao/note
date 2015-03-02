@@ -1,74 +1,36 @@
 package com.example.administrator.mvp.model;
 
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
-
-import com.example.administrator.mvp.model.bean.User;
-
 /**
  * Created by Administrator on 2/27.
  */
 public class UserModel {
 
-    private User user;
-    private Handler handler;
-    private LoginListener loginListener;
+    private String name;
+    private String pswd;
 
-
-    public UserModel(LoginListener loginListener) {
-        handler = new UserHandler();
-        this.loginListener = loginListener;
+    public String getName() {
+        return name;
     }
 
-    public User getUser() {
-        return user;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public String getPswd() {
+        return pswd;
     }
 
-    ;
-
-    public void login() {
-        if(checkUser()){
-            handler.sendEmptyMessageDelayed(0x123, 2000);
-        }else{
-            handler.sendEmptyMessageDelayed(0x124, 2000);
-        }
+    public void setPswd(String pswd) {
+        this.pswd = pswd;
     }
 
-    private class UserHandler extends Handler {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            Log.i("temp", "handleMessage(" + msg.what + ");");
-
-            switch (msg.what) {
-                case 0x123:
-                    loginListener.onLoginListener("submit-OK");
-                    break;
-                case 0x124:
-                    loginListener.onLoginListener("submit-Error");
-                    break;
-            }
-        }
+    @Override
+    public String toString() {
+        return "UserModel{" +
+                "name='" + name + '\'' +
+                ", pswd='" + pswd + '\'' +
+                '}';
     }
 
-    public interface LoginListener {
-        void onLoginListener(String msg);
-    }
 
-    private boolean checkUser() {
-        if ("".equals(user.getName())) {
-            return false;
-        }
-
-        if ("".equals(user.getPswd())) {
-            return false;
-        }
-
-        return true;
-    }
 }

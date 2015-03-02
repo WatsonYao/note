@@ -1,7 +1,5 @@
 package com.example.administrator.mvp.view;
 
-import com.example.administrator.mvp.model.bean.User;
-
 /**
  * Created by Administrator on 2/27.
  */
