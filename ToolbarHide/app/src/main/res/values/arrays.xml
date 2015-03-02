@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="titles">
+        <item>sss</item>
+        <item>aaa</item>
+        <item>bbb</item>
+        <item>ccc</item>
+        <item>sss</item>
+        <item>aaa</item>
+        <item>bbb</item>
+        <item>ccc</item>
+        <item>sss</item>
+        <item>aaa</item>
+        <item>bbb</item>
+        <item>ccc</item>
+        <item>sss</item>
+        <item>aaa</item>
+        <item>bbb</item>
+        <item>ccc</item>
+        <item>sss</item>
+        <item>aaa</item>
+        <item>bbb</item>
+        <item>ccc</item>
+        <item>sss</item>
+        <item>aaa</item>
+        <item>bbb</item>
+        <item>ccc</item>
+        <item>sss</item>
+        <item>aaa</item>
+        <item>bbb</item>
+        <item>ccc</item>
+
+
+    </string-array>
+
+</resources>
