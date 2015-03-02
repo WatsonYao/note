@@ -87,3 +87,77 @@ MVP模式里通常包含4个要素
 html {font-size: 62.5%;/*10 ÷ 16 × 100% = 62.5%*/}
 body {font-size: 1.4rem;/*1.4 × 10px = 14px */}
 h1 { font-size: 2.4rem;/*2.4 × 10px = 24px*/}
+
+//设计
+Step1. 信息架构，确定内容策略
+列表类页面、详情类页面、操作类页面
+
+Step2 移动框架
+先说下为什么第二步要先设计移动框架。移动优先是移动互联网浪潮下应运而生的理念，由Luke Wroblewski最早提出。移动优先并不是指移动更重要，响应式设计理念里设备是同等重要的。它是指优先设计手机端的体验，有三个原因：
+
+手机让设计专注，强迫你想清楚什么信息是最重要的。因为手机屏幕小，每屏呈现的内容少；触屏手机使用手指操作而非鼠标这样的精密设备来操作，对操作有更高要求；手机使用场景更加丰富，很多场景用户是缺乏耐心的，比如当你排队看电影正在找手机上的电子票，马上排到你了翻半天却迟迟找不到那张票这是多么令人崩溃的事情。
+手机许多特性让设计更强大。手机上的语音输入、地理位置定位、丰富的手势操作、越来越多传感器，手机交互比PC拥有更多可能性。从手机开始设计，让你更早地思考如何发挥这些特性。
+手机正在迅猛增长。手机即将超越PC，成为最主流的上网方式，这个趋势是不可逆的。
+
+Step3：响应式框架
+
+
+// MVP 实践
+Entities: 
+	these are the business objects of the application.
+Use Cases: 
+	these use cases orchestrate(协调) the flow of data to and from the entities.are also called interactors.
+Interface Adapters:
+	this set of adapters convert data from the format most convenient for the use cases and entities.
+	presenters and Controllers belong here.
+Frameworks and drivers:
+	this is where all the details go: UI, tools, frameworks, etc.
+
+
+
+// MVP 实践2
+Entities:
+	Entities encapsulate Enterprise wide business rules.
+	实体封装的企业的业务规则。
+	An entity can be an object with methods, or it can be a set of data structures and functions.
+	一个实体可以是一个带方法的对象，或者一系列数据结构和函数的集合
+	it doesn't matter so long as the entities could be used by many different applications in the enterprise.
+	只要这个实体能够被不同的应用程序使用即可。
+
+	if you dont have an enterprise,and are just writing a single application, then these entities are the business objects of the application.
+	如果你编写的不是企业软件，只是简单的应用程序，这些实体就是应用的业务对象。
+	they encapsulate the most general and high-level rules.
+	它封装着最普遍最顶层的业务规则。
+	they are the least likely to change when something external changes.
+	不能因为外部的改变而改变。
+	For example,you would not expect these objects to be affected by a change to page navigation,or security.
+	比如，这些实体对象被一个页面的导航功能或者安全机制改变。
+	No operational change to any particular application should affet the entity layer.
+	操作层的改变不能影响实体层。
+
+Use Cases:
+	the software in this layer contains application specific business rules.
+	it encapsulates and implements all of the use cases of the system.
+	these use cases orchestrate the flow of data to and from the entities, and direct those entities to use their enterpricse wide business rules to achieve the goals of the use case.
+
+	we do not expect changes in this layer to affect the entites.
+	we also do not expect this layer to be affected by changes to externalities such as the database,the UI,or any of the common frameworks.this layer is isolated from such concerns.
+
+	we do,however,expect that changes to the operation of the application will affect the use-cases and therefore the software in this layer. if the details of a use-case chagne,then some code in this layer will certainly be affected.
+
+	在这个层的软件包含应用指定的业务规则，它封装和实现系统的所有用例，这些用例会混合各种来自实体的各种数据流程，并且指导这些实体使用企业规则来完成用例的功能目标。
+
+	我们并不期望改变这层会影响实体层. 我们也不期望这层被更外部如数据库 UI或普通框架影响，这层也是因为关注而外部分离的。
+
+	我们期望应用层面的技术操作都不能影响用例层，如果需求中用例发生改变，这个层的代码才会发生改变。
+
+Interface adapters
+	the software in this layer is a set of adapters that convert data from the format most convenitent for the use cases and entities,to the format most convenitent for some external agency such as the Database or the Web.
+	it is this layer,for example,that will wholly contain the MVC architechture of a GUI.The Presenters,Views,and Controllers all belong in here.The models are likely just data structures that are passed from the controllers to the use cases,and then back from the use cases to the presenters and views.
+
+	Similarly,data is converted,in this layer,from the form most converient for entities and use cases,
+	into the form most convenient for whatever persistence framework is being used.i.e.The Database.
+	No code inward of this circle should know anything at all about the database.If the database is a SQL database,then all the SQL should be restricted to this layer,and in particular to the parts of this layer that have to do with the database.
+
+	Also in this layer is any other adapter necessary to convert data from some external form,such as an external service,
+	to the internal form used by the use cases and entities.

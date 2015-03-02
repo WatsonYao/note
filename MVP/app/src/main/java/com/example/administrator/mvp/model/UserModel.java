@@ -5,7 +5,6 @@ import android.os.Message;
 import android.util.Log;
 
 import com.example.administrator.mvp.model.bean.User;
-import com.example.administrator.mvp.presenter.UserPresenter;
 
 /**
  * Created by Administrator on 2/27.
