@@ -11,20 +11,17 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import com.example.administrator.mvp.R;
-import com.example.administrator.mvp.presenter.UserPresenter;
-import com.example.administrator.mvp.presenter.UserPresenterImpl;
+import com.example.administrator.mvp.presenter.LoginPresenter;
+import com.example.administrator.mvp.presenter.LoginPresenterImpl;
 
 
-public class MainActivity extends ActionBarActivity implements UserView {
+public class LoginActivity extends ActionBarActivity implements LoginView {
 
     private EditText name, pswd;
     private Button submit;
     private ProgressBar pb;
 
-    private UserPresenter mUserPresenter;
-
-    public MainActivity() {
-    }
+    private LoginPresenter mLoginPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,18 +30,18 @@ public class MainActivity extends ActionBarActivity implements UserView {
 
         initWidget();
 
-        mUserPresenter = new UserPresenterImpl(this);
+        mLoginPresenter = new LoginPresenterImpl(this);
     }
 
     private void initWidget() {
         name = (EditText) findViewById(R.id.name);
         pswd = (EditText) findViewById(R.id.pswd);
         submit = (Button) findViewById(R.id.submit);
-        pb = (ProgressBar)findViewById(R.id.pb);
+        pb = (ProgressBar) findViewById(R.id.pb);
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mUserPresenter.login();
+                mLoginPresenter.login();
             }
         });
     }
@@ -81,9 +78,9 @@ public class MainActivity extends ActionBarActivity implements UserView {
     }
 
     @Override
-    public void showData(String msg) {
+    public void showData() {
         Log.i("temp", "showData");
-        submit.setText(msg);
+        submit.setText(mLoginPresenter.getLoginRes().getMsg() + "");
     }
 
     @Override
@@ -92,9 +89,9 @@ public class MainActivity extends ActionBarActivity implements UserView {
     }
 
     @Override
-    public void showError(String error) {
+    public void showError() {
         Log.i("temp", "showError");
-        submit.setText(error);
+        submit.setText(mLoginPresenter.getLoginRes().getMsg() + "");
     }
 
     @Override
@@ -103,10 +100,9 @@ public class MainActivity extends ActionBarActivity implements UserView {
     }
 
     @Override
-    public void setUser() {
-        mUserPresenter.setUser(name.getText().toString(),pswd.getText().toString());
+    public void setLogin() {
+        mLoginPresenter.setUser(name.getText().toString(), pswd.getText().toString());
     }
-
 
 
 }

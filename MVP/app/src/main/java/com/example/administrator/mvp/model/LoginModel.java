@@ -3,7 +3,7 @@ package com.example.administrator.mvp.model;
 /**
  * Created by Administrator on 2/27.
  */
-public class UserModel {
+public class LoginModel {
 
     private String name;
     private String pswd;
