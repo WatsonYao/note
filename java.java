@@ -6926,3 +6926,55 @@ private void hideToolbar(){
 	
 }
 
+// 适配器模式 接口适配，类对象适配
+// 可以重用一个现有的类，以满足客户端的需要。
+// 当客户端通过接口表达其需求时，通常可以创建一个实现了该接口的新类，同时使该类继承自现有类。
+// 这种方式为类的适配，能够将客户端的调用转换为对现有类方法的调用。
+// 当客户端没有指定它所需要的接口时，可能需要创建一个新的客户端的之类，它将使用现有类的实例。
+// 这种方式通过创建一个对象适配器，将客户端的调用指向现有类的实例。
+// 如果我们不需要（或许不能）重写客户端可能调用的方法时，这种方式可能存在一定的危险性。
+
+interface RocketSim{
+	double getMass();
+	double getThrust();
+	setSimTime(Double double);
+}
+
+public class OozinozRocket extends PhysicalRocket implements RocketSim{
+
+	private double time;
+
+	public OozinozRocket(double burnArea, double burnRate, double fuelMass, double totalMass){
+		super(burnArea,burnRate,fuelMass,totalMass);
+	}
+
+	public double getMass(){
+
+	}
+
+	public double getThrust(){
+
+	}
+
+	public void setSimTime(double time){
+		this.time = time;
+	}
+}
+
+public class OozinozSkyrocket extends Skyrocket{
+
+	private PhysicalRocket rocket;
+
+	public OozinozSkyrocket(PhysicalRocket r){
+		super(r.getMass(0),r.getThrust(0),r.getBurnTime());
+		rocket = r;
+	}
+
+	public double getMass(){
+		return rocket.getMass(simTime);
+	}
+
+	public double getThrust(){
+		return rocket.getThrust(simTime);
+	}
+}
