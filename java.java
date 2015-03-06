@@ -6978,3 +6978,150 @@ public class OozinozSkyrocket extends Skyrocket{
 		return rocket.getThrust(simTime);
 	}
 }
+
+// 合成模式
+/*
+抽象构件角色 interface Component
+树叶构件角色 leaf
+树枝构件角色 Composite
+*/
+
+// 安全式的合成模式
+// 要求管理聚集的方法只出现在树枝构件类中
+public interface Component{
+	Composite getCompsite();
+
+	void sampleOperation();
+}
+
+public class Composite implements Component{
+
+	private Vector componentVector = new Vector();
+
+	public Composite getCompsite(){
+		return this;
+	}
+
+	public void sampleOperation(){
+
+	}
+
+	public void add(Component component){
+
+	}
+
+	public void remove(Component component){
+
+	}
+
+	public Enumeration components(){
+		return componentVector.elements();
+	}
+}
+
+public class Leaf implments Component{
+
+	public void sampleOperation(){
+
+	}
+
+	public Composite getCompsite(){
+
+	}
+}
+
+// 透明式的合成模式的结构
+// 均符合固定的接口
+public interface Component{
+	void sampleOperation();
+
+	Composite getComposite();
+
+	void add(Component component);
+
+	void remove(Compoent component);
+
+	Enumeration components();
+}
+
+public class Composite implements Component{
+
+	private Vector compoentVector = new Vector();
+
+	public Composite getCompsite(){
+		return this;
+	}
+
+	public void sampleOperation(){
+
+	}
+
+	public void add(Component component){
+
+	}
+
+	public void remove(Component component){
+
+	}
+
+	public Enumeration components(){
+		return compoentVector.elements();
+	}
+}
+
+public class Leaf implements Component{
+
+	public void sampleOperation(){
+
+	}
+
+	// 等其他需要实现的接口
+}
+
+// 装饰模式
+// 以客户端透明的方式扩展对象的功能，是继承关系的一个替代方案
+// 动态的给一个对象附加上更多的责任，客户端不知道装饰前后有什么不同
+
+/*
+抽象构件Component 给出一个抽象接口，以规范准备接收附加责任的对象
+具体构件Cocrete Component： 定义一个将要接收附加责任的类。
+装饰角色 Decorator ： 持有一个构件Component对象的实例，并定义一个与抽象构件接口一致的接口
+具体装饰 Concrete Decorator：负责给构件对象贴上附加的责任
+*/
+
+public interface Component{
+	void sampleOperation();
+}
+
+public class Decorator implements Component{
+
+	private Component component;
+
+	public Decorator(Component component){
+		this.Component = component;
+	}
+
+	public Decorator(){
+
+	}
+
+	public void sampleOperation(){
+		component.sampleOperation();
+	}
+}
+
+public class ConcreteComponent implements component{
+
+	public ConcreteComponent(){
+
+	}
+
+	public void sampleOperation(){
+
+	}
+}
+
+public class ConcreteDecorator extends Decorator{
+
+	public void sampleOperation();
+}
