@@ -7125,3 +7125,218 @@ public class ConcreteDecorator extends Decorator{
 
 	public void sampleOperation();
 }
+
+// 代理模式
+// 是对象的结构模式
+// 给某一个对象提供一个代理对象，并由代理对象控制对原对象的引用。
+
+// 按照使用目的来划分：
+// 远程remote代理：
+// 虚拟Virtual代理：
+// 。。。
+
+//  系统提供了向真实主题传递客户端请求的控制。
+// 代理主题可以在向真实主题传递客户端请求之前执行特定的操作，并决定是否将请求传递给真实主题；
+// 代理主题可以在向真实主题传递客户端请求之后执行另外一种操作等。
+
+abstract public class Subject{
+	abstract public void request();
+}
+
+public class RealSubject extends Subject{
+	public RealSubject(){
+
+	}
+
+	public void request(){
+		// ...
+	}
+}
+
+public class ProxySubject extends Subject{
+
+	private RealSubject realSubject;
+
+	public ProxySubject(){
+
+	}
+
+	public void request(){
+		preRequest();
+		if(RealSubject == null){
+			realSubject = new RealSubject();
+		}
+
+		realSubject.reuqest();
+		postRequest();
+	}
+
+	private void preRequest(){
+
+	}
+
+	private void postRequest(){
+
+	}
+}
+
+
+// 调用代理主题
+Subject subject = new ProxySubject();
+subject.request();
+
+// 享元模式 Flyweight Pattern
+// 单纯享元模式和复合享元模式
+// 对象的结构模式，以共享的方式高效地支持大量的细粒度对象
+// 区分内蕴状态 Internal State 和 外蕴状态 External State
+// 一个内蕴状态是存储在享元对象内部的，并且是不会随环境改变而有所不同的。
+// 因此，一个享元可以具有内蕴状态并可以共享。
+
+// 一个外蕴状态是随环境改变而改变的、不可以共享的状态。
+// 对象的外蕴状态必须由客户端保存，并在享元对象被创建之后，在需要的时候再传入的享元对象内部。
+// 内外蕴是相互独立的。
+
+
+// state 参数代表了享元对象的外蕴状态
+abstract public class Flyweight{
+	abstract public void operation(String state);
+}
+
+public class ConcreteFlyweight extends Flyweight{
+
+	private Character intrinsicState = null;
+
+	public ConcreteFlyweight(Character state){
+		this.intrinsicState = state;
+	}
+
+	public void operation(String state){
+		// ...
+	}
+}
+
+// 客户端不可以直接将具体享元实例化，而必须通过一个工厂对象，
+public class FlyweightFactory{
+
+	private HashMap flies = new HashMap();
+	private Flyweight lnkFlyweight;
+
+	public FlyweightFactory(){}
+
+	public Flyweight factory(Character state){
+		if(flies.cotainsKey(state)){
+			return (Flyweight)files.get(state);
+		}else{
+			Flyweight fly = new ConcreteFlyweight(state);
+			flies.put(state,fly);
+			return fly;
+		}
+	}
+
+	public void checkFlyweight(){
+		Flyweight fly;
+		int i = 0;
+		// ...
+		for(Iterator it = flies.entrySet().iterator();it.hasNext();){
+			Map.Entry e = (Map.Entry)it.next();
+		}
+	}
+}
+
+// 使用享元模式
+FlyweightFactory factory = new FlyweightFactory();
+Flyweight fly = factory.factory(new Character('a'));
+fly.operation("First call");
+fly = factory.factory(new Character('b'));
+fly.operateMethod1("second call");
+fly = factory.factory(new Character('a'));
+fly.operation("third call");
+
+// 复合享元模式
+abstract public class Flyweight{
+	abstract public void operation(String state);
+}
+
+public class ConcreteFlyweight extends Flyweight{
+
+	private Character intrinsicState = null;
+
+	public ConcreteFlyweight(Character state){
+		this.intrinsicState = state;
+	}
+
+	public void operation(String state){
+		// ...
+	}
+}
+
+public class ConcreteCompositeFlyweight extends Flyweight{
+	private HashMap flies = new HashMap(10);
+
+	private Flyweight flyweight;
+
+	public ConcreteCompositeFlyweight(){
+
+	}
+
+	public void add(Character key,Flyweight fly){
+		flies.put(key, fly);
+	}
+
+	public void operation(String extrinsicState){
+		Flyweight fly = null;
+		for(Iterator it = flies.entrySte().iterator();it.hasNext();){
+			Map.Entry e = (Map.Entry)it.next();
+			fly = (Flyweight)e.getValue();
+			fly.operation(extrinsicState);
+		}
+	}
+}
+
+public class FlyweightFactory{
+
+	private HashMap flies = new HashMap();
+
+	public FlyweightFactory(){}
+
+	public Flyweight factory(String compositeState){
+		ConcreteCompositeFlyweight compositeFly = new ConcreteCompositeFlyweight();
+		int length = compositeState.length();
+		Character state = null;
+		for(int i=0; i<length; i++){
+			state = new Character(compositeState.charAt(i));
+			compositeFly.add(state,this.factory(state));
+		}
+
+		return compositeFly;
+	}
+
+	public Flyweight factory(Character state){
+		if(flies.containsKey(state)){
+			return (Flyweight)flies.get(state);
+		}else{
+			Flyweight fly = new ConcreteFlyweight(state);
+			flies.put(state,fly);
+			return fly;
+		}
+	}
+
+	public void checkFlyweight(){
+		Flyweight fly;
+		int i = 0;
+		// for
+	}
+}
+
+Flyweight fly = factory.factory("aba");
+fly.operation("Composite call");
+
+// 门面模式 Facade
+// 对象的结构模式，外部与一个子系统的通信必循通过一个统一的门面Facade对象进行
+// 提供一个高层次的接口，使得子系统更易于使用
+
+
+// 桥梁模式
+
+
+// 不变模式
