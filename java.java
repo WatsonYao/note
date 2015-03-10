@@ -7340,3 +7340,132 @@ fly.operation("Composite call");
 
 
 // 不变模式
+
+
+// wear 可穿戴
+// 指定可穿戴设备独有的actions
+Intent actionIntent = new Intent(this, ActioniActivity.class);
+PendingIntent actionPendingIntent = PendingIntent.getActivity(this,0,actionIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+NotificationCompat.Action action = new NotificationCompat.Action.Builder(R.drawable.ic_action,getString(R.string.label,actionPendingIntent)).build();
+
+Notification notification = new NotificationCompat.Builder(mContext)
+	.setSmallIcon(R.drawable.ic_message)
+	.setContentTitle(getString(R.string.title))
+	.setContentText(getString(R.string.content))
+	.extend(new WearableExtender().addAction(action))
+	.build();
+
+// 大图
+BigTextStyle bigStyle = new NotificationCompat.BigTextStyle();
+bigStyle.bigText(eventDescription);
+NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+	.setSmallIcon(R.drawable.ic_event)
+	.setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.notif_background))
+	.setContentTitle(eventTitle)
+	.setContentText(eventLocation)
+	.setContentIntent(viewPendingIntent)
+	.addAction(R.drawable.ic_map,getString(R.string.map),mapPendingIntent)
+	.setStyle(bigStyle);
+
+
+
+// 可穿戴特性
+NotificationCompat.WearableExtender wearableExtender = new NotificationCompat.WearableExtender().setHintHideIcon(true);
+
+Notification notif = new NotificationCompat.Builder(mContext)
+	.setContentTitle("xxx")
+	.setContentText(subject)
+	.setSmallIcon(R.drawable.new_mail)
+	.extend(wearableExtender)
+	.build();
+
+NotificationCompat.WearableExtender wearableExtender = new NotificationCompat.WearableExtender(notif);
+boolean hintHideIcon = wearableExtender.getHintHideIcon();
+
+// 提交通知
+NotificationManagerCompat notificationManager = NotificationManagerCompat.from(mContext);
+notificationManager.notify(notificationId,notif);
+
+// 让用户口述一个回复或者通过RemoteInput预先设定好文本信息
+
+//定义语音输入
+private static final String EXTRA_VOICE_REPLY = "xxxx";
+String replyLabel = getResources().getString(R.string.reply_label);
+RemoteInput remoteInput = new RemoteInput.Builder(EXTRA_VOICE_REPLY).setLabel(replyLabel).build();
+
+// 你还可以提供多达5条的文本反馈，这样用户可以直接进行选择实现快速回复。
+RemoteInput remoteInput = new RemoteInput.Builder(EXTRA_VOICE_REPLY)
+	.setLabel(replyLabel)
+	.setChoices(replyChoices)
+	.build();
+
+// 添加语音输入作为Notification的action
+Intent replyIntent = new Intent(this, ReplyActivity.class);
+PendingIntent replyPendingIntent = PendingIntent.getActivity(this,0,replyIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+
+NotificationCompat.Action action = new NotificationCompat.Action.Builder(R.drawable.ic_reply_icon,getString(R.string.label,replyPendingIntent))
+	.addRemoteInput(remoteInput).build();
+
+Notification notification = new NotificationCompat.Buidler(mContext)
+	.setSmallIcon(R.drawable.ic_message)
+	.setContentTitle(getString(R.string.title))
+	.setContentText(getString(R.string.content))
+	.extend(new WearableExtender().addAction(action))
+	.build();
+
+NotificationManagerCompat notificationManager = NotificationManagerCompat.from(mContext);
+notificationManager.notify(notificationId, notification);
+
+private CharSequence getMessageText(Intent intent){
+	Bundle remoteInput = RemoteInput.getResultFromIntent(intent);
+	if(remoteInput != null){
+		return remoteInput.getCharSequence(EXTRA_VOICE_REPLY);
+	}
+	return null;
+}
+
+// 为Notification添加显示页面
+NotificationCompat.Builder notificaitionBuidler = new NotificationCompat.Builder(this)
+	.setSmallIcon(xxx)
+	.setContentTitle(xxx);
+	.setContentText("xxx");
+	.setContentText("xxx")
+	.setContentIntent(viewPendingIntent);
+
+BigTextStyle secondPageStyle = new NotificationCompat.BigTextStyle();
+secondPageStyle.setBigContentTitle("xxx").bigText("xxxxx");
+
+Notification secondePageNotification = new NotificationCompat.Builder(this).setStyle(secondPageStyle).build();
+
+Notification twoPageNotification = new WearableExtender()
+	.addPage(secondePageNotification)
+	.extend(notificationBuilder)
+	.build();
+
+notificationManager = NotificationManagerCompat.from(this);
+notificationManager.notify(notificationId,twoPageNotification);
+
+
+// 以Stack的方式显示Notifications
+final static String GROUP_KEY_EMAILS = "group_key_emails";
+Notification notif = new NotificationCompat.Builder(mContext)
+	.setContentTitle()
+	.setContentText()
+	.setSmallIcon()
+	.setGroup(GROUP_KEY_EMAILS)
+	.build();
+
+NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+notificationManager.notify(notificationId, notif);
+
+Notification notif2 = new NotificationCompat.Builder(mContext)
+	.setContentTitle()
+	.setContentText()
+	.setSmallIcon()
+	.setGroup(GROUP_KEY_EMAILS)
+	.build();
+
+notificationManager.notify(notificationId, notif2);
+// 最近的Notification会被放置在最顶端。你可以通过setSortKey()来修改Notification的排顺序
+
+// 添加概括式Notification
