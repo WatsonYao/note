@@ -7469,3 +7469,236 @@ notificationManager.notify(notificationId, notif2);
 // 最近的Notification会被放置在最顶端。你可以通过setSortKey()来修改Notification的排顺序
 
 // 添加概括式Notification
+
+
+// 通常来说，你应该尽可能的把运行操作搬到手持设备上，然后发送操作结果到可穿戴设备。
+
+// 如果标准的notification风格无法满足你的需求(例如NotificationCompat.BigTextStyle 或者 NotificationCompat.InboxStyle)，
+// 你可以使用activity，显示一个自定义的布局来达到目的。
+// 在可穿戴设备上你只可以创建并处理自定义的notification，同时系统无法为这些notification同步到手持设备上。
+// 当在可穿戴设备上创建自定义的notification时，你可以使用API Level 20上标准的APIs，不需要使用Support Library
+
+// 1 创建布局并设置这个布局为需要显示的activity的content view；
+public void onCreate(Bundle bundle){
+	//...
+	setContentView(R.layout.xxx);
+}
+
+// 2 为了使得activity能够显示在可穿戴设备上，需要在manifest中定义必须的属性
+<activity android:name="com.example.MyDisplayActivity"
+  android:exported="true"
+  android:allowEmbedded="true"
+  android:taskAffinity=""
+  android:theme="@android:style/Theme.DeviceDefault.Light" />
+
+// 3 创建PendingIntent
+Intent notificationIntent = new Intent(this, NotificationActivity.class);
+PendingIntent notificationPendingIntent = PendingIntent.getActivity(this,0,notificationIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+
+// 4. 创建Notification并执行setDisplayIntent())方法，参数是前面创建的PendingIntent。
+// 当用户查看这个notification时，系统使用这个pendingIntent来启动activity
+
+// 5 触发notification使用notify()的方法。
+// 当用户往上滑动notification时，将会看到为这个notification准备的自定义的activity。
+
+
+// 穿戴提供了2种类型的语音操作：
+// + 系统提供的
+// 这些语音指令都是基于任务的，并且内置在Wear的平台内。
+// 你在activity中过滤你想要接收的指令。例如包含"Take a note" 或者 "Set an alarm"的指令。
+
+// 应用提供的
+// 这些语音指令都是基于应用的，你需要像声明一个Launcher Icon一样定义这些指令。
+// 用户通过说"Start XXX"来使用那些语音指令，然后会启动你指定启动的activity。/**/
+
+// 对于"Take a note"的指令，定义一个MyNoteActivity来接收这个指令:
+
+<activity android:name="MyNoteActivity">
+      <intent-filter>
+          <action android:name="android.intent.action.SEND" />
+          <category android:name="com.google.android.voicesearch.SELF_NOTE" />
+      </intent-filter>
+  </activity>
+
+// 在"Start"指令的后面需要指定的文字, 这个文字需要注册在activity的label属性上。
+//例如，下面的设置能够识别"Start MyRunningApp"的语音指令并启动StartRunActivity.
+
+<application>
+  <activity android:name="StartRunActivity" android:label="MyRunningApp">
+      <intent-filter>
+          <action android:name="android.intent.action.MAIN" />
+          <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+  </activity>
+</application>
+
+// startActivityForResult()使用ACTION_RECOGNIZE_SPEECH启动系统语音识别应用。
+// 在onActivityResult()中处理返回的结果：
+
+
+private static final int SPEECH_REQUEST_CODE = 0;
+
+private void displaySpeechRecognizer(){
+	Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+	intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+	startActivityForResult(intent,SPEECH_REQUEST_CODE);
+}
+
+protected void onActivityResult(int requestCode, int resultCode, Intent data){
+	if(requestCode == SPEECH_REQUEST && resultCode == RESULT_OK){
+		List<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+		String spokenText = results.get(0);
+	}
+
+	super.onActivityResult(requestCode, resultCode, data);
+}
+
+// 可穿戴数据层 the wearable data layer API
+// 是 Google Play service 的一部分
+// 为你的手持与可穿戴应用提供一个交流通道。
+// 此API包括一系列的数据对象，其可由系统通过网络和能告知你应用数据层重要事件的监听器发送并同步
+
+// Data items
+// 数据元提供了手持设备与可穿戴设备间的自动同步的数据存储
+
+// Messsages
+// MessageApi 类可以发送自动跟踪命令消息，
+
+// Asset
+// 资源对象是为了发送如图像这样的二进制数据。将资源附加到数据元，系统会自动负责传递，并通过缓存大的资源来避免重复传送
+
+// WearableListenerService(for services)
+// 扩展的 WearableListenerService能够监听一个service中重要的数据层事件。
+// 系统控制其生命周期，并当需要发送数据元或消息时，将其与service绑定，否则解除绑定。
+
+// DataListener（for foreground activities)
+// 在一个前台activity中实现DataListener能够监听重要的数据通道事件。
+// 只有当用户频繁地使用应用时，用此代替WearableListenerService来监听改变。
+// 不能试着打开底层sockkets来创建通信通道
+
+// 调用数据层API，需创建一个GoogleApiClient实例，所有Google Play services APIs 的主要入口点。
+// GoogleApiClient 提供一个易于创建客户端实例的builder。最简单的GoogleApiClient如下：
+GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
+	.addConnectionCallbacks(new ConnectionCallbacks(){
+		public void onConnected(Bundle connectionHint){
+			//...
+		}
+
+		public void onConnectionSuspended(int cause){
+			// ...
+		}	
+	})
+	.addOnConnectionFailedListener(new OnConnectionFailedListener(){
+		public void onConnectionFailed(ConnectionResult result){
+			// ...
+		}
+
+	})
+	// 请求只访问Wearable API
+	.addApi(Wearable.API)
+	.build();
+
+// 在你使用数据层API之前，通过调用connect())方法进行连接，如 Start a Connection中所述。
+// 当系统为你的客户端调用了onConnected()) 方法，你就可以使用数据层API了。
+
+// DataItem 是指系统用于同步手持设备与可穿戴设备间数据的接口。
+// 一个DataItem通常包括以下几点：
+// Pyload： 一个字节数组，可以设置为任何你想要的数据，允许你将对象序列化和反序列化，但长度限制为100KB
+// Path： 唯一且以斜线开头的string /path/to/data
+
+// 通常不直接实现DataItem，而是：
+// 1. 创建一个PutdataRequest对象，指明一个string path 以唯一确定该 item。
+// 2. 调用setData()方法设置Pyload。
+// 3. 调用DataApi.putDataItem()方法，请求系统创建数据元。
+// 4 .当请求的时候，系统会返回正确实现DataItem接口的对象。
+// 然而，我们建议使用Data Map来显示装在一个易用的类似Bundle接口中的数据元，而用不是setData()来处理原始字节。
+
+
+// 使用DataMap类，将数据元处理为 Android Bundle的形式，
+// 因此对象的序列化和反序列化就会完成，你就可以以 key-value 对的形式操纵数据。
+
+// 1. 创建一个 PutDataMapRequest对象，设置数据元的path。
+// 2. 调用PutDataMapRequest.getDataMap())获取一个你可以使用的data map 对象。
+// 3. 使用put...()方法，如：putString()),为data map设置数据。
+// 4. 调用PutDataMapRequest.asPutDataRequest())获得PutDataRequest对象。
+// 5. 调用 DataApi.putDataItem()) 请求系统创建数据元
+// Note: 如果手机和可穿戴设备没有连接，数据会缓冲并在重新建立连接时同步。
+
+public class MainActivity extends Activity implements 
+	DataApi.DataListener, 
+	GoogleApiClient.ConnectionCallbacks,
+	GoogleApiClient.OnConnectionFailedListener{
+
+	private static final String COUNT_KEY = "xxx.com.key.count";
+
+	private GoogleApiClient mGoogleApiClient;
+	private int count = 0;
+
+	private void increaseCounter(){
+		PutDataMapRequest putDataMapReq = PutDataMapRequest.create("/count");
+		putDataMapReq.getDataMap().putInt(COUNT_KEY, count++);
+		PutDataRequest putDataReq = putDataMapReq.asPutDataRequest();
+		PendingResult<DataApi.DataItemResult> pendingResult = Wearable.DataApi.putDataItem(mGoogleApiClient, putDataReq);
+	}
+
+	// ...
+}
+
+public class MainActivity extends Activity implements
+	DataApi.DataListener,
+	GoogleApiClient.ConnectionCallbacks,
+	GoogleApiClient.OnConnectionFailedListener{
+
+	private static final String COUNT_KEY = "com.example.key.count";
+
+    private GoogleApiClient mGoogleApiClient;
+    private int count = 0;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+        	.addApi(Wearable.API)
+        	.addConnectionCallbacks(this)
+        	.addOnConnectionFailedListener(this)
+        	.build();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onStart();
+        mGoogleApiClient.connect();
+    }
+
+    public void onConnected(Bundle bundle){
+    	Wearable.DataApi.addListener(mGoogleApiClient, this);
+    }
+
+     @Override
+    protected void onPause() {
+    	super.onPause();
+    	Wearable.DataApi.removeListener(mGoogleApiClient, this);
+    	mGoogleApiClient.disconnect();
+    }
+
+    public void onDataChanged(DataEventBuffer dataEvents){
+    	for(DataEvent event: dataEvents){
+    		if( event.getType() == DataEvent.TYPE_CHANGED){
+    			DataItem item = event.getDataItem();
+    			if(item.getUri().getPath().compareTo("/count") == 0){
+    				DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
+    				updateCount(dataMap.getInt(COUNT_KEY));
+    			}
+    		}else if(event.getType() == DataEvent.TYPE_DELETED){
+    			// dataitem 删除了
+    		}
+    	}
+    }
+
+     // 我们的更新 count 的方法
+    private void updateCount(int c) { ... }
+
+    // ...
+}
