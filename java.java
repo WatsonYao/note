@@ -6897,26 +6897,26 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListenr{
 
 // toolbar 隐藏
 private RecyclerView.OnScrollListener recyclerScrollListener =
-	new RecyclerView.OnScrollListener(){
+new RecyclerView.OnScrollListener(){
 
-		public boolean flag;
+	public boolean flag;
 
-		public void onScrolled(RecyclerView recyclerView, int dx, int dy){
-			super.onScrolled(recyclerView, dx, dy);
+	public void onScrolled(RecyclerView recyclerView, int dx, int dy){
+		super.onScrolled(recyclerView, dx, dy);
 
-			if(dy > 10){
-				if( !flag ){
-					showToolbar();
-					flag = true;
-				}
-			}else if( dy < 10){
-				if(flag){
-					hideToolbar();
-					flag  = false;
-				}
+		if(dy > 10){
+			if( !flag ){
+				showToolbar();
+				flag = true;
+			}
+		}else if( dy < 10){
+			if(flag){
+				hideToolbar();
+				flag  = false;
 			}
 		}
 	}
+}
 
 private void showToolbar(){
 
@@ -7349,23 +7349,23 @@ PendingIntent actionPendingIntent = PendingIntent.getActivity(this,0,actionInten
 NotificationCompat.Action action = new NotificationCompat.Action.Builder(R.drawable.ic_action,getString(R.string.label,actionPendingIntent)).build();
 
 Notification notification = new NotificationCompat.Builder(mContext)
-	.setSmallIcon(R.drawable.ic_message)
-	.setContentTitle(getString(R.string.title))
-	.setContentText(getString(R.string.content))
-	.extend(new WearableExtender().addAction(action))
-	.build();
+.setSmallIcon(R.drawable.ic_message)
+.setContentTitle(getString(R.string.title))
+.setContentText(getString(R.string.content))
+.extend(new WearableExtender().addAction(action))
+.build();
 
 // 大图
 BigTextStyle bigStyle = new NotificationCompat.BigTextStyle();
 bigStyle.bigText(eventDescription);
 NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-	.setSmallIcon(R.drawable.ic_event)
-	.setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.notif_background))
-	.setContentTitle(eventTitle)
-	.setContentText(eventLocation)
-	.setContentIntent(viewPendingIntent)
-	.addAction(R.drawable.ic_map,getString(R.string.map),mapPendingIntent)
-	.setStyle(bigStyle);
+.setSmallIcon(R.drawable.ic_event)
+.setLargeIcon(BitmapFactory.decodeResource(getResources(),R.drawable.notif_background))
+.setContentTitle(eventTitle)
+.setContentText(eventLocation)
+.setContentIntent(viewPendingIntent)
+.addAction(R.drawable.ic_map,getString(R.string.map),mapPendingIntent)
+.setStyle(bigStyle);
 
 
 
@@ -7373,11 +7373,11 @@ NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(
 NotificationCompat.WearableExtender wearableExtender = new NotificationCompat.WearableExtender().setHintHideIcon(true);
 
 Notification notif = new NotificationCompat.Builder(mContext)
-	.setContentTitle("xxx")
-	.setContentText(subject)
-	.setSmallIcon(R.drawable.new_mail)
-	.extend(wearableExtender)
-	.build();
+.setContentTitle("xxx")
+.setContentText(subject)
+.setSmallIcon(R.drawable.new_mail)
+.extend(wearableExtender)
+.build();
 
 NotificationCompat.WearableExtender wearableExtender = new NotificationCompat.WearableExtender(notif);
 boolean hintHideIcon = wearableExtender.getHintHideIcon();
@@ -7395,23 +7395,23 @@ RemoteInput remoteInput = new RemoteInput.Builder(EXTRA_VOICE_REPLY).setLabel(re
 
 // 你还可以提供多达5条的文本反馈，这样用户可以直接进行选择实现快速回复。
 RemoteInput remoteInput = new RemoteInput.Builder(EXTRA_VOICE_REPLY)
-	.setLabel(replyLabel)
-	.setChoices(replyChoices)
-	.build();
+.setLabel(replyLabel)
+.setChoices(replyChoices)
+.build();
 
 // 添加语音输入作为Notification的action
 Intent replyIntent = new Intent(this, ReplyActivity.class);
 PendingIntent replyPendingIntent = PendingIntent.getActivity(this,0,replyIntent,PendingIntent.FLAG_UPDATE_CURRENT);
 
 NotificationCompat.Action action = new NotificationCompat.Action.Builder(R.drawable.ic_reply_icon,getString(R.string.label,replyPendingIntent))
-	.addRemoteInput(remoteInput).build();
+.addRemoteInput(remoteInput).build();
 
 Notification notification = new NotificationCompat.Buidler(mContext)
-	.setSmallIcon(R.drawable.ic_message)
-	.setContentTitle(getString(R.string.title))
-	.setContentText(getString(R.string.content))
-	.extend(new WearableExtender().addAction(action))
-	.build();
+.setSmallIcon(R.drawable.ic_message)
+.setContentTitle(getString(R.string.title))
+.setContentText(getString(R.string.content))
+.extend(new WearableExtender().addAction(action))
+.build();
 
 NotificationManagerCompat notificationManager = NotificationManagerCompat.from(mContext);
 notificationManager.notify(notificationId, notification);
@@ -7426,11 +7426,11 @@ private CharSequence getMessageText(Intent intent){
 
 // 为Notification添加显示页面
 NotificationCompat.Builder notificaitionBuidler = new NotificationCompat.Builder(this)
-	.setSmallIcon(xxx)
-	.setContentTitle(xxx);
-	.setContentText("xxx");
-	.setContentText("xxx")
-	.setContentIntent(viewPendingIntent);
+.setSmallIcon(xxx)
+.setContentTitle(xxx);
+.setContentText("xxx");
+.setContentText("xxx")
+.setContentIntent(viewPendingIntent);
 
 BigTextStyle secondPageStyle = new NotificationCompat.BigTextStyle();
 secondPageStyle.setBigContentTitle("xxx").bigText("xxxxx");
@@ -7438,9 +7438,9 @@ secondPageStyle.setBigContentTitle("xxx").bigText("xxxxx");
 Notification secondePageNotification = new NotificationCompat.Builder(this).setStyle(secondPageStyle).build();
 
 Notification twoPageNotification = new WearableExtender()
-	.addPage(secondePageNotification)
-	.extend(notificationBuilder)
-	.build();
+.addPage(secondePageNotification)
+.extend(notificationBuilder)
+.build();
 
 notificationManager = NotificationManagerCompat.from(this);
 notificationManager.notify(notificationId,twoPageNotification);
@@ -7449,21 +7449,21 @@ notificationManager.notify(notificationId,twoPageNotification);
 // 以Stack的方式显示Notifications
 final static String GROUP_KEY_EMAILS = "group_key_emails";
 Notification notif = new NotificationCompat.Builder(mContext)
-	.setContentTitle()
-	.setContentText()
-	.setSmallIcon()
-	.setGroup(GROUP_KEY_EMAILS)
-	.build();
+.setContentTitle()
+.setContentText()
+.setSmallIcon()
+.setGroup(GROUP_KEY_EMAILS)
+.build();
 
 NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
 notificationManager.notify(notificationId, notif);
 
 Notification notif2 = new NotificationCompat.Builder(mContext)
-	.setContentTitle()
-	.setContentText()
-	.setSmallIcon()
-	.setGroup(GROUP_KEY_EMAILS)
-	.build();
+.setContentTitle()
+.setContentText()
+.setSmallIcon()
+.setGroup(GROUP_KEY_EMAILS)
+.build();
 
 notificationManager.notify(notificationId, notif2);
 // 最近的Notification会被放置在最顶端。你可以通过setSortKey()来修改Notification的排顺序
@@ -7486,10 +7486,10 @@ public void onCreate(Bundle bundle){
 
 // 2 为了使得activity能够显示在可穿戴设备上，需要在manifest中定义必须的属性
 <activity android:name="com.example.MyDisplayActivity"
-  android:exported="true"
-  android:allowEmbedded="true"
-  android:taskAffinity=""
-  android:theme="@android:style/Theme.DeviceDefault.Light" />
+android:exported="true"
+android:allowEmbedded="true"
+android:taskAffinity=""
+android:theme="@android:style/Theme.DeviceDefault.Light" />
 
 // 3 创建PendingIntent
 Intent notificationIntent = new Intent(this, NotificationActivity.class);
@@ -7514,22 +7514,22 @@ PendingIntent notificationPendingIntent = PendingIntent.getActivity(this,0,notif
 // 对于"Take a note"的指令，定义一个MyNoteActivity来接收这个指令:
 
 <activity android:name="MyNoteActivity">
-      <intent-filter>
-          <action android:name="android.intent.action.SEND" />
-          <category android:name="com.google.android.voicesearch.SELF_NOTE" />
-      </intent-filter>
-  </activity>
+<intent-filter>
+<action android:name="android.intent.action.SEND" />
+<category android:name="com.google.android.voicesearch.SELF_NOTE" />
+</intent-filter>
+</activity>
 
 // 在"Start"指令的后面需要指定的文字, 这个文字需要注册在activity的label属性上。
 //例如，下面的设置能够识别"Start MyRunningApp"的语音指令并启动StartRunActivity.
 
 <application>
-  <activity android:name="StartRunActivity" android:label="MyRunningApp">
-      <intent-filter>
-          <action android:name="android.intent.action.MAIN" />
-          <category android:name="android.intent.category.LAUNCHER" />
-      </intent-filter>
-  </activity>
+<activity android:name="StartRunActivity" android:label="MyRunningApp">
+<intent-filter>
+<action android:name="android.intent.action.MAIN" />
+<category android:name="android.intent.category.LAUNCHER" />
+</intent-filter>
+</activity>
 </application>
 
 // startActivityForResult()使用ACTION_RECOGNIZE_SPEECH启动系统语音识别应用。
@@ -7579,24 +7579,24 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data){
 // 调用数据层API，需创建一个GoogleApiClient实例，所有Google Play services APIs 的主要入口点。
 // GoogleApiClient 提供一个易于创建客户端实例的builder。最简单的GoogleApiClient如下：
 GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
-	.addConnectionCallbacks(new ConnectionCallbacks(){
-		public void onConnected(Bundle connectionHint){
+.addConnectionCallbacks(new ConnectionCallbacks(){
+	public void onConnected(Bundle connectionHint){
 			//...
-		}
+	}
 
-		public void onConnectionSuspended(int cause){
+	public void onConnectionSuspended(int cause){
 			// ...
-		}	
-	})
-	.addOnConnectionFailedListener(new OnConnectionFailedListener(){
-		public void onConnectionFailed(ConnectionResult result){
+	}	
+})
+.addOnConnectionFailedListener(new OnConnectionFailedListener(){
+	public void onConnectionFailed(ConnectionResult result){
 			// ...
-		}
+	}
 
-	})
+})
 	// 请求只访问Wearable API
-	.addApi(Wearable.API)
-	.build();
+.addApi(Wearable.API)
+.build();
 
 // 在你使用数据层API之前，通过调用connect())方法进行连接，如 Start a Connection中所述。
 // 当系统为你的客户端调用了onConnected()) 方法，你就可以使用数据层API了。
@@ -7625,9 +7625,9 @@ GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
 // Note: 如果手机和可穿戴设备没有连接，数据会缓冲并在重新建立连接时同步。
 
 public class MainActivity extends Activity implements 
-	DataApi.DataListener, 
-	GoogleApiClient.ConnectionCallbacks,
-	GoogleApiClient.OnConnectionFailedListener{
+DataApi.DataListener, 
+GoogleApiClient.ConnectionCallbacks,
+GoogleApiClient.OnConnectionFailedListener{
 
 	private static final String COUNT_KEY = "xxx.com.key.count";
 
@@ -7645,60 +7645,233 @@ public class MainActivity extends Activity implements
 }
 
 public class MainActivity extends Activity implements
-	DataApi.DataListener,
-	GoogleApiClient.ConnectionCallbacks,
-	GoogleApiClient.OnConnectionFailedListener{
+DataApi.DataListener,
+GoogleApiClient.ConnectionCallbacks,
+GoogleApiClient.OnConnectionFailedListener{
 
 	private static final String COUNT_KEY = "com.example.key.count";
 
-    private GoogleApiClient mGoogleApiClient;
-    private int count = 0;
+	private GoogleApiClient mGoogleApiClient;
+	private int count = 0;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-        	.addApi(Wearable.API)
-        	.addConnectionCallbacks(this)
-        	.addOnConnectionFailedListener(this)
-        	.build();
-    }
+		mGoogleApiClient = new GoogleApiClient.Builder(this)
+		.addApi(Wearable.API)
+		.addConnectionCallbacks(this)
+		.addOnConnectionFailedListener(this)
+		.build();
+	}
 
-    @Override
-    protected void onResume() {
-        super.onStart();
-        mGoogleApiClient.connect();
-    }
+	@Override
+	protected void onResume() {
+		super.onStart();
+		mGoogleApiClient.connect();
+	}
 
-    public void onConnected(Bundle bundle){
-    	Wearable.DataApi.addListener(mGoogleApiClient, this);
-    }
+	public void onConnected(Bundle bundle){
+		Wearable.DataApi.addListener(mGoogleApiClient, this);
+	}
 
-     @Override
-    protected void onPause() {
-    	super.onPause();
-    	Wearable.DataApi.removeListener(mGoogleApiClient, this);
-    	mGoogleApiClient.disconnect();
-    }
+	@Override
+	protected void onPause() {
+		super.onPause();
+		Wearable.DataApi.removeListener(mGoogleApiClient, this);
+		mGoogleApiClient.disconnect();
+	}
 
-    public void onDataChanged(DataEventBuffer dataEvents){
-    	for(DataEvent event: dataEvents){
-    		if( event.getType() == DataEvent.TYPE_CHANGED){
-    			DataItem item = event.getDataItem();
-    			if(item.getUri().getPath().compareTo("/count") == 0){
-    				DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
-    				updateCount(dataMap.getInt(COUNT_KEY));
-    			}
-    		}else if(event.getType() == DataEvent.TYPE_DELETED){
+	public void onDataChanged(DataEventBuffer dataEvents){
+		for(DataEvent event: dataEvents){
+			if( event.getType() == DataEvent.TYPE_CHANGED){
+				DataItem item = event.getDataItem();
+				if(item.getUri().getPath().compareTo("/count") == 0){
+					DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
+					updateCount(dataMap.getInt(COUNT_KEY));
+				}
+			}else if(event.getType() == DataEvent.TYPE_DELETED){
     			// dataitem 删除了
-    		}
-    	}
-    }
+			}
+		}
+	}
 
      // 我们的更新 count 的方法
-    private void updateCount(int c) { ... }
+	private void updateCount(int c) { ... }
 
     // ...
 }
+
+
+// 微博授权
+https://api.weibo.com/oauth2/authorize?
+response_type=token
+&display=mobile
+&redirect_uri=https%3A%2F%2Fapi.weibo.com%2Foauth2%2Fdefault.html
+&client_id=1065511513
+&scope=friendships_groups_read,friendships_groups_write
+
+onPageStarted-https://api.weibo.com/oauth2/default.html
+#access_token=2.00LhzAKCZNmGKB3d9cf4a0a70hXZMj
+&remind_in=7220180
+&expires_in=7220180
+&uid=1980266185
+
+shouldOverrideUrlLoading-https://api.weibo.com/oauth2/default.html
+#access_token=2.00LhzAKCZNmGKB3d9cf4a0a70hXZMj
+&remind_in=7220180
+&expires_in=7220180
+&uid=1980266185
+
+onPageStarted-https://api.weibo.com/oauth2/default.html
+#access_token=2.00LhzAKCZNmGKB3d9cf4a0a70hXZMj
+&remind_in=7220180
+&expires_in=7220180
+&uid=1980266185
+
+// Loader
+// 你通常要在activity的onCreate()方法中或fragment的onActivityCreated()方法中初始化一个装载器．
+
+getLoaderManager().initLoader(0,null,this);
+
+public static class AppListLoader extends AsyncTaskLoader<List<AppEntry>>{
+
+	public List<AppEntry> loadInBackground(){
+
+	}
+
+	public void deliverResult(List<AppEntry> data){
+
+	}
+
+	public void onCanceled(){
+
+	}
+
+	protected void onReset();
+}
+
+public class CustomListAsyncTaskLoader extends AsyncTaskLoader<List>{
+
+	private List list;
+	private LoadListener listener;
+
+	public CustomListAsyncTaskLoader(Context context, LoadListener listener){
+		super(context);
+		this.listener = listener;
+	}
+
+	protected void onStartLoading(){
+		if( list != null){
+			deliverResult(list);
+		}
+
+		if(takeContentChanged() || list == null){
+			forceLoad();
+		}
+	}
+
+	protected void onStopLoading(){
+		cancelLoad();
+	}
+
+	protected void onReset(){
+		super.onReset();
+		onStopLoading();
+
+		list = null;
+	}
+
+	public List loadInBackground(){
+		list = Collections.unmodifiableList((List) listener.loading());
+		return list;
+	}
+
+	public interface LoadingListener{
+		List loading();
+	}
+}
+
+private LoaderManager.LoaderCallbacks<List> loaderCallbacks = new LoaderManager.LoaderCall(){
+	public Loader<List> onCreateLoader(int i, Bundle bundle){
+		return new CustomListAsyncTaskLoader(getActivity(), new LoadingListener(){
+			public List loading(){
+				return getDataList();
+			};
+		})
+	}
+
+	public void onLoadFinished(Loader<List> listLoader, List list){
+		mAdapter.setData(list);
+	}
+
+	public void onLoaderReset(Loader<List> listLoader){
+		mAdapter.clear();
+	}
+}
+
+
+static class CouponShopQueryLoader2 extends AsyncTaskLoader<List<CouponStore>> {
+	private List<CouponStore> mData;
+	private int couponId;
+	public CouponShopQueryLoader2(Context context, int couponId) {
+		super(context);
+		this.couponId = couponId;
+	}
+// final ForceLoadContentObserver mObserver;
+	/* Runs on a worker thread */
+	@Override
+	public List<CouponStore> loadInBackground() {
+		mData = ds.queryShopByCoupon(couponId, pageNo, PAGE_SIZE);
+		return mData;
+	}
+	/* Runs on the UI thread */
+	@Override
+	public void deliverResult(List<CouponStore> data) {
+		if (isReset()) {
+			return;
+		}
+		if (isStarted()) {
+			super.deliverResult(data);
+		}
+	}
+/**
+* Starts an asynchronous load of the contacts list data. When the
+* result is ready the callbacks will be called on the UI thread. If a
+* previous load has been completed and is still valid the result may be
+* passed to the callbacks immediately.
+*
+* Must be called from the UI thread
+*/
+@Override
+protected void onStartLoading() {
+	if (mData != null) {
+		deliverResult(mData);
+	}
+	if (takeContentChanged() || mData == null) {
+		forceLoad();
+	}
+}
+/**
+* Must be called from the UI thread
+*/
+@Override
+protected void onStopLoading() {
+	Log.d("sss", "onStopLoading");
+// Attempt to cancel the current load task if possible.
+	cancelLoad();
+}
+@Override
+public void onCanceled(List<CouponStore> cursor) {
+	Log.d("sss", "onCanceled");
+}
+@Override
+protected void onReset() {
+	super.onReset();
+	Log.d("sss", "onReset");
+// Ensure the loader is stopped
+	onStopLoading();
+	mData = null;
+}
+}  
