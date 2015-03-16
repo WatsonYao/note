@@ -7875,3 +7875,95 @@ protected void onReset() {
 	mData = null;
 }
 }  
+
+
+// 多主题
+// 至少两个主题拓展自android themes
+// 
+
+//values/styles.xml
+<style name="AppTheme" parent="Theme.AppCompat.Light">
+    <item name="colorPrimary">@color/colorPrimary</item>
+    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+    <item name="colorAccent">@color/colorAccent</item>
+    <item name="android:textColorPrimary">@color/textColorPrimary</item>
+    <item name="android:textColorSecondary">@color/textColorSecondary</item>
+    <item name="android:textColorPrimaryInverse">@color/textColorPrimaryInverse</item>
+    <item name="android:textColorSecondaryInverse">@color/textColorSecondaryInverse</item>
+    <!-- some other theme configurations for actionbar, overflow menu etc. -->
+    //...
+</style>
+
+<style name="AppTheme.Dark" parent="Theme.AppCompat">
+    <item name="colorPrimary">@color/colorPrimaryInverse</item>
+    <item name="colorPrimaryDark">@color/colorPrimaryDarkInverse</item>
+    <item name="colorAccent">@color/colorAccentInverse</item>
+    <item name="android:textColorPrimary">@color/textColorPrimaryInverse</item>
+    <item name="android:textColorSecondary">@color/textColorSecondaryInverse</item>
+    <item name="android:textColorPrimaryInverse">@color/textColorPrimary</item>
+    <item name="android:textColorSecondaryInverse">@color/textColorSecondary</item>
+    ...
+</style>
+
+//values/attrs.xml
+<attr name="themedMenuStoryDrawable" format="reference" />
+<attr name="themedMenuCommentDrawable" format="reference" />
+
+//values/styles.xml
+<style name="AppTheme" parent="Theme.AppCompat.Light">
+    <!-- original theme attributes -->
+    ...
+    <item name="themedMenuStoryDrawable">@drawable/ic_subject_white_24dp</item>
+    <item name="themedMenuCommentDrawable">@drawable/ic_mode_comment_white_24dp</item>
+</style>
+
+<style name="AppTheme.Dark" parent="Theme.AppCompat">
+    <!-- alternative theme attributes -->
+    ...
+    <item name="themedMenuStoryDrawable">@drawable/ic_subject_black_24dp</item>
+    <item name="themedMenuCommentDrawable">@drawable/ic_mode_comment_black_24dp</item>
+</style>
+
+//menu/my_menu.xml
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@id/menu_comment"
+        android:icon="?attr/themedMenuCommentDrawable" />
+    <item android:id="@id/menu_story"
+        android:icon="?attr/themedMenuStoryDrawable" />
+    <item android:id="@id/menu_share"
+        app:actionProviderClass="android.support.v7.widget.ShareActionProvider" />
+</menu>
+
+//BaseActivity.java
+public abstract class BaseActivity extends ActionBarActivity {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        if (PreferenceManager.getDefaultSharedPreferences(this)
+                .getBoolean("pref_dark_theme"), false)) {
+            setTheme(R.style.AppTheme_Dark);
+        }
+        super.onCreate(savedInstanceState);
+    }
+}
+
+//SettingsFragment.java
+public class SettingsFragment extends PreferenceFragment {
+    ...
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+            @Override
+            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+                if (!key.equals("pref_dark_theme")) {
+                    return;
+                }
+
+                getActivity().finish();
+                final Intent intent = getActivity().getIntent();
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+                getActivity().startActivity(intent);
+            }
+        };
+    }
