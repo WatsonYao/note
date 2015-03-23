@@ -7967,3 +7967,13 @@ public class SettingsFragment extends PreferenceFragment {
             }
         };
     }
+}
+
+
+// 关于导航抽屉
+// 最大宽度 mobile-56dp*n tablet-64dp*n
+
+<item name="android:statusBarColor">@android:color/transparent</item>
+<item name="android:windowDrawsSystemBarBackgrounds">true</item>
+<item name="android:windowTranslucentStatus">true</item>
+<item name="android:windowContentTransitions">true</item>
