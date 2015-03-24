@@ -7977,3 +7977,14 @@ public class SettingsFragment extends PreferenceFragment {
 <item name="android:windowDrawsSystemBarBackgrounds">true</item>
 <item name="android:windowTranslucentStatus">true</item>
 <item name="android:windowContentTransitions">true</item>
+
+// cardview 使用
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    card_view:cardCornerRadius="4dp"
+    android:gravity="center_vertical"
+    card_view:cardElevation="1dp"
+    card_view:cardUseCompatPadding="true"
+    android:layout_height="wrap_content">
