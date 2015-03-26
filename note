@@ -306,3 +306,30 @@ java编译器检查方法的覆写Override时，会进一步检查两个方法�
 8.商务运营优势
 9.用户优势：用户数，关系网络，或数据
 10. 生态系统优势
+
+
+进程通信
+有传统的Pipe Signal Trace 这三项通信手段只能用户父进程与子进程之间，或者兄弟进程之间
+后来增加了 Named Pipe，使得进程间通信不再局限于父子进程或者兄弟进程之间。
+为了商业事务：
+增加System V IPC 进程间通信机制
+Message ShareMemory Semaphore信号量
+BSD Unix对其进行了重要的扩充，提供了一种称为Socket的进程间通信机制。
+
+Android系统采用的是Binder机制，一种类似于COM和CORBA分布式组件架构，提供远程过程调用RPC功能。
+有Client Server ServiceManager Binder驱动程序
+其中Client Server ServiceManager运行在用户空间，Binder驱动程序运行在内核空间。
+Binder就是一种把四个组件粘合在一起的粘合剂，
+开发者只需要实现自己的client和server组件就可以了。
+
+4. Client和Server之间的进程间通信通过Binder驱动程序间接实现
+5. Service Manager是一个守护进程，用来管理Server，并向Client提供查询Server接口的能力
+
+
+todo
+HashMap理解
+Handler理解
+业务逻辑和UI分离，EventBus,otto 通过发消息进行通信更新UI
+事件流程
+view绘制流程
+git概念和使用
