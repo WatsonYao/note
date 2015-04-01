@@ -7990,3 +7990,155 @@ public class SettingsFragment extends PreferenceFragment {
     android:layout_height="wrap_content">
 
 // 进程通信
+// java 同步
+class Callme{
+	void call(String msg){
+		System.out.print("[" + msg);
+		try{
+			Thread.sleep(1000);
+		}catch(){
+
+		}
+		System.out.print("]");
+	}
+}
+
+class Caller implements Runnable{
+	String msg;
+	Callme target;
+	Thread t;
+	public Caller(Callme targ, String s){
+		target = targ;
+		msg = s;
+		t = new Thread(this);
+		t.start();
+	}
+
+	public void run(){
+		target.call(msg);
+	}
+}
+
+class Synch{
+	public static void main(String args[]){
+		Callme target = new Callme();
+		Caller ob1 = new Caller(target,"hello");
+		Caller ob2 = new Caller(target,"sync");
+		Caller ob3 = new Caller(target,"world");
+
+		try{
+			ob1.t.join();
+			ob2.t.join();
+			ob3.t.join();
+		}catch(){
+
+		}
+	}
+}
+
+// 同步块
+classs Callme{
+	void call(String msg){
+		System.out.print("[" + msg);
+		try{
+			Thread.sleep(1000);
+		}catch(){
+
+		}
+		System.out.print("]");
+	}
+}
+
+class Caller implements Runnable{
+	String msg;
+	Callme target;
+	Thread t;
+	public Caller(Callme targ, String s){
+		target = targ;
+		msg = s;
+		t = new Thread(this);
+		t.start();
+	}
+
+	public void run(){
+		synchronized(target){
+			target.call(msg);
+		}
+	}
+}
+
+class Synch{
+	public static void main(String args[]){
+		Callme target = new Callme();
+		Caller ob1 = new Caller(target,"hello");
+		Caller ob2 = new Caller(target,"sync");
+		Caller ob3 = new Caller(target,"world");
+
+		try{
+			ob1.t.join();
+			ob2.t.join();
+			ob3.t.join();
+		}catch(){
+
+		}
+	}
+}
+
+// 死锁
+class A{
+	synchronized void foo(B b){
+		String name = Thread.currentThread().getName();
+		System.out.println(name + "entered A.foo");
+		try{
+			Thread.sleep(1000);
+		}catch(){
+
+		}
+		System.out.print(name + " trying to call B.last()");
+		b.last();
+	}
+
+	synchronized void last(){
+		System.out.print("Inside A.last");
+	}
+}
+
+class B{
+	synchronized void bar(A a){
+		String name = Thread.currentThread().getName();
+		System.out.println(name + "entered B.bar");
+		try{
+			Thread.sleep(1000);
+		}catch(){
+
+		}
+		System.out.print(name + "trying to call A.last()");
+		a.last();
+	}
+
+	synchronized void last(){
+		System.out.print("Inside B.last");
+	}
+}
+
+class Deadlock implments Runnable{
+	A a = new A();
+	B b = new B();
+
+	Deadlock(){
+		Thread.currentThread().setName("MainThread");
+		Thread t = new Thread(this, "RacingThread");
+		t.start();
+		a.foo(b);
+		System.out.print("Back in main thread");
+	}
+
+	public void run(){
+		b.bar(a);
+		System.out.print("Back in other thread");
+	}
+
+	public static void main(String[] args){
+		new Deadlock();
+	}
+}
