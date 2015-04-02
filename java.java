@@ -8142,3 +8142,94 @@ class Deadlock implments Runnable{
 		new Deadlock();
 	}
 }
+
+// 序列化
+public class Employee implements java.io.Serializable{
+	public String name;
+	public String address;
+	public transient int SSN;
+	public int number;
+	public void mailCheck(){
+		System.out.print("xxx");
+	}
+}
+
+// 一个类的对象想要序列化成功，必须满足两个条件：
+// 该类必须实现Serializable对象。
+// 该类的所有属性必须是可序列化的。如果有一个属性不是可序列化的，则该属性必须注明是短暂的。
+FileOutputStream fileOut = new Fileout("/temp/employee.ser");
+ObjectOutputStream out = new ObjectOutputStream(fileOut);
+out.writeObject(e);
+out.close();
+fileOut.close();
+
+// 反序列化
+Employee e = null;
+try{
+	FileInputStream fileIn = new FileInputStream("temp/employee.ser");
+	ObjectInputStream in = new ObjectInputStream(fileIn);
+	e = (Employee) in.readObject();
+	in.close();
+	fileIn.close();
+}
+
+// android 的序列化
+class ParceableDeveloper implements Parcelable{
+	String name;
+	int yearsOfExperience;
+	List<Skill> skillSet;
+	float favoriteFloat;
+
+	ParcelableDeveloper(Parcel in){
+		this.name = in.readString();
+		this.yearsOfExperience = in.readInt();
+		this.skillSet = new ArrayList<Skill>();
+		in.readTypedList(skillSet,Skill.CREATOR);
+		this.favoriteFloat = in.readFloat();
+	}
+
+	int describeContents(){
+		return 0;
+	}
+
+	static final Parcelable.Creator<ParcelableDeveloper> CREATOR
+	 = new Parcelable.Creator<ParceableDeveloper>(){
+	 	ParcelableDeveloper createFromParcel(Parcel in){
+	 		return new ParcelableDeveloper(in);
+	 	}
+
+	 	ParcelableDeveloper[] newArray(int size){
+	 		return new ParceableDeveloper[size];
+	 	}
+	 };
+
+	 static class Skill implements Parcelabel{
+	 	String name;
+	 	boolean programmingRelated;
+
+	 	Skill(Parcel in){
+	 		this.name = in.readString();
+	 		this.programmingRelated = (in.readInt() == 1);
+	 	}
+
+	 	void writeToParcel(Parcel dest, int flags){
+	 		dest.writeString(name);
+	 		dest.writeInt(programmingRelated?1:0);
+	 	}
+
+	 	static final Parcelable.Creator<Skill> CREATOR = new Parcelable.Creator<Skill>(){
+	 		Skill createFromPacel(Parcel in){
+	 			return new Skill(in);
+	 		}
+
+	 		Skill[] newArray(int size){
+	 			return new Skill[size];
+	 		}
+	 	};
+
+	 	int describeContents(){
+	 		return 0;
+	 	}
+	 }
+
+}
