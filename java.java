@@ -8349,3 +8349,40 @@ public class DemoSuper extends Person{
 		ds.print();
 	}
 }
+
+// 屏幕旋转 fragment内存缓存
+private LruCache<String,Bitmap> mMemoryCache;
+
+protected void onCreate(Bundle savedInstanceState){
+
+	RetainFragment retainFragment = RetainFragment.findOrCreateRetainFragment(getFragmentManager());
+	mMemoryCache = retainFragment.mRetainedCache;
+	if(mMemoryCache == null){
+		mMemoryCache = new LruCache<String,Bitmap>(cacheSize){
+
+		}
+		retainFragment.mRetainedCache = mMemoryCache;
+	}
+}
+
+class RetainFragment extends Fragment{
+	private static final String TAG="RetainFragment";
+	public LruCache<String,Bitmap> mRetainedCache;
+
+	public RetainFragment(){}
+
+	public static RetainFragment findOrCreateRetainFragment(FragmentManager fm){
+		RetainFragment fragment = (RetainFragment)fm.findFragmentByTag(TAG);
+		if(fragment == null){
+			fragment = new RetainFragment();
+			fm.beginTransaction().add(fragment,TAG).commit();
+		}
+		return fragment;
+	}
+
+	public void onCreate(Bundle savedinstanceState){
+		super.onCreate(savedinstanceState);
+		setRetainInstance(true);
+	}
+}
+
