@@ -1,4 +1,4 @@
-﻿//数据 与 显示 分开
+//数据 与 显示 分开
 
 //工厂模式：
 //将大量有共同接口的类实例化。
@@ -8232,4 +8232,120 @@ class ParceableDeveloper implements Parcelable{
 	 	}
 	 }
 
+}
+
+// 初始化顺序
+public class Value{
+	private String str;
+	public Value(String str){
+		this.str = str;
+		System.out.print(str);
+	}
+}
+
+public class Super{
+	public static Value superV1 = new Value("super static v1");
+	public static Value superV2;
+
+	static{
+		System.out.print("父类静态初始化块");
+		superV2 = new Value("super static v2");
+	}
+
+	public static Value superV3 = new Value("super static v3");
+
+	public Value superV4 = new Value("super v4");
+	public Value superV5;
+	{
+		System.out.println("父类非静态初始化块");
+		superV5 = new Value("super V5");
+	}
+
+	public Value superV7;
+
+	public Super(){
+		System.out.println("super 构造函数");
+		this.superV7 = new Value("super v7");
+	}
+
+	public Value superV6 = new Value("super v6");
+}
+
+public class FieldAccess{
+	public static void main(String[] args){
+		System.out.println("------");
+		Super su = new Super();
+	}
+}
+
+
+// super this
+class Person{
+	public static void prt(String s){
+		System.out.println(s);
+	}
+
+	Person(){
+		prt("A Person")
+	}
+
+	Person(String name){
+		prt("A person name is:" + name);
+	}
+}
+
+public class Chinese extends Person{
+	Chinese(){
+		super();
+		prt("A chinese");
+	}
+
+	Chinese(String name){
+		super(name);
+		prt("his name is:" + name);
+	}
+
+	Chinese(String name, int age){
+		this(name);
+		prt("his age is:" + age);
+	}
+
+	public static void main(String[] args){
+		Chinese cn = new Chinese();
+		cn = new Chinese("kevin");
+		cn = new Chinese("kevin",22);
+	}
+}
+
+
+//
+class Person{
+	public int c;
+	private String name;
+	private int age;
+	protected void setName(String name){
+		this.name = name;
+	}
+
+	protected void setAge(int age){
+		this.age = age;
+	}
+
+	protected void print(){
+		System.out.println("name=" + name + ",age=" + age);
+	}
+}
+
+public class DemoSuper extends Person{
+	public void print(){
+		Sytem.out.prinltn("demosuper:");
+		super.print();
+	}
+
+	public static void main(String[] args){
+		DemoSuper ds = new DemoSuper();
+		ds.setName("kevin");
+		ds.setAge(22);
+		ds.print();
+	}
 }
