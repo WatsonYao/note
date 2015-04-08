@@ -8386,3 +8386,59 @@ class RetainFragment extends Fragment{
 	}
 }
 
+// rxjava
+Observable<String> myObservable = Observable.create(
+	new Observable.OnSubscribe<String>(){
+		public void call(Subscriber<? super String> sub){
+			sub.onNext("hello,world!");
+			sub.onCompleted();
+		}
+	}
+);
+
+Subscriber<String> mySubscriber = new Subscriber<String>(){
+	public void onNext(String s){
+		//...
+	}
+
+	public void onCompeted(){}
+
+	public void onError(Throwable e){}
+}
+
+myObservable.subscribe(mySubcriber);
+
+// 只发出一个事件就结束
+Observable<String> myObservable = Observable.just("hello,watson");
+
+Action1<String> onNextAction = new Action1<String>(){
+	public void call(String s){
+		// ...
+	}
+}
+
+myObservable.subscribe(onNextAction, onErrorAction,onCompleteAction);
+myObservable.subscribe(onNextAction);
+
+Observable.just("hello watson")
+	.subscribe(new Action1<String>(){
+		public void call(String s){
+			System.out.println(s)
+		}
+	});
+// 使用java8的 lambda
+Observable.just("hello watson")
+	.subscribe(s -> System.out.println(s));
+
+// map操作符，就是用来把一个事件转换为另一个事件的
+Obserbvable.just("hello watson")
+	.map(new Func1<String,String>(){
+		public String call(String s){
+			return s+"-Dan";
+		}
+	})
+	.subscribe(s -> System.out.println(s));
+
+Obserbvable.just("hello watson")
+	.map(s -> s + " -Dan")
+	.subscribe(s -> System.out.println(s));
