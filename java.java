@@ -8442,3 +8442,126 @@ Obserbvable.just("hello watson")
 Obserbvable.just("hello watson")
 	.map(s -> s + " -Dan")
 	.subscribe(s -> System.out.println(s));
+
+
+// 函数式
+final List<String> friends = Arrays.asList("a","b","c");
+System.out.println(friends.get(i));
+
+friends.forEach(new Consumer<String>(final String name){
+	System.out.println(name);
+})
+
+friends.forEach((final String name) -> System.out.println(name));
+friends.forEach((name) -> System.out.println(name));
+friedns.forEach( name -> System.out.println(name));
+
+
+final List<String> uppercaseNames = new ArrayList<String>();
+for(String name:friends){
+	uppercaseNames.add(name.toUpperCase());
+}
+
+final List<String> uppercaseNames = new ArrayList<String>();
+friends.forEach(name -> uppercaseNames.add(name.toUpperCase()));
+
+friends.stream()
+.map(name -> name.toUpperCase())
+.forEach(name -> System.out.prinlnt(name+" "));
+
+friends.stream()
+.map(String::toUpperCase)
+.forEach(name -> System.out.prinltn(name));
+
+final List<String> startWithN = 
+friends.stream()
+.filter(name -> name.startsWith("N"))
+.collect(Collectors.toList());
+
+// 冗余1
+final List<String> friends = Arrays.asList("xxx","xxxx");
+final List<String> editors = Arrays.asList("xxxx","yyy");
+final List<String> comrades = Arrays.asList("xxxx","zzz");
+
+final Predicate<String> startWithN = name -> name.startsWith("N");
+final long countFriendStartN = 
+	friends.steam()
+	.filter(startWithN)
+	.count();
+final long countEditorsStartN = 
+	editors.stream()
+	.filter(startWithN)
+	.count();
+// ...
+
+
+// 冗余2
+final Predicate<string> startsWithN = name -> name.startsWith("N");
+final Predicate<string> startsWithB = name -> name.startsWith("B");
+final long countFriendsStartN = friends.steam().filter(startWithN).count();
+final long countFriendsStartB = friends.steam().filter(startWithB).count();
+
+// 使用词法作用域来避免冗余
+public static Predicate<string> checkIfStartsWith(final String letter){
+	return name -> name.startWith(letter);
+}
+
+final long countFriendsStartN = friends.steam().filter(checkIfStartsWith("N")).count();
+
+// 重构，缩小作用域
+final Function<String,Predicate<String>> startsWithLetter = (String letter) -> {
+	Predicate<String> checkStarts = (String name) -> name.startsWith(letter);
+	return checkStarts;
+};
+final Function<String,Predicate<String>> startsWithLetter = (String letter) -> (String name) -> name.startsWith(letter);
+final Function<String,Predicate<String>> startsWithLetter = 
+	letter -> name -> name.startsWith(letter);
+
+final long countFriendStartN = friends.stream().filter(startsWithLetter.apply("N")).count();
+
+
+public static void pickName(final List<String> names,final String startingLetter){
+		final Optional<String> foundName = 
+		names.stream().filter(name -> name.startsWith(startingLetter)).findFirst();
+	}
+}
+
+//
+friedns.stream().mapToInt(name -> name.length()).sum();
+
+// reduce 操作来比较两个元素的长度，然后返回最长的那个，再和剩下的元素做进一步比较。
+// 在第二次调用中，name1的值被绑定成上次调用的结果，name2的值这是集合的第三个元素。
+// reduce方法返回的是一个Optional值
+final Optional<string> aLongName = friends.stream().reduce((name1,name2) -> name1.length >= name2.length() ? name1:name2);
+aLongName.ifPresent(name->System.out.println(String.format("A longest name: %s",name)));
+
+// 默认值 基础值,这个版本的reduce() 方法不会返回optional对象。
+final String steveOrLonger = friends.stream().reduce("Steve",(name1,name2) -> name1.length() >= name2.length() ? name1 : name2);
+
+System.out.println(String.join(",",friends));
+
+System.out.println(friends.stream().map(String::toUpperCase).collect(joining(", ")));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
