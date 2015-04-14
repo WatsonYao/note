@@ -8542,6 +8542,315 @@ System.out.println(String.join(",",friends));
 
 System.out.println(friends.stream().map(String::toUpperCase).collect(joining(", ")));
 
+// android 进程 AIDL
+// ICalcAIDL.aidl
+interface ICalcAIDL{
+	int add(int x, int y);
+	int min(int x, int y);
+}
+
+public class CalcService extends Service{
+
+	private static final String TAG = "server"; 
+
+	public void onCreate()  
+    {  
+        Log.e(TAG, "onCreate");  
+    }  
+  
+    public IBinder onBind(Intent t)  
+    {  
+        Log.e(TAG, "onBind");  
+        return mBinder;  
+    }  
+  
+    public void onDestroy()  
+    {  
+        Log.e(TAG, "onDestroy");  
+        super.onDestroy();  
+    }  
+  
+    public boolean onUnbind(Intent intent)  
+    {  
+        Log.e(TAG, "onUnbind");  
+        return super.onUnbind(intent);  
+    }  
+  
+    public void onRebind(Intent intent)  
+    {  
+        Log.e(TAG, "onRebind");  
+        super.onRebind(intent);  
+    }
+
+    private final ICalcAIDL.Stub mBinder = new ICalcAIDL.Stub(){
+    	public int add(int x, int y) throws RemoteException{
+    		return x + y;
+    	}
+
+    	public int min(int x, int y) throws RemoteException{
+    		return x - y;
+    	}
+    }
+
+}
+
+public class MainActivity extends Activity{
+
+	 private ICalcAIDL mCalcAidl;
+
+	 private ServiceConnection mServiceConn = new ServiceConnection(){
+
+	 	public void onServiceDisconnected(ComponentName name){
+	 		mCalcAidl = null;
+	 	}
+
+	 	public void onServiceConnected(ComponentName name,IBinder service){
+	 		mCalcAidl = ICalcAIDL.Stub.asInterface(service);
+	 	}
+
+	 };
+
+	 public void bindService(View view){
+	 	Intent intent = new Intent();
+	 	intent.setAction("com.zhy.aidl.calc");
+	 	bindService(intent, mServiceConn, Context.BIND_AUTO_CREATE);
+	 }
+
+	 public void addInvoked(View view) throws Exception{
+
+	 	if(mCalAidl != null){
+	 		int addRes = mCalcAidl.add(12,12);
+	 	}else{
+	 		// ...
+	 	}
+	 }
+
+}
+
+public static abstract class Stub extends android.os.Binder implments com.xxx.aidl.ICalcAIDL
+
+public boolean onTransact(int code, android.os.Parcel data, android.os.Parcel reply, int flags) throws android.os.RemoteException{
+	switch(code){
+		case INTERFACE_TRANSACTION:{
+			reply.writeString(DESCRIPTOR);
+			return true;
+		}
+
+		case TRANSACTION_add:{
+			data.enforceInterface(DESCRIPTOR);
+			int _arg0;
+			_arg0 = data.readInt();
+			int _arg1;
+			_arg1 = data.readInt();
+
+			int _result = this.add(_arg0 + _arg1);
+			reply.writeNoException();
+			reply.writeInt(_result);
+			return true;
+		}
+
+		case TRANSACTION_min:{
+			// ...
+		}
+	}
+	return super.onTransact(code, data, reply, flags);
+}
+// 服务端的Binder实例会根据客户端依靠Binder驱动发来的消息，执行onTransact方法，然后由其参数决定执行服务端的代码。
+// onServiceConnected中的IBinder实例，就是Binder驱动，也是一个Binder实例。
+
+// ICalcAIDL.Stub.asInterface中最终调用了
+// return new com.xx.aidl.ICalcAIDL.Stub.Proxy(obj);
+// 这个Proxy实例传入了我们的Binder驱动，并且封装了我们调用服务端的代码，
+// Proxy中的方法
+
+public int add(int x, int y) throws android.os.RemoteException{
+	android.os.Parcel _data = android.os.Parcel.obtain();
+	android.os.Parcel _reply = android.os.Parcel.obtain();
+	int _result;
+	try{
+		_data.writeinterfaceToken(DESCRIPTOR);
+		_data.writeInt(x);
+		_data.writeInt(y);
+		mRemote.transact(Stub.TRANSACTION_add, _data, _reply, 0);
+		_reply.readException();
+		_result = _reply.readInt();
+	}finally{
+		_reply.recycle();
+		_data.recycle();
+	}
+	return _result;
+}
+
+// Service 的作用就是为我们创建Binder驱动，即服务端与客户端连接的桥梁。
+// AIDL 其实通过我们写的aidl文件，
+// 帮助我们生成了一个接口，一个Stub类用于服务端，一个Proxy类用于客户端调用。
+
+// 不依赖AIDL实现程序间通讯
+public class CalcPlusService extends Service{
+
+	private static final String DESCRIPTOR = "CalcPlusService";  
+    private static final String TAG = "CalcPlusService"; 
+
+    public void onCreate()  
+    {  
+        Log.e(TAG, "onCreate");  
+    }  
+  
+    @Override  
+    public int onStartCommand(Intent intent, int flags, int startId)  
+    {  
+        Log.e(TAG, "onStartCommand");  
+        return super.onStartCommand(intent, flags, startId);  
+    }  
+  
+    public IBinder onBind(Intent t)  
+    {  
+        Log.e(TAG, "onBind");  
+        return mBinder;  
+    }  
+  
+    public void onDestroy()  
+    {  
+        Log.e(TAG, "onDestroy");  
+        super.onDestroy();  
+    }  
+  
+    public boolean onUnbind(Intent intent)  
+    {  
+        Log.e(TAG, "onUnbind");  
+        return super.onUnbind(intent);  
+    }  
+  
+    public void onRebind(Intent intent)  
+    {  
+        Log.e(TAG, "onRebind");  
+        super.onRebind(intent);  
+    }  
+  
+    private MyBinder mBinder = new MyBinder();  
+    private class MyBinder extends Binder{
+    	protected boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException{
+    		switch(code){
+    			case 0x110:{
+    				data.enforceInterface(DESCRIPTOR);
+    				int _arg0;
+    				_arg0 = data.readInt();
+    				// ..
+    			}
+    		}
+    	}
+    }
+}
+
+public class MainActivity extends Activity  
+{  
+  
+    private IBinder mPlusBinder;  
+    private ServiceConnection mServiceConnPlus = new ServiceConnection()  
+    {  
+        @Override  
+        public void onServiceDisconnected(ComponentName name)  
+        {  
+            Log.e("client", "mServiceConnPlus onServiceDisconnected");  
+        }  
+  
+        @Override  
+        public void onServiceConnected(ComponentName name, IBinder service)  
+        {  
+  
+            Log.e("client", " mServiceConnPlus onServiceConnected");  
+            mPlusBinder = service;  
+        }  
+    };  
+  
+    @Override  
+    protected void onCreate(Bundle savedInstanceState)  
+    {  
+        super.onCreate(savedInstanceState);  
+        setContentView(R.layout.activity_main);  
+  
+    }  
+  
+    public void bindService(View view)  
+    {  
+        Intent intentPlus = new Intent();  
+        intentPlus.setAction("com.zhy.aidl.calcplus");  
+        boolean plus = bindService(intentPlus, mServiceConnPlus,  
+                Context.BIND_AUTO_CREATE);  
+        Log.e("plus", plus + "");  
+    }  
+  
+    public void unbindService(View view)  
+    {  
+        unbindService(mServiceConnPlus);  
+    }  
+  
+    public void mulInvoked(View view)  
+    {  
+  
+        if (mPlusBinder == null)  
+        {  
+            Toast.makeText(this, "未连接服务端或服务端被异常杀死", Toast.LENGTH_SHORT).show();  
+        } else  
+        {  
+            android.os.Parcel _data = android.os.Parcel.obtain();  
+            android.os.Parcel _reply = android.os.Parcel.obtain();  
+            int _result;  
+            try  
+            {  
+                _data.writeInterfaceToken("CalcPlusService");  
+                _data.writeInt(50);  
+                _data.writeInt(12);  
+                mPlusBinder.transact(0x110, _data, _reply, 0);  
+                _reply.readException();  
+                _result = _reply.readInt();  
+                Toast.makeText(this, _result + "", Toast.LENGTH_SHORT).show();  
+  
+            } catch (RemoteException e)  
+            {  
+                e.printStackTrace();  
+            } finally  
+            {  
+                _reply.recycle();  
+                _data.recycle();  
+            }  
+        }  
+  
+    }  
+      
+    public void divInvoked(View view)  
+    {  
+  
+        if (mPlusBinder == null)  
+        {  
+            Toast.makeText(this, "未连接服务端或服务端被异常杀死", Toast.LENGTH_SHORT).show();  
+        } else  
+        {  
+            android.os.Parcel _data = android.os.Parcel.obtain();  
+            android.os.Parcel _reply = android.os.Parcel.obtain();  
+            int _result;  
+            try  
+            {  
+                _data.writeInterfaceToken("CalcPlusService");  
+                _data.writeInt(36);  
+                _data.writeInt(12);  
+                mPlusBinder.transact(0x111, _data, _reply, 0);  
+                _reply.readException();  
+                _result = _reply.readInt();  
+                Toast.makeText(this, _result + "", Toast.LENGTH_SHORT).show();  
+  
+            } catch (RemoteException e)  
+            {  
+                e.printStackTrace();  
+            } finally  
+            {  
+                _reply.recycle();  
+                _data.recycle();  
+            }  
+        }  
+  
+    }  
+}  
 
 
 
