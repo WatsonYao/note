@@ -7883,26 +7883,26 @@ protected void onReset() {
 
 //values/styles.xml
 <style name="AppTheme" parent="Theme.AppCompat.Light">
-    <item name="colorPrimary">@color/colorPrimary</item>
-    <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-    <item name="colorAccent">@color/colorAccent</item>
-    <item name="android:textColorPrimary">@color/textColorPrimary</item>
-    <item name="android:textColorSecondary">@color/textColorSecondary</item>
-    <item name="android:textColorPrimaryInverse">@color/textColorPrimaryInverse</item>
-    <item name="android:textColorSecondaryInverse">@color/textColorSecondaryInverse</item>
-    <!-- some other theme configurations for actionbar, overflow menu etc. -->
+<item name="colorPrimary">@color/colorPrimary</item>
+<item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+<item name="colorAccent">@color/colorAccent</item>
+<item name="android:textColorPrimary">@color/textColorPrimary</item>
+<item name="android:textColorSecondary">@color/textColorSecondary</item>
+<item name="android:textColorPrimaryInverse">@color/textColorPrimaryInverse</item>
+<item name="android:textColorSecondaryInverse">@color/textColorSecondaryInverse</item>
+<!-- some other theme configurations for actionbar, overflow menu etc. -->
     //...
 </style>
 
 <style name="AppTheme.Dark" parent="Theme.AppCompat">
-    <item name="colorPrimary">@color/colorPrimaryInverse</item>
-    <item name="colorPrimaryDark">@color/colorPrimaryDarkInverse</item>
-    <item name="colorAccent">@color/colorAccentInverse</item>
-    <item name="android:textColorPrimary">@color/textColorPrimaryInverse</item>
-    <item name="android:textColorSecondary">@color/textColorSecondaryInverse</item>
-    <item name="android:textColorPrimaryInverse">@color/textColorPrimary</item>
-    <item name="android:textColorSecondaryInverse">@color/textColorSecondary</item>
-    ...
+<item name="colorPrimary">@color/colorPrimaryInverse</item>
+<item name="colorPrimaryDark">@color/colorPrimaryDarkInverse</item>
+<item name="colorAccent">@color/colorAccentInverse</item>
+<item name="android:textColorPrimary">@color/textColorPrimaryInverse</item>
+<item name="android:textColorSecondary">@color/textColorSecondaryInverse</item>
+<item name="android:textColorPrimaryInverse">@color/textColorPrimary</item>
+<item name="android:textColorSecondaryInverse">@color/textColorSecondary</item>
+...
 </style>
 
 //values/attrs.xml
@@ -7911,62 +7911,62 @@ protected void onReset() {
 
 //values/styles.xml
 <style name="AppTheme" parent="Theme.AppCompat.Light">
-    <!-- original theme attributes -->
-    ...
-    <item name="themedMenuStoryDrawable">@drawable/ic_subject_white_24dp</item>
-    <item name="themedMenuCommentDrawable">@drawable/ic_mode_comment_white_24dp</item>
+<!-- original theme attributes -->
+...
+<item name="themedMenuStoryDrawable">@drawable/ic_subject_white_24dp</item>
+<item name="themedMenuCommentDrawable">@drawable/ic_mode_comment_white_24dp</item>
 </style>
 
 <style name="AppTheme.Dark" parent="Theme.AppCompat">
-    <!-- alternative theme attributes -->
-    ...
-    <item name="themedMenuStoryDrawable">@drawable/ic_subject_black_24dp</item>
-    <item name="themedMenuCommentDrawable">@drawable/ic_mode_comment_black_24dp</item>
+<!-- alternative theme attributes -->
+...
+<item name="themedMenuStoryDrawable">@drawable/ic_subject_black_24dp</item>
+<item name="themedMenuCommentDrawable">@drawable/ic_mode_comment_black_24dp</item>
 </style>
 
 //menu/my_menu.xml
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@id/menu_comment"
-        android:icon="?attr/themedMenuCommentDrawable" />
-    <item android:id="@id/menu_story"
-        android:icon="?attr/themedMenuStoryDrawable" />
-    <item android:id="@id/menu_share"
-        app:actionProviderClass="android.support.v7.widget.ShareActionProvider" />
+<item android:id="@id/menu_comment"
+android:icon="?attr/themedMenuCommentDrawable" />
+<item android:id="@id/menu_story"
+android:icon="?attr/themedMenuStoryDrawable" />
+<item android:id="@id/menu_share"
+app:actionProviderClass="android.support.v7.widget.ShareActionProvider" />
 </menu>
 
 //BaseActivity.java
 public abstract class BaseActivity extends ActionBarActivity {
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        if (PreferenceManager.getDefaultSharedPreferences(this)
-                .getBoolean("pref_dark_theme"), false)) {
-            setTheme(R.style.AppTheme_Dark);
-        }
-        super.onCreate(savedInstanceState);
-    }
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		if (PreferenceManager.getDefaultSharedPreferences(this)
+			.getBoolean("pref_dark_theme"), false)) {
+	setTheme(R.style.AppTheme_Dark);
+}
+super.onCreate(savedInstanceState);
+}
 }
 
 //SettingsFragment.java
 public class SettingsFragment extends PreferenceFragment {
-    ...
+	...
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-            @Override
-            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                if (!key.equals("pref_dark_theme")) {
-                    return;
-                }
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		mListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+			@Override
+			public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+				if (!key.equals("pref_dark_theme")) {
+					return;
+				}
 
-                getActivity().finish();
-                final Intent intent = getActivity().getIntent();
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
-                getActivity().startActivity(intent);
-            }
-        };
-    }
+				getActivity().finish();
+				final Intent intent = getActivity().getIntent();
+				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+				getActivity().startActivity(intent);
+			}
+		};
+	}
 }
 
 
@@ -7980,14 +7980,14 @@ public class SettingsFragment extends PreferenceFragment {
 
 // cardview 使用
 <android.support.v7.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    card_view:cardCornerRadius="4dp"
-    android:gravity="center_vertical"
-    card_view:cardElevation="1dp"
-    card_view:cardUseCompatPadding="true"
-    android:layout_height="wrap_content">
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:card_view="http://schemas.android.com/apk/res-auto"
+android:layout_width="match_parent"
+card_view:cardCornerRadius="4dp"
+android:gravity="center_vertical"
+card_view:cardElevation="1dp"
+card_view:cardUseCompatPadding="true"
+android:layout_height="wrap_content">
 
 // 进程通信
 // java 同步
@@ -8193,44 +8193,44 @@ class ParceableDeveloper implements Parcelable{
 	}
 
 	static final Parcelable.Creator<ParcelableDeveloper> CREATOR
-	 = new Parcelable.Creator<ParceableDeveloper>(){
-	 	ParcelableDeveloper createFromParcel(Parcel in){
-	 		return new ParcelableDeveloper(in);
-	 	}
+	= new Parcelable.Creator<ParceableDeveloper>(){
+		ParcelableDeveloper createFromParcel(Parcel in){
+			return new ParcelableDeveloper(in);
+		}
 
-	 	ParcelableDeveloper[] newArray(int size){
-	 		return new ParceableDeveloper[size];
-	 	}
-	 };
+		ParcelableDeveloper[] newArray(int size){
+			return new ParceableDeveloper[size];
+		}
+	};
 
-	 static class Skill implements Parcelabel{
-	 	String name;
-	 	boolean programmingRelated;
+	static class Skill implements Parcelabel{
+		String name;
+		boolean programmingRelated;
 
-	 	Skill(Parcel in){
-	 		this.name = in.readString();
-	 		this.programmingRelated = (in.readInt() == 1);
-	 	}
+		Skill(Parcel in){
+			this.name = in.readString();
+			this.programmingRelated = (in.readInt() == 1);
+		}
 
-	 	void writeToParcel(Parcel dest, int flags){
-	 		dest.writeString(name);
-	 		dest.writeInt(programmingRelated?1:0);
-	 	}
+		void writeToParcel(Parcel dest, int flags){
+			dest.writeString(name);
+			dest.writeInt(programmingRelated?1:0);
+		}
 
-	 	static final Parcelable.Creator<Skill> CREATOR = new Parcelable.Creator<Skill>(){
-	 		Skill createFromPacel(Parcel in){
-	 			return new Skill(in);
-	 		}
+		static final Parcelable.Creator<Skill> CREATOR = new Parcelable.Creator<Skill>(){
+			Skill createFromPacel(Parcel in){
+				return new Skill(in);
+			}
 
-	 		Skill[] newArray(int size){
-	 			return new Skill[size];
-	 		}
-	 	};
+			Skill[] newArray(int size){
+				return new Skill[size];
+			}
+		};
 
-	 	int describeContents(){
-	 		return 0;
-	 	}
-	 }
+		int describeContents(){
+			return 0;
+		}
+	}
 
 }
 
@@ -8394,7 +8394,7 @@ Observable<String> myObservable = Observable.create(
 			sub.onCompleted();
 		}
 	}
-);
+	);
 
 Subscriber<String> mySubscriber = new Subscriber<String>(){
 	public void onNext(String s){
@@ -8421,27 +8421,27 @@ myObservable.subscribe(onNextAction, onErrorAction,onCompleteAction);
 myObservable.subscribe(onNextAction);
 
 Observable.just("hello watson")
-	.subscribe(new Action1<String>(){
-		public void call(String s){
-			System.out.println(s)
-		}
-	});
+.subscribe(new Action1<String>(){
+	public void call(String s){
+		System.out.println(s)
+	}
+});
 // 使用java8的 lambda
 Observable.just("hello watson")
-	.subscribe(s -> System.out.println(s));
+.subscribe(s -> System.out.println(s));
 
 // map操作符，就是用来把一个事件转换为另一个事件的
 Obserbvable.just("hello watson")
-	.map(new Func1<String,String>(){
-		public String call(String s){
-			return s+"-Dan";
-		}
-	})
-	.subscribe(s -> System.out.println(s));
+.map(new Func1<String,String>(){
+	public String call(String s){
+		return s+"-Dan";
+	}
+})
+.subscribe(s -> System.out.println(s));
 
 Obserbvable.just("hello watson")
-	.map(s -> s + " -Dan")
-	.subscribe(s -> System.out.println(s));
+.map(s -> s + " -Dan")
+.subscribe(s -> System.out.println(s));
 
 
 // 函数式
@@ -8485,13 +8485,13 @@ final List<String> comrades = Arrays.asList("xxxx","zzz");
 
 final Predicate<String> startWithN = name -> name.startsWith("N");
 final long countFriendStartN = 
-	friends.steam()
-	.filter(startWithN)
-	.count();
+friends.steam()
+.filter(startWithN)
+.count();
 final long countEditorsStartN = 
-	editors.stream()
-	.filter(startWithN)
-	.count();
+editors.stream()
+.filter(startWithN)
+.count();
 // ...
 
 
@@ -8515,15 +8515,15 @@ final Function<String,Predicate<String>> startsWithLetter = (String letter) -> {
 };
 final Function<String,Predicate<String>> startsWithLetter = (String letter) -> (String name) -> name.startsWith(letter);
 final Function<String,Predicate<String>> startsWithLetter = 
-	letter -> name -> name.startsWith(letter);
+letter -> name -> name.startsWith(letter);
 
 final long countFriendStartN = friends.stream().filter(startsWithLetter.apply("N")).count();
 
 
 public static void pickName(final List<String> names,final String startingLetter){
-		final Optional<String> foundName = 
-		names.stream().filter(name -> name.startsWith(startingLetter)).findFirst();
-	}
+	final Optional<String> foundName = 
+	names.stream().filter(name -> name.startsWith(startingLetter)).findFirst();
+}
 }
 
 //
@@ -8554,76 +8554,76 @@ public class CalcService extends Service{
 	private static final String TAG = "server"; 
 
 	public void onCreate()  
-    {  
-        Log.e(TAG, "onCreate");  
-    }  
-  
-    public IBinder onBind(Intent t)  
-    {  
-        Log.e(TAG, "onBind");  
-        return mBinder;  
-    }  
-  
-    public void onDestroy()  
-    {  
-        Log.e(TAG, "onDestroy");  
-        super.onDestroy();  
-    }  
-  
-    public boolean onUnbind(Intent intent)  
-    {  
-        Log.e(TAG, "onUnbind");  
-        return super.onUnbind(intent);  
-    }  
-  
-    public void onRebind(Intent intent)  
-    {  
-        Log.e(TAG, "onRebind");  
-        super.onRebind(intent);  
-    }
+	{  
+		Log.e(TAG, "onCreate");  
+	}  
 
-    private final ICalcAIDL.Stub mBinder = new ICalcAIDL.Stub(){
-    	public int add(int x, int y) throws RemoteException{
-    		return x + y;
-    	}
+	public IBinder onBind(Intent t)  
+	{  
+		Log.e(TAG, "onBind");  
+		return mBinder;  
+	}  
 
-    	public int min(int x, int y) throws RemoteException{
-    		return x - y;
-    	}
-    }
+	public void onDestroy()  
+	{  
+		Log.e(TAG, "onDestroy");  
+		super.onDestroy();  
+	}  
+
+	public boolean onUnbind(Intent intent)  
+	{  
+		Log.e(TAG, "onUnbind");  
+		return super.onUnbind(intent);  
+	}  
+
+	public void onRebind(Intent intent)  
+	{  
+		Log.e(TAG, "onRebind");  
+		super.onRebind(intent);  
+	}
+
+	private final ICalcAIDL.Stub mBinder = new ICalcAIDL.Stub(){
+		public int add(int x, int y) throws RemoteException{
+			return x + y;
+		}
+
+		public int min(int x, int y) throws RemoteException{
+			return x - y;
+		}
+	}
 
 }
 
 public class MainActivity extends Activity{
 
-	 private ICalcAIDL mCalcAidl;
+	private ICalcAIDL mCalcAidl;
 
-	 private ServiceConnection mServiceConn = new ServiceConnection(){
+	private ServiceConnection mServiceConn = new ServiceConnection(){
 
-	 	public void onServiceDisconnected(ComponentName name){
-	 		mCalcAidl = null;
-	 	}
+		public void onServiceDisconnected(ComponentName name){
+			mCalcAidl = null;
+		}
 
-	 	public void onServiceConnected(ComponentName name,IBinder service){
-	 		mCalcAidl = ICalcAIDL.Stub.asInterface(service);
-	 	}
+		public void onServiceConnected(ComponentName name,IBinder service){
+			mCalcAidl = ICalcAIDL.Stub.asInterface(service);
+		}
 
-	 };
+	};
 
-	 public void bindService(View view){
-	 	Intent intent = new Intent();
-	 	intent.setAction("com.zhy.aidl.calc");
-	 	bindService(intent, mServiceConn, Context.BIND_AUTO_CREATE);
-	 }
+	public void bindService(View view){
+		Intent intent = new Intent();
+		intent.setAction("com.zhy.aidl.calc");
+		bindService(intent, mServiceConn, Context.BIND_AUTO_CREATE);
+	}
 
-	 public void addInvoked(View view) throws Exception{
+	public void addInvoked(View view) throws Exception{
 
-	 	if(mCalAidl != null){
-	 		int addRes = mCalcAidl.add(12,12);
-	 	}else{
+		if(mCalAidl != null){
+			int addRes = mCalcAidl.add(12,12);
+		}else{
 	 		// ...
-	 	}
-	 }
+		}
+	}
 
 }
 
@@ -8689,167 +8689,167 @@ public int add(int x, int y) throws android.os.RemoteException{
 public class CalcPlusService extends Service{
 
 	private static final String DESCRIPTOR = "CalcPlusService";  
-    private static final String TAG = "CalcPlusService"; 
+	private static final String TAG = "CalcPlusService"; 
 
-    public void onCreate()  
-    {  
-        Log.e(TAG, "onCreate");  
-    }  
-  
-    @Override  
-    public int onStartCommand(Intent intent, int flags, int startId)  
-    {  
-        Log.e(TAG, "onStartCommand");  
-        return super.onStartCommand(intent, flags, startId);  
-    }  
-  
-    public IBinder onBind(Intent t)  
-    {  
-        Log.e(TAG, "onBind");  
-        return mBinder;  
-    }  
-  
-    public void onDestroy()  
-    {  
-        Log.e(TAG, "onDestroy");  
-        super.onDestroy();  
-    }  
-  
-    public boolean onUnbind(Intent intent)  
-    {  
-        Log.e(TAG, "onUnbind");  
-        return super.onUnbind(intent);  
-    }  
-  
-    public void onRebind(Intent intent)  
-    {  
-        Log.e(TAG, "onRebind");  
-        super.onRebind(intent);  
-    }  
-  
-    private MyBinder mBinder = new MyBinder();  
-    private class MyBinder extends Binder{
-    	protected boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException{
-    		switch(code){
-    			case 0x110:{
-    				data.enforceInterface(DESCRIPTOR);
-    				int _arg0;
-    				_arg0 = data.readInt();
+	public void onCreate()  
+	{  
+		Log.e(TAG, "onCreate");  
+	}  
+
+	@Override  
+	public int onStartCommand(Intent intent, int flags, int startId)  
+	{  
+		Log.e(TAG, "onStartCommand");  
+		return super.onStartCommand(intent, flags, startId);  
+	}  
+
+	public IBinder onBind(Intent t)  
+	{  
+		Log.e(TAG, "onBind");  
+		return mBinder;  
+	}  
+
+	public void onDestroy()  
+	{  
+		Log.e(TAG, "onDestroy");  
+		super.onDestroy();  
+	}  
+
+	public boolean onUnbind(Intent intent)  
+	{  
+		Log.e(TAG, "onUnbind");  
+		return super.onUnbind(intent);  
+	}  
+
+	public void onRebind(Intent intent)  
+	{  
+		Log.e(TAG, "onRebind");  
+		super.onRebind(intent);  
+	}  
+
+	private MyBinder mBinder = new MyBinder();  
+	private class MyBinder extends Binder{
+		protected boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException{
+			switch(code){
+				case 0x110:{
+					data.enforceInterface(DESCRIPTOR);
+					int _arg0;
+					_arg0 = data.readInt();
     				// ..
-    			}
-    		}
-    	}
-    }
+				}
+			}
+		}
+	}
 }
 
 public class MainActivity extends Activity  
 {  
-  
-    private IBinder mPlusBinder;  
-    private ServiceConnection mServiceConnPlus = new ServiceConnection()  
-    {  
-        @Override  
-        public void onServiceDisconnected(ComponentName name)  
-        {  
-            Log.e("client", "mServiceConnPlus onServiceDisconnected");  
-        }  
-  
-        @Override  
-        public void onServiceConnected(ComponentName name, IBinder service)  
-        {  
-  
-            Log.e("client", " mServiceConnPlus onServiceConnected");  
-            mPlusBinder = service;  
-        }  
-    };  
-  
-    @Override  
-    protected void onCreate(Bundle savedInstanceState)  
-    {  
-        super.onCreate(savedInstanceState);  
-        setContentView(R.layout.activity_main);  
-  
-    }  
-  
-    public void bindService(View view)  
-    {  
-        Intent intentPlus = new Intent();  
-        intentPlus.setAction("com.zhy.aidl.calcplus");  
-        boolean plus = bindService(intentPlus, mServiceConnPlus,  
-                Context.BIND_AUTO_CREATE);  
-        Log.e("plus", plus + "");  
-    }  
-  
-    public void unbindService(View view)  
-    {  
-        unbindService(mServiceConnPlus);  
-    }  
-  
-    public void mulInvoked(View view)  
-    {  
-  
-        if (mPlusBinder == null)  
-        {  
-            Toast.makeText(this, "未连接服务端或服务端被异常杀死", Toast.LENGTH_SHORT).show();  
-        } else  
-        {  
-            android.os.Parcel _data = android.os.Parcel.obtain();  
-            android.os.Parcel _reply = android.os.Parcel.obtain();  
-            int _result;  
-            try  
-            {  
-                _data.writeInterfaceToken("CalcPlusService");  
-                _data.writeInt(50);  
-                _data.writeInt(12);  
-                mPlusBinder.transact(0x110, _data, _reply, 0);  
-                _reply.readException();  
-                _result = _reply.readInt();  
-                Toast.makeText(this, _result + "", Toast.LENGTH_SHORT).show();  
-  
-            } catch (RemoteException e)  
-            {  
-                e.printStackTrace();  
-            } finally  
-            {  
-                _reply.recycle();  
-                _data.recycle();  
-            }  
-        }  
-  
-    }  
-      
-    public void divInvoked(View view)  
-    {  
-  
-        if (mPlusBinder == null)  
-        {  
-            Toast.makeText(this, "未连接服务端或服务端被异常杀死", Toast.LENGTH_SHORT).show();  
-        } else  
-        {  
-            android.os.Parcel _data = android.os.Parcel.obtain();  
-            android.os.Parcel _reply = android.os.Parcel.obtain();  
-            int _result;  
-            try  
-            {  
-                _data.writeInterfaceToken("CalcPlusService");  
-                _data.writeInt(36);  
-                _data.writeInt(12);  
-                mPlusBinder.transact(0x111, _data, _reply, 0);  
-                _reply.readException();  
-                _result = _reply.readInt();  
-                Toast.makeText(this, _result + "", Toast.LENGTH_SHORT).show();  
-  
-            } catch (RemoteException e)  
-            {  
-                e.printStackTrace();  
-            } finally  
-            {  
-                _reply.recycle();  
-                _data.recycle();  
-            }  
-        }  
-  
-    }  
+
+	private IBinder mPlusBinder;  
+	private ServiceConnection mServiceConnPlus = new ServiceConnection()  
+	{  
+		@Override  
+		public void onServiceDisconnected(ComponentName name)  
+		{  
+			Log.e("client", "mServiceConnPlus onServiceDisconnected");  
+		}  
+
+		@Override  
+		public void onServiceConnected(ComponentName name, IBinder service)  
+		{  
+
+			Log.e("client", " mServiceConnPlus onServiceConnected");  
+			mPlusBinder = service;  
+		}  
+	};  
+
+	@Override  
+	protected void onCreate(Bundle savedInstanceState)  
+	{  
+		super.onCreate(savedInstanceState);  
+		setContentView(R.layout.activity_main);  
+
+	}  
+
+	public void bindService(View view)  
+	{  
+		Intent intentPlus = new Intent();  
+		intentPlus.setAction("com.zhy.aidl.calcplus");  
+		boolean plus = bindService(intentPlus, mServiceConnPlus,  
+			Context.BIND_AUTO_CREATE);  
+		Log.e("plus", plus + "");  
+	}  
+
+	public void unbindService(View view)  
+	{  
+		unbindService(mServiceConnPlus);  
+	}  
+
+	public void mulInvoked(View view)  
+	{  
+
+		if (mPlusBinder == null)  
+		{  
+			Toast.makeText(this, "未连接服务端或服务端被异常杀死", Toast.LENGTH_SHORT).show();  
+		} else  
+		{  
+			android.os.Parcel _data = android.os.Parcel.obtain();  
+			android.os.Parcel _reply = android.os.Parcel.obtain();  
+			int _result;  
+			try  
+			{  
+				_data.writeInterfaceToken("CalcPlusService");  
+				_data.writeInt(50);  
+				_data.writeInt(12);  
+				mPlusBinder.transact(0x110, _data, _reply, 0);  
+				_reply.readException();  
+				_result = _reply.readInt();  
+				Toast.makeText(this, _result + "", Toast.LENGTH_SHORT).show();  
+
+			} catch (RemoteException e)  
+			{  
+				e.printStackTrace();  
+			} finally  
+			{  
+				_reply.recycle();  
+				_data.recycle();  
+			}  
+		}  
+
+	}  
+
+	public void divInvoked(View view)  
+	{  
+
+		if (mPlusBinder == null)  
+		{  
+			Toast.makeText(this, "未连接服务端或服务端被异常杀死", Toast.LENGTH_SHORT).show();  
+		} else  
+		{  
+			android.os.Parcel _data = android.os.Parcel.obtain();  
+			android.os.Parcel _reply = android.os.Parcel.obtain();  
+			int _result;  
+			try  
+			{  
+				_data.writeInterfaceToken("CalcPlusService");  
+				_data.writeInt(36);  
+				_data.writeInt(12);  
+				mPlusBinder.transact(0x111, _data, _reply, 0);  
+				_reply.readException();  
+				_result = _reply.readInt();  
+				Toast.makeText(this, _result + "", Toast.LENGTH_SHORT).show();  
+
+			} catch (RemoteException e)  
+			{  
+				e.printStackTrace();  
+			} finally  
+			{  
+				_reply.recycle();  
+				_data.recycle();  
+			}  
+		}  
+
+	}  
 }  
 
 // handle的使用方法
@@ -8861,19 +8861,19 @@ public class SampleActivity extends Activity {
    * reference to their outer class.
    */
   private static class MyHandler extends Handler {
-    private final WeakReference<SampleActivity> mActivity;
+  	private final WeakReference<SampleActivity> mActivity;
 
-    public MyHandler(SampleActivity activity) {
-      mActivity = new WeakReference<SampleActivity>(activity);
-    }
+  	public MyHandler(SampleActivity activity) {
+  		mActivity = new WeakReference<SampleActivity>(activity);
+  	}
 
-    @Override
-    public void handleMessage(Message msg) {
-      SampleActivity activity = mActivity.get();
-      if (activity != null) {
+  	@Override
+  	public void handleMessage(Message msg) {
+  		SampleActivity activity = mActivity.get();
+  		if (activity != null) {
         // ...
-      }
-    }
+  		}
+  	}
   }
 
   private final MyHandler mHandler = new MyHandler(this);
@@ -8883,20 +8883,20 @@ public class SampleActivity extends Activity {
    * reference to their outer class when they are "static".
    */
   private static final Runnable sRunnable = new Runnable() {
-      @Override
-      public void run() { /* ... */ }
-  };
+  	@Override
+  public void run() { /* ... */ }
+};
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+	super.onCreate(savedInstanceState);
 
     // Post a message and delay its execution for 10 minutes.
-    mHandler.postDelayed(sRunnable, 1000 * 60 * 10);
+	mHandler.postDelayed(sRunnable, 1000 * 60 * 10);
 
     // Go back to the previous Activity.
-    finish();
-  }
+	finish();
+}
 }
 
 // java 同步
@@ -9089,7 +9089,189 @@ public class SyncMethodTest{
 	}
 }
 
+// 线程间通讯
+class Res{
+	String name;
+	String sex;
+}
 
+class Input implements Runnable{
+
+	private Res r;
+
+	Input(Res r){
+		this.r = r;
+	}
+
+	public void run(){
+		int x = 0;
+		while(true){
+			synchronized(r){
+				if(x == 0){
+					r.name = "tom";
+					r.sex = "man";
+				}else{
+					r.name = "春丽";
+					r.sex = "女";
+				}
+			}
+			x  = (x+1)%2;
+		}
+	}
+}
+
+class Output implements Runnable{
+
+	private Res r;
+
+	Output(Res r){
+		this.r = r;
+	}
+
+	public void run(){
+		while(true){
+			synchronized(r){
+				System.out.println(r.name + ",,," + r.sex);
+				System.out.println(r.name + ",,," + r.sex);
+			}
+		}
+	}
+}
+
+class InputOutputDemo{
+	public static void main(String[] args){
+		Res res = new Res();
+		Input in = new Input(res);
+		Output out = new Output(res);
+
+		Thread t1 = new Thread(in);
+		Thread t2 = new Thread(out);
+
+		t1.start();
+		t2.start();
+	}
+}
+
+// 生产者 消费者模型
+class Resourse{
+
+	private String name;
+	private int count = 1;
+	private boolean flag = false;
+
+	public synchronized void set(String name){
+		while(flag){
+
+			try{
+				this.wait();
+			}catch(){
+
+			}
+
+			this.name = name + "--" + count++;
+			System.out.println(Thread.currentThread().getName() + "xxx生产者" + this.name);
+			flag = true;
+			this.notifyAll();
+		}
+	}
+
+	public synchronized void out(){
+		while(!flag){
+			try{
+				this.wait();
+			}catch(){}
+
+			System.out.println(Thread.currentThread().getName()+"xxx消费者" + this.name);
+			flag = false;
+			this.notifyAll();
+		}
+	}
+}
+
+class Producer implments Runnable{
+
+	Producer(Resourse res){
+		this.res = res;
+	}
+
+	private Resourse res;
+
+	public void run(){
+		while(true){
+			res.set(" xxx 商品 xxx");
+		}
+	}
+}
+
+class Consumer implements Runnable{
+
+	Consumer(Resourse res){
+		this.res = res;
+	}
+
+	private Resourse res;
+
+	public void run(){
+		res.out();
+	}
+}
+
+class ProducerConsumerDemo{
+	public static void main(String[] args){
+		Resourse res = new Resourse();
+		new Thread(new Producer(res)).start();
+		new Thread(new Consumer(res)).start();
+		new Thread(new Producer(res)).start();
+		new Thread(new Consumer(res)).start();
+		new Thread(new Producer(res)).start();
+		new Thread(new Consumer(res)).start();
+		new Thread(new Producer(res)).start();
+		new Thread(new Consumer(res)).start();
+	}
+}
+
+// jdk 1.5 提供了多线程升级解决方法
+// 将同步sync替换成现实lock操作
+// 将object中的wait notify notifyall 替换了Condition对象
+// 该对象可以Lock锁 进行获取。
+
+class Resourse{
+
+	private String name;
+	private int count = 1;
+	private boolean flag = false;
+	private Lock lock = new ReentrantLock();
+	private Condition condition_pro = lock.newCondition();
+	private Condition condition_con = lock.newCondition();
+
+	public void set(String name) throws InterruptedException{
+		lock.lock();
+		try{
+			while(flag){
+				condition_pro.await();
+				this.name = name + "--" + count++;
+				flag = true;
+				condition_con.signal();
+			}
+		}finally{
+			lock.unlock();
+		}
+	}
+
+	public synchronized void out() throws InterruptedException{
+		lock.lock();
+		try{
+			while(!flag){
+				condition_con.await();
+				//..
+				flag = false;
+				condition_pro.signal();
+			}
+		}finally{
+			lock.unlock();
+		}
+	}
+}
 
 
 
