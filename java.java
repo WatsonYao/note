@@ -8899,8 +8899,195 @@ public class SampleActivity extends Activity {
   }
 }
 
+// java 同步
+// 该类中的代码可能运行在多线程环境下
+// 同步加锁的是对象，而不是代码
+// amount是一个竞态条件，访问都要进行同步
 
+class Account{
 
+	String name;
+	float amount;
+
+	public Account(String name, float amount){
+		this.name = name;
+		this.amount = amount;
+	}
+
+	public synchronized void deposit(float amt){
+		float tmp = amount;
+		tmp += amt;
+
+		try{
+			Thread.sleep(100);
+		}catch(InterruptedException e){
+			// ...
+		}
+
+		amount = tmp;
+	}
+
+	public synchronized void withdraw(float amt){
+		float tep = amount;
+		tmp -= amt;
+
+		try{
+			Thread.sleep(100);
+		}catch(InterruptedException e){
+			//...
+		}
+
+		amount = tmp;
+	}
+
+	public float getBalance(){
+		return amount;
+	}
+}
+
+public class AccountTest{
+
+	private static int NUM_OF_THREAD = 1000;
+	static Thread[] threads = new Threa[NUM_OF_THREAD];
+
+	public static void main(String[] args){
+
+		final Account acc = new Account("john",1000.0f);
+
+		for(int i=0; i< NUM_OF_THREAD; i++){
+			threads[i] = new Thread(new Runnable(){
+				public void run(){
+					acc.deposit(100.0f);
+					acc.withdraw(100.0f);
+				}
+			});
+
+			threads[i].start();
+		}
+
+		for(int i=0; i<NUM_OF_THREAD; i++){
+			try{
+				threads[i].join(); // 等待所有线程运行结束。
+			}catch(InterruptedException e){
+				// 
+			}
+		}
+
+		// log-> acc.getBalance();
+	}
+}
+
+// 如果你的类中有一个同步方法，这个方法可以被两个不同的线程同时执行。
+// 只要每个线程自己创建一个该类的实例即可。
+class Foo extends Thread{
+
+	private int val;
+
+	public Foo(int v){
+		val = v;
+	}
+
+	public synchronized void printVal(int v){
+		while(true){
+			System.out.println(v);
+		}
+	}
+
+	public void run(){
+		printVal(val);
+	}
+}
+
+class SyncText{
+	public static void main(String[] args){
+		Foo f1 = new Foo(1);
+		f1.start();
+		Foo f2 = new Foo(3);
+		f2.start();
+	}
+}
+
+// 类的同步
+// 同步一个全局对象或者对类进行同步
+// 不再对个别的类的实例同步而是对类进行同步。
+// 对Foo而言，它只有唯一的类定义，两个线程在相同的锁上同步，因此只有一个线程可以执行方法。
+// 这个代码也可以通过对公共对象加锁。
+class Foo extends Thread{
+
+	private int val;
+
+	public Foo(int v){
+		val = v;
+	}
+
+	public void printVal(int v){
+		synchronized(Foo.class){
+			while(true){
+				System.out.println(v);
+			}
+		}
+	}
+
+	public void run(){
+		printVal(val);
+	}
+}
+
+class Foo extends Thread{
+
+	private int val;
+	private static Object lock = new Object();
+
+	public Foo(int v){
+		val = v;
+	}
+
+	public void printVal(int v){
+		synchronized(lock){
+			while(true){
+				System.out.println(v);
+			}
+		}
+	}
+
+	public void run(){
+		printVal(val);
+	}
+}
+// 上面的同步粒度试试一个对象，比上上面的类定义要小
+
+class Foo extends Thread{
+
+	private String name;
+	private String val;
+
+	public Foo(String name,String v){
+		this.name = name;
+		val = v;
+	}
+
+	public void printVal(){
+		synchronized(val){
+			while(true){
+				System.out.println(name + val);
+			}
+		}
+	}
+
+	public void run(){
+		printVal();
+	}
+}
+
+public class SyncMethodTest{
+
+	public static void main(String[] args){
+		Foo f1 = new Foo("Foo1:","printVal");
+		Foo f2 = new Foo("Foo2:","printVal");
+		f1.start();
+		f2.start();
+	}
+}
 
 
 
