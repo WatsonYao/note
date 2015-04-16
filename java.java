@@ -9273,9 +9273,197 @@ class Resourse{
 	}
 }
 
+// 自定义viewGroup
 
+// 因为我们只需要支持margin，所以直接使用系统的
+public ViewGroup.LayoutParams getnerateLayoutParams(AttributeSet attrs){
+	return new MarginLayoutParams(getContext(),attrs);
+}
 
+protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
+	super.onMeasure(widthMeasureSpec,heightMeasureSpec);
 
+	// 获得它的父容器为它设置的测量模式和大小
+	int sizeWidth = MeasureSpec.getSize(widthMeasureSpec);
+	int sizeHeight = MeasureSpec.getSize(heightMeasureSpec);
+
+	int modeWidth = MeasureSpec.getMode(widthMeasureSpec);
+	int modeHeight = MeasureSpec.getMode(heightMeasureSpec);
+
+	int width = 0;
+	int height = 0;
+	int lineWidth = 0;
+	int lineHeight = 0;
+
+	int cCount = getChildCount();
+
+	for(int i=0; i<cCount; i++){
+		View child = getChildAt(i);
+		measureChild(child, widthMeasureSpec, heightMeasureSpec);
+		// 得到child的lp
+		MarginLayoutParams lp = (MarginLayoutParams) child.getLayoutParams();
+		// 当前子控件实际占据的宽度
+		int childWidth = child.getMeasureWidth() + lp.leftMargin + lp.rightMargin;
+		int childHeight = child.getMeasureHeight() + lp.topMargin + lp.bottomMargin;
+
+		// 如果加入当前child 则超出最大宽度
+		if(lineWidth + childWidth > sizeWidth){
+			width = Math.max(lineWidth,childWidth);
+			lineWidth = childWidth; 
+			height += lineHeight;
+			lineHeight = childHeight;
+		}else{
+			lineWidth += childWidth;
+			lineHeight = Math.max(lineHeight, childHeight);
+		}
+
+		// 如果是最后一个，则将当前记录的最大宽度和当前lineWidth比较
+		if(i == cCount - 1){
+			width = Math.max(width,lineWidth);
+			height += lineHeight;
+		}
+	}
+
+	setMeasureDimension(
+		(modeWidth == MeasureSpec.EXAXTLY) ? sizeWidth : width,
+		(modeHeight == MeasureSpec.EXAXTLY) ? sizeHeight : height
+		);
+}
+
+// onLayout中完成对所有childview的位置以及大小的指定
+
+// 存储所有的View，按行记录
+private List<List<View>> mAllViews = new ArrayList<List<View>>();
+// 记录每一行的最大高度
+private List<Integer> mLineHeight = new ArrayList<Integer>();
+
+protected void onLayout(boolean changed, int l, int t, int r, int b){
+	mAllViews.clear();
+	mLineHeight.clear();
+
+	int width = getWidth();
+
+	int lineWidth = 0;
+	int lineHeight = 0;
+
+	List<Viwe> lineViews = new ArrayList<View>();
+	int cCount = getChildCount();
+	for( int i=0; i< cCount; i++){
+		View child = getChildAt(i);
+		MarginLayoutParams lp = (MarginLayoutParams) child.getLayoutParams();
+		
+		int childWidth = child.getMeasuredWidth();
+		int childHeight = child.getMeasureHeight();
+
+		if(childWidth + lp.lef)
+	}
+
+}
+
+// 自定义 ViewGroup
+
+// ViewGroup会为childview指定测量模式：
+
+// 计算所有childView的宽度和高度，然后根据childView的计算结果，设置自己的宽和高
+
+protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
+
+	int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+	int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+
+	int sizeWidth = MeasureSpec.getSize(widthMeasureSpec);
+	int sizeHeight = MeasureSpec.getSize(heightMeasureSpec);
+
+	// 计算出所有childview的宽和高
+	measureChildren(widthMeasureSpec, heightMeasureSpec);
+	int width = 0;
+	int height = 0;
+
+	int cCount = getChildCount();
+
+	int cWidth = 0;
+	int cHeight = 0;
+
+	MarginLayoutParams cParams = null;
+
+	int lHeight = 0;
+	int rHeight = 0;
+
+	int tWidth = 0;
+	int bWidth = 0;
+
+	for(int i=0; i<cCount; i++){
+		View childView = getChildAt(i);
+		cWidth = childView.getMeasuredWidth();
+		cHeight = childView.getMeasureHeight();
+		cParams = (MarginLayoutParams) childView.getLayoutParams();
+
+		// 上面两个childview
+		if( i==0 || i==1){
+			twidth += cwidth + cParams.leftMargin + cParams.rightMargin;
+		}
+
+		if(i==2 || i == 3){
+			bWidth ++ cWith + cParams.leftMargin + cParams.rightMargin;
+		}
+
+		if(i == 1 || 1 == 3){
+			rHeight += cheight + cParams.topMargin + cParams.bottomMargin;
+
+		}
+	}
+
+	width = Math.max(tWidth, bWidth);
+	height = Math.max(lHeight,rHeight);
+
+	setMeasureDimension(
+		(widthMode == MeasureSpec.EXACTLY) ? sizeWidth  : width, 
+		(heightMode == MeasureSpec.EXACTLY) ? sizeHeight  : height
+		);
+
+	// onlayout对其所有childview进行定位
+	// 设置childview的绘制区域
+	protected void onLayout(boolean changed, int l, int t, int r, int b){
+
+		int cCount = getChildCount();
+
+		int cWidth = 0;
+		int cHeight = 0;
+		MarginLayoutParams cParams = null;
+
+		for( int i=0; i<cCount; i++){
+			View childView = getChildAt(i);
+			cWidth = childView.getMeasureWidth();
+			cHeight = childView.getMeasureHeight();
+			cParams = (MarginLayoutParams) childView.getLayoutParams();
+
+			int cl = 0; ct = 0; cr = 0; cb = 0;
+
+			switch(i){
+				case 0:  
+					cl = cParams.leftMargin;  
+					ct = cParams.topMargin;  
+					break;  
+				case 1:  
+					cl = getWidth() - cWidth - cParams.leftMargin  - cParams.rightMargin;  
+					ct = cParams.topMargin;  
+					break;  
+				case 2:  
+					cl = cParams.leftMargin;  
+					ct = getHeight() - cHeight - cParams.bottomMargin;  
+					break;  
+				case 3:  
+					cl = getWidth() - cWidth - cParams.leftMargin  - cParams.rightMargin;  
+					ct = getHeight() - cHeight - cParams.bottomMargin;  
+				break;  
+			}
+
+			cr = cl + cWidth;
+			cb = cHeight + ct;
+			childView.layout(cl, ct, cr, cb);
+		}
+	}
+}
 
 
 
