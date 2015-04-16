@@ -9441,20 +9441,20 @@ protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
 
 			switch(i){
 				case 0:  
-					cl = cParams.leftMargin;  
-					ct = cParams.topMargin;  
-					break;  
+				cl = cParams.leftMargin;  
+				ct = cParams.topMargin;  
+				break;  
 				case 1:  
-					cl = getWidth() - cWidth - cParams.leftMargin  - cParams.rightMargin;  
-					ct = cParams.topMargin;  
-					break;  
+				cl = getWidth() - cWidth - cParams.leftMargin  - cParams.rightMargin;  
+				ct = cParams.topMargin;  
+				break;  
 				case 2:  
-					cl = cParams.leftMargin;  
-					ct = getHeight() - cHeight - cParams.bottomMargin;  
-					break;  
+				cl = cParams.leftMargin;  
+				ct = getHeight() - cHeight - cParams.bottomMargin;  
+				break;  
 				case 3:  
-					cl = getWidth() - cWidth - cParams.leftMargin  - cParams.rightMargin;  
-					ct = getHeight() - cHeight - cParams.bottomMargin;  
+				cl = getWidth() - cWidth - cParams.leftMargin  - cParams.rightMargin;  
+				ct = getHeight() - cHeight - cParams.bottomMargin;  
 				break;  
 			}
 
@@ -9464,6 +9464,111 @@ protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
 		}
 	}
 }
+
+// 自定义drawable
+public class RoundImageDrawable extends Drawable  
+{  
+
+	private Paint mPaint;  
+	private Bitmap mBitmap;  
+
+	private RectF rectF;  
+
+	public RoundImageDrawable(Bitmap bitmap){  
+		mBitmap = bitmap;  
+		BitmapShader bitmapShader = new BitmapShader(bitmap, TileMode.CLAMP,  
+			TileMode.CLAMP);  
+		mPaint = new Paint();  
+		mPaint.setAntiAlias(true);  
+		mPaint.setShader(bitmapShader);  
+	}
+
+	@Override  
+	public void setBounds(int left, int top, int right, int bottom){  
+		super.setBounds(left, top, right, bottom);  
+		rectF = new RectF(left, top, right, bottom);  
+	}
+
+	public void draw(Canvas canvas)  {  
+		canvas.drawRoundRect(rectF, 30, 30, mPaint);  
+	} 
+
+	@Override  
+	public int getIntrinsicWidth()  
+	{  
+		return mBitmap.getWidth();  
+	}  
+
+	@Override  
+	public int getIntrinsicHeight()  
+	{  
+		return mBitmap.getHeight();  
+	}  
+
+	@Override  
+	public void setAlpha(int alpha)  
+	{  
+		mPaint.setAlpha(alpha);  
+	}  
+
+	@Override  
+	public void setColorFilter(ColorFilter cf)  
+	{  
+		mPaint.setColorFilter(cf);  
+	}  
+
+	@Override  
+	public int getOpacity()  
+	{  
+		return PixelFormat.TRANSLUCENT;  
+	}
+
+}
+
+// 自定义Drawable State
+public class MessageListItem extends RelativeLayout  {  
+
+	private static final int[] STATE_MESSAGE_READED = { R.attr.state_message_readed };  
+	private boolean mMessgeReaded = false;  
+
+	public MessageListItem(Context context, AttributeSet attrs)  {  
+		super(context, attrs);  
+	}  
+
+	public void setMessageReaded(boolean readed)  {  
+		if (this.mMessgeReaded != readed)  {  
+			mMessgeReaded = readed;  
+			refreshDrawableState();  
+		}  
+	}  
+
+	@Override  
+	protected int[] onCreateDrawableState(int extraSpace){
+
+		if (mMessgeReaded){  
+			final int[] drawableState = super.onCreateDrawableState(extraSpace + 1);  
+			mergeDrawableStates(drawableState, STATE_MESSAGE_READED);  
+			return drawableState;  
+		}  
+
+		return super.onCreateDrawableState(extraSpace);  
+	}  
+}  
+
+//@Override  
+public View getView(int position, View convertView, ViewGroup parent){
+
+	if (convertView == null)  {  
+		convertView = mInflater.inflate(R.layout.item_msg_list,parent, false);  
+	}
+
+	MessageListItem messageListItem = (MessageListItem) convertView;  
+	TextView tv = (TextView) convertView.findViewById(R.id.id_msg_item_text);  
+	tv.setText(getItem(position).message);  
+	messageListItem.setMessageReaded(getItem(position).readed); 
+
+	return convertView;  
+}  
 
 
 
