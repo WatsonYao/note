@@ -9570,6 +9570,166 @@ public View getView(int position, View convertView, ViewGroup parent){
 	return convertView;  
 }  
 
+// 动态代理
+
+public class ProxyDemo {  
+
+    /** 
+     * @param args 
+     * @throws Exception 
+     */  
+    public static void main(String[] args) throws Exception {  
+        // TODO Auto-generated method stub  
+    	Class clazzProxy1 = Proxy.getProxyClass(Collection.class.getClassLoader(), Collection.class);  
+    	System.out.println(clazzProxy1);  
+
+    	System.out.println("----------get constructors----------");  
+        // 得到代理类的所有构造方法  
+    	Constructor[] constructors = clazzProxy1.getConstructors();  
+    	for (Constructor constructor : constructors) {  
+    		String name = constructor.getName();  
+    		StringBuilder sb = new StringBuilder(name);  
+    		sb.append('(');  
+    			Class[] clazzParams = constructor.getParameterTypes();  
+    			for (Class clazzParam : clazzParams) {  
+    				sb.append(clazzParam.getName()).append(',');  
+    			}  
+    			if (clazzParams != null && clazzParams.length != 0)  
+    				sb.deleteCharAt(sb.length() - 1);  
+    			sb.append(')');  
+    			System.out.println(sb);  
+    		}  
+
+    		System.out.println("----------get methods----------");  
+        // 得到所有代理类的方法以及参数类型  
+    		Method[] methods = clazzProxy1.getMethods();  
+    		for (Method method : methods) {  
+    			String name = method.getName();  
+    			StringBuilder sb = new StringBuilder(name);  
+    			sb.append('(');  
+    				Class[] clazzParams = method.getParameterTypes();  
+    				for (Class clazzParam : clazzParams) {  
+    					sb.append(clazzParam.getName()).append(',');  
+    				}  
+    				if (clazzParams != null && clazzParams.length != 0)  
+    					sb.deleteCharAt(sb.length() - 1);  
+    				sb.append(')');  
+    				System.out.println(sb);  
+    			}  
+        //得到代理类的构造方法。  
+    			Constructor constructor = clazzProxy1.getConstructor(InvocationHandler.class);  
+        //实例化代理类，其中参数是个实现InvocationHandler()接口的对象  
+    			Collection proxy1 = (Collection) constructor.newInstance(new InvocationHandler() {  
+    				ArrayList arr = new ArrayList();  
+
+    				@Override  
+    				public Object invoke(Object proxy, Method method,  
+    					Object[] args) throws Throwable {  
+                        // TODO Auto-generated method stub  
+                        //系统功能函数  
+    					long beginTime = System.currentTimeMillis();  
+                        //功能函数，返回得到的对象。  
+    					Object retVal = method.invoke(arr, args);  
+    					long endTime = System.currentTimeMillis();  
+    					System.out.println(method.getName() + ":"  
+    						+ (endTime - beginTime));  
+    					return retVal;  
+    				}  
+    			});  
+    			proxy1.add("xyz");  
+    			proxy1.add("lee");  
+    			proxy1.add("com");  
+    			System.out.println(proxy1.size());  
+    		}  
+    	}
+
+// 关于泛型
+// 利用反射，跳过编译器的泛型检查
+Class clazz = list.getClass();
+Method addMethod = clazz.getMethod("add",Object.class);
+addMethod.invoke(list,"xyz");
+
+// 迭代器
+public static void main(String[] args){
+	ArrayList al = new ArrayList();
+	al.add("java01");
+	al.add("java02");
+	al.add("java03");
+
+	ListIterator li = al.listIterator();
+	while(li.hasNext()){
+		Obejct obj = li.next();
+		if(obj.equals("java02")){
+			li.set("java006");
+		}
+	}
+
+	while(li.hasPrevious()){
+		// ...
+	}
+}
+
+// map按照键排序
+Map<String,String> map = new HashMap<String,String>();
+map.put("01","zhangsan1");
+map.put("02","zhangsan2");
+map.put("03","zhangsan3");
+map.put("04","zhangsan4");
+
+Set<Map.Entry<String,String>> entrySet = map.entrySet();
+Iterator<Map.Entry<Stirng,String>> it = entrySet.iterator();
+while(it.hasNext()){
+	Map.Entry<String,String> me = it.next();
+}
+
+// 线程池
+public class WorkQueue{
+
+	private final int nThreads;
+	private final LinkedList queue;
+
+	public WorkQueue(int nThreads){
+		this.nThreads = nThreads;
+		queue = new LinkedList();
+		threads = new PoolWorker[nThreads];
+		for(int i=0; i<nThreads; i++){
+			threads[i] = new PoolWorker();
+			threads[i].start();
+		}
+	}
+
+	public void execute(Runnable r){
+		synchronized(queue){
+			queue.addLast(r);
+			queue.notify();
+		}
+	}
+
+	private class PoolWorker extends Thead{
+		public void run(){
+			Runnable r;
+			while(true){
+				synchronized(queue){
+					while(queue.isEmpty){
+						try{
+							queue.wait();
+						}catch(InterruptedException ignored){
+
+						}
+					}
+
+					r = (Runnable) queue.removeFirst();
+				}
+
+				try{
+					r.run();
+				}catch(RuntimeException e){
+
+				}
+			}
+		}
+	}
+}
 
 
 
@@ -9581,4 +9741,135 @@ public View getView(int position, View convertView, ViewGroup parent){
 
 
 
+public final class ThreadPool{
 
+	private static int worker_num = 5;
+	private WorkThread[] workThreads;
+	private static volatile int finished_task = 0;
+	private List<Runnable> taskQueue = new LinkedList<Runnable>();
+	private static ThreadPool threadPool;
+
+	private ThreadPool(){
+		this(5);
+	}
+
+	private ThreadPool(int worker_num){
+		ThreadPool.worker_num = worker_num;
+		workThreads = new WorkThread[worker_num];
+		for(int i=0; i<worker_num; i++){
+			workThreads[i] = new WorkThread();
+			workThreads[i].start();
+		}
+	}
+
+	public static ThreadPool getThreadPool(){
+		return getThreadPool(ThreadPool.worker_num);
+	}
+
+	public static ThreadPool getThreadPool(int worker_num){
+		if(worker_num <= 0){
+			worker_num = ThreadPool.worker_num;
+		}
+		if(threadPool == null){
+			threadPool = new ThreadPool(worker_num1);
+		}
+
+		return threadPool;
+	}
+
+	// 执行任务，就是把任务加到任务列队，什么时候执行由线程池管理决定
+	public void execute(Runnable task){
+		synchronized(taskQueue){
+			taskQueue.add(task);
+			taskQueue.notify();
+		}
+	}
+
+	// 批量执行任务，其实就是把任务加入到任务列队，什么时候执行有线程池决定
+	public void execute(Runnable[] task){
+		synchronized(taskQueue){
+			for(Runnable t : task){
+				taskQueue.add(t)
+			}
+			taskQueue.notify();
+		}
+	}
+
+	public void execute(List<Runnable> task){
+		synchronized(taskQueue){
+			for(Runnable t : task){
+				taskQueue.add(t);
+			}
+			taskQueue.notify();
+		}
+	}
+
+	public void destory(){
+		while(!taskQueue.isEmpty){
+			try{
+				Thread.sleep(10);
+			}catch(InterruptedException e){
+				e.printStackTrace;
+			}
+		}
+
+		for( int i = 0; i< worker_num; i++){
+			workThreads[i].stopWorker();
+			workThreads[i] = null;
+		}
+
+		threadPool = null;
+		taskQueue.clear();
+	}
+
+	public int getWorkThreadNumber(){
+		return worker_num;
+	}
+
+	public int getFinishedTasknumber(){
+		return finished_task;
+	}
+
+	public int getWaitTaskNumber(){
+		return taskQueue.size();
+	}
+
+	public String toString(){
+		// return ... 
+	}
+
+	private class WorkThread extends Thread{
+
+		private boolean isRunning = true;
+
+		public void stopWorker(){
+			isRunning = false;
+		}
+
+		public void run(){
+			Runnable r = null;
+			while(isRunning){
+				synchronized(taskQueue){
+					while(isRunning && taskQueue.isEmpty()){
+						try{
+							taskQueue.wait(20);
+						}catch(){
+
+						}
+					}
+
+					if(!taskQueue.isEmpty()){
+						r = taskQueue.remove(0);
+					}
+
+					if(r != null){
+						r.run();
+					}
+
+					finished_task++;
+					r = null;
+				}
+			}
+		}
+	}
+}
