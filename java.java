@@ -9873,3 +9873,206 @@ public final class ThreadPool{
 		}
 	}
 }
+
+// 手表处理
+// 当用户选择表盘时，穿戴设备会显示表盘，在必要时，并且调用他的service回调函数。
+// You can only use the invalidate() method in the main UI thread.
+// To invalidate the canvas from another thread, call the postInvalidate() method.
+
+// Declare variables for a custom timer, graphic objects, and other elements.
+// Initialize the watch face elements in the Engine.onCreate() method.
+// Initialize the custom timer in the Engine.onVisibilityChanged() method.
+
+public class AnalogWatchFaceService extends CanvasWatchFaceService{
+
+    @Override
+    public Engine onCreateEngine() {
+        /* provide your watch face implementation */
+        return new Engine();
+    }
+
+    /* implement service callback methods */
+    private class Engine extends CanvasWatchFaceService.Engine {
+
+        static final int MSG_UPDATE_TIME = 0;
+        Time mTime;
+        boolean mLowBitAmbient;
+
+        Bitmap mBackgroundBitmap;
+        Bitmap mBackgroundScaledBitmap;
+        Paint mHourPaint;
+        Paint mMinutePaint;
+
+        final Handler mUpdateTimeHandler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                //super.handleMessage(msg);
+                switch (msg.what){
+                    case MSG_UPDATE_TIME:
+                        invalidate();
+                        if(shouldTimerBeRunning()){
+                            long timeMs = System.currentTimeMillis();
+                            long delayMs = INTERACTIVE_UPDATE_RATE_MS - (timeMs%INTERACTIVE_UPDATE_RATE_MS);
+                            mUpdateTimeHandler.sendEmptyMessageDelayed(MSG_UPDATE_TIME,delayMs);
+                        }
+                        break;
+                }
+            }
+        };
+
+        final BroadcastReceiver mTimeZoneReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                mTime.clear(intent.getStringExtra("time-zone"));
+                mTime.setToNow();
+            }
+        };
+
+        @Override
+        public void onCreate(SurfaceHolder holder) {
+            super.onCreate(holder);
+            /* initialize your watch face */
+
+            setWatchFaceStyle(new WatchFaceStyle.Builder(AnalogWatchFaceService.this)
+                .setCardPeekMode(WatchFaceStyle.PEEK_MODE_SHORT)
+                .setBackgroundVisibility(WatchFaceStyle.BACKGROUND_VISIBILITY_INTERRUPTIVE)
+                .setShowSystemUiTime(false).build()
+            );
+
+            Resources resources = AnalogWatchFaceService.this.getResources();
+            Drawable backgroundDrawable = resources.getDrawable(R.drawable.bg);
+            mBackgroundBitmap = ((BitmapDrawable)backgroundDrawable).getBitmap();
+
+            mHourPaint = new Paint();
+            mHourPaint.setARGB(255,200,200,200);
+            mHourPaint.setStrokeWidth(5.0f);
+            mHourPaint.setAntiAlias(true);
+            mHourPaint.setStrokeCap(Paint.Cap.ROUND);
+
+            mTime = new Time();
+        }
+
+        @Override
+        public void onPropertiesChanged(Bundle properties) {
+            super.onPropertiesChanged(properties);
+            /* get device features (burn-in, low-bit ambient) */
+            mLowBitAmbient = properties.getBoolean(PROPERTY_LOW_BIT_AMBIENT,false);
+            mBurnInProtection = properties.getBoolean(PROPERTY_BURN_IN_PROTECTION,false);
+        }
+
+        @Override
+        public void onTimeTick() {
+            super.onTimeTick();
+            /* the time changed */
+
+            invalidate();
+        }
+
+        @Override
+        public void onAmbientModeChanged(boolean inAmbientMode) {
+            super.onAmbientModeChanged(inAmbientMode);
+            /* the wearable switched between modes */
+            if(mLowBitAmbient){
+                boolean antiAlias = !inAmbientMode;
+                mHourPaint.setAntiAlias(antiAlias);
+                mMinutePaint.setAntiAlias(antiAlias);
+                mSecondPaint.setAntiAlias(antiAlias);
+                mTickPaint.setAntiAlias(antiAlias);
+            }
+
+            invalidate();
+            updateTimer();
+        }
+
+        @Override
+        public void onDraw(Canvas canvas, Rect bounds) {
+            /* draw your watch face */
+            mTime.setToNow();
+
+            int width = bounds.width();
+            int height = bounds.height();
+
+            if(mBackgroundScaledBitmap == null
+                    || mBackgroundScaledBitmap.getWidth()!= width
+                    || mBackgroundScaledBitmap.getHeight() != height){
+                mBackgroundScaledBitmap = Bitmap.createScaledBitmap(mBackgroundBitmap,width,height,true);
+            }
+
+            canvas.drawBitmap(mBackgroundScaledBitmap,0,0,null);
+
+            float centerX = width/2f;
+            float centerY = height/2f;
+
+            float secRot = mTime.second/30f*(float)Math.PI;
+            int minutes = mTime.minute;
+            float minRot = minutes/30f*(float)Math.PI;
+            float hrRot = ((mTime.hour + (minutes/60f))/6f)*(float)Math.PI;
+
+            float secLength = centerX - 20;
+            float minLength = centerX - 40;
+            float hrLength = centerX - 80;
+
+            if(!isInAmbientMode()){
+                float secX = (float)Math.sin(secRot)*secLength;
+                float secY = (float)-Math.cos(secRot)*secLength;
+                canvas.drawLine(centerX,centerY,centerX+secX,centerY+secY,mSecondPaint);
+            }
+
+            float minX = (float)Math.sin(minRot)*minLength;
+            float minY = (float)-Math.cos(minRot)*minLength;
+            canvas.drawLine(centerX,centerY,centerX+minX,centerY+minY,mMinutePaint);
+
+            float hrX = (float)Math.sin(hrRot)*hrLength;
+            float hrY = (float)-Math.cos(hrRot)*hrLength;
+            canvas.drawLine(centerX,centerY,centerX+hrX,centerY+hrY,mHourPaint);
+
+
+        }
+
+        @Override
+        public void onVisibilityChanged(boolean visible) {
+            super.onVisibilityChanged(visible);
+            /* the watch face became visible or invisible */
+            if(visible){
+                // registerReceiver();
+
+                mTime.clear(TimeZone.getDefault().getID());
+                mTime.setToNow();
+            }else{
+                // unregisterReceiver();
+            }
+
+            updateTimer();
+        }
+
+
+        private void updateTimer(){
+            mUpdateTimeHandler.removeMessages(MSG_UPDATE_TIME);
+            if(shouldTimerBeRunning()){
+                mUpdateTimeHandler.sendEmptyMessage(MSG_UPDATE_TIME);
+            }
+        }
+
+        private boolean shouldTimerBeRunning(){
+            return isVisible() && !isInAmbientMode();
+        }
+
+        private void registerReceiver(){
+            if(mRegisteredTimeZoneReceiver){
+                return;
+            }
+            mRegisteredTimeZoneReceiver = true;
+            IntentFilter filter = new IntentFilter(Intent.ACTION_TIMEZONE_CHANGED);
+            AnalogWatchFaceService.this.registerReceiver(mTimeZoneReceiver,filter);
+        }
+
+        private void unregisterReceiver(){
+            if(!mRegisteredTimeZoneRecevier){
+                return;
+            }
+
+            mRegisteredTimeZoneReceiver = false;
+            AnalogWatchFaceService.this.unregisterReceiver(mTimeZoneReceiver);
+        }
+    }
+}
