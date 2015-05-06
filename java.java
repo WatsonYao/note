@@ -1329,6 +1329,25 @@ Shape: view.clipToOutline()
 Ripples
 android:foreground="?android:attr/selectableItemBackground"
 
+<?xml version="1.0" encoding="utf-8"?>
+<ripple android:color="@color/flat_pressed">
+    <item
+        android:id="@android:id/mask"
+        android:drawable="@drawable/btn_flat_normal"/>
+</ripple>
+
+<?xml version="1.0" encoding="utf-8"?>
+<selector 
+    android:exitFadeDuration="400"
+    android:enterFadeDuration="400">
+
+    <item android:drawable="@drawable/btn_flat_pressed"
+          android:state_pressed="true" />
+
+    <item android:drawable="@android:color/transparent" />
+
+</selector>
+
 public boolean onTouchEvent(MotionEvent event){
 	switch(event.getAction()){
 		case MotionEvent.ACTION_DOWN:
@@ -10076,3 +10095,51 @@ public class AnalogWatchFaceService extends CanvasWatchFaceService{
         }
     }
 }
+
+// 关于z轴高度
+float raisedElevation = getContext().getResources().getDimension(R.dimen.raised_elevation);
+myImageView.setOnTouchListener(new View.OnTouchListener(){
+	public boolean onTouch(View view,MotionEvent motionEvent){
+		int action = motionEvent.getActionMasked();
+
+		switch(action){
+			case MotionEvent.ACTION_DOWN:
+				view.animate().setDuration(100).translationZ(raisedElevation);
+				return true;
+			case MotionEvent.ACTION_UP:
+				view.animate().setDuration(100).translationZ(0);
+				return true;
+		}
+		return false;
+	}
+});
+
+// StateListAnimator
+<ImageView
+	android:elevation="2dp"
+	android:stateListAnimator="@anim/my_state_list_animator"/>
+
+<selector>
+	<item 
+		android:state_pressed="true"
+		android:state_enabled="true">
+			<objectAnimator
+				android:propertyName="translationZ"
+				android:valueTo="6dp"
+				android:valueType="floatType" />
+	</item>
+	<item>
+		<objectAnimator 
+			android:propertyName="translationZ"
+			android:valueTo="0"
+			android:valueType="floatType" />
+	</item>
+<selector>
+
+// 共享移动
+<ImageView
+	android:transitionName="@transition/my_transition"/>
+	// 也可以用代码
+	ViewCompat.setTransitionName(mHeaderImageView,VIEW_NAME_HEADER_IMAGE);
+ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this,mHeaderImageView,VIEW_NAME_HEADER_IMAGE);
+startActvity(intent,options.toBundle());
