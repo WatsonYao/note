@@ -10143,3 +10143,282 @@ myImageView.setOnTouchListener(new View.OnTouchListener(){
 	ViewCompat.setTransitionName(mHeaderImageView,VIEW_NAME_HEADER_IMAGE);
 ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this,mHeaderImageView,VIEW_NAME_HEADER_IMAGE);
 startActvity(intent,options.toBundle());
+
+// 关于xml预览的一些技巧
+xmlns:tools="http://schemas.android.com/tools"
+
+tools:text="I am a title"
+
+tools:context="com.android.example.MainActivity"
+
+// 在listview等布局中
+tools:listheader="@layout/list_header"
+tools:listitem="@layout/list_item"
+tools:listfooter="@layout/list_footer"
+
+// 在merge布局中使用 可以现实整合后的布局
+tools:showIn="@layout/activity_main"
+
+// 自定义控件
+protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
+	setMeasureDimension(
+		getDefaultSize(getSuggestedMinimumWidth(),widthMeasureSpec),
+		getDefaultSize(getSuggestedMinimumHeight(),heightMeasureSpec)
+	);
+}
+
+
+// 调用ViewGroup类中测量子类的方法
+measureChilren(widthMeasureSpec,heightMeasureSpec);
+protected void measureChildren(int widthMeasureSpec, int heightMeasureSpec){
+	final int size = mChildrenCount;
+	final View[] children = mChildren;
+	for(int i=0; i<size; ++i){
+		final View child = children[i];
+		if((child.mViewFlags & VISIBLE_MASK) != GONE){
+			measureChild(child,widthMeasureSpec,heightMeasureSpec);
+		}
+	}
+}
+
+protected void measureChild(View child, int parentWidthMeasureSpec,int parentHeightMeasureSpec){
+	// 获得子视图的布局参数
+	final LayoutParams lp = child.getLayoutParams();
+
+	// getChildMeasureSpec 获得最终的宽高详细测量值
+	final int childWidthMeasureSpec = getChildMeasureSpec(parentWidthMeasureSpec,mPaddingLeft + mPaddingRight, lp.width);
+	final int childHeightMeasureSpec = getChildMeasureSpec(parentHeightMeasureSpec,mPaddingTop + mPaddingBottom, lp.height);
+
+	child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
+}
+
+// 子view的确切大小由两方面共同决定：
+// 1.父view的MeasureSpec 
+// 2.子view的LayoutParams属性
+
+public class MyScrollView extends ScrollView{
+
+	int columns = 0;
+
+	public MyScrollView(Context context){
+		super(context);
+	}
+
+	public MyScrollView(Context context, AttributeSet attrs){
+		super(context, attrs);
+		TypedArray typedArray = context.obtainStyledAttributes(attrs,R.styleable.MyScrollView);
+		columns = typedArray.getInteger(R.styleable.MyScrollView_columns,0);
+		typedArray.recycle();
+
+		initView(columns);
+
+	}
+
+	private void initView(int columns){
+		LinearLayout linearLayout = new LinearLayout(getContext());
+		linearLayout.setOrientation(LinearLayout.VERTICAL);
+
+		linearLayout.addView(new AutoCardLayout(getContext(),columns));
+		addView(linearLayout,new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
+	}
+}
+
+public class AutoCardLayout extends ViewGroup{
+
+	int column = 0;
+	int margin = 20;
+
+	public AutoCardLayout(Context context,int columns){
+		super(context);
+		this.column = columns;
+		View v1 = LayoutInflater.from(context).inflate(R.layout.card_layout1,null);
+		// v2345
+		addView(v1, new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
+	}
+
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
+
+		int width = MeasureSpec.getSize(widthMeasureSpec);
+	}
+}
+
+public class SmartImageView extends ImageView{
+
+	public SmartImageView(Context context, AttributeSet attrs,  
+            int defStyleAttr, int defStyleRes) {  
+        super(context, attrs, defStyleAttr, defStyleRes);  
+    }  
+  
+    public SmartImageView(Context context, AttributeSet attrs, int defStyle) {  
+        super(context, attrs, defStyle);  
+    }  
+  
+    public SmartImageView(Context context, AttributeSet attrs) {  
+        super(context, attrs);  
+    }  
+  
+    public SmartImageView(Context context) {  
+        super(context);  
+    }  
+  
+
+  	private float ratio = 2.43f;
+
+  	public void setRatio(float ratio){
+  		this.ratio = ratio;
+  	}
+
+  	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
+
+  		int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+  		int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+
+  		int width = MeasureSpec.getSize(widthMeasureSpec) - getPaddingLeft() - getPaddingRight();
+  		int height = MeasureSpec.getSize(heightMeasureSpec) - getPaddingTop() - getPaddingBottom();
+
+  		if(widthMode == MeasureSpec.EXACTLY && heightMode != MeasureSpec.EXACTLY && ratio != 0.0f){
+  			height = (int) ( width / ratio + 0.5f);
+  			heightMeasureSpec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY);
+  		}else if( widthMode != MeasureSpec.EXACTLY && heightMode == MeasureSpec.EXACTLY && ratio != 0.0f){
+  			width = (int) (height*ratio + 0.5f);
+  			widthMeasureSpec = MeasureSpec.makeMeasureSpec(width,MeasureSpec.EXAXTLY);
+  		}
+
+  		super.onMeasure(widthMeasureSpec,heightMeasureSpec);
+  	}
+}
+
+// retrofit的用法
+{
+  "code": 200,
+  "error_message": null,
+  "data":
+  {
+      "text": "Hey ! This is a text message :)",
+      "value": 4242
+  }
+}
+
+public class ItemTypeAdapterFactory implements TypeAdapterFactory{
+
+	public <T> TypeAdapter<T> create(Gson gson, final TypeToken<T> type){
+
+		final TypeAdapter<T> delegate = gson.getDelegateAdapter(this, type);
+		final TypeAdapter<JsonElement> elementAdapter = gson.getAdapter(JsonElement.class);
+
+		return new TypeAdapter<T>(){
+
+			public void write(JsonWriter out, value) throws IOException{
+				delegate.write(out,value);
+			}
+
+			public T read(JsonReader in) throws IOException{
+
+				JsonElement jsonElement = elementAdapter.read(in);
+				if(jsonElement.isJsonObject()){
+					JsonObject jsonObject = jsonElement.getAsJsonObject();
+					if( jsonObject.has("data") && jsonObject.get("data").isJsonObject()){
+						jsonElement = jsonObject.get("data");
+					}
+				}
+
+				return delegate.fromJsonTree(jsonElement);
+			}
+		}.nullSafe();
+	}
+}
+
+public class RestClient{
+
+	private static final String BASE_URL = "xxx";
+	private ApiService apiService;
+
+	public RestClient(){
+		Gson gson = new GsonBuilder()
+			.registerTypeAdapterFactory(new ItemTypeAdapterFactory())
+			.setDateFormat()
+			.create();
+
+		RestAdapter restAdapter = new RestAdapter.Builder()
+			.setEndpoint()
+			.setConverter(new GsonConverter(gson))
+			.setRequestInterceptor(new SessionRequestInterceptor())
+			.build();
+
+		apiService = restAdapter.create(ApiService.class);
+	}
+
+	public ApiService getApiService(){
+		return apiService;
+	}
+}
+
+@Parcel
+public class RestError{
+	@serializedName("code")
+	private Integer code;
+
+	@serializedName("error_message")
+	private String strMessage;
+
+	public RestError(String strMessage){
+		this.strMessage = strMessage;
+	}
+
+	// getters and setters
+}
+
+public abstract class RestCallback<T> implements Callback<T>{
+
+	public abstract void failure(RestError restError);
+
+	public void failure(RetrofitError error){
+		RestError restError = (RestError) error.getBodyAs(RestError.class);
+
+		if(restError != null){
+			failure(restError);
+		}else{
+			failure(new RestError(error.getMessage()));
+		}
+	}
+}
+
+// 带业务逻辑的json解析
+String json = new String(response.data,HttpHeaderParser.parseCharset(response.header));
+JsonPraser parser = new JsonParser();
+JsonObject root = parser.parse(json).getAsJsonObject();
+int code = root.get("code").getAsInt();
+String message = root.get("message").getAsString();
+if(code == HttpStatus.SC_OK){
+	return parseNetworkResponse(root, response);
+}else{
+	return Respsonse.error(new NetError(code,message));
+}
+
+// 自定义retrofit的数据转换器
+public class MyConverter implements Converter{
+
+	public Obejct fromBody(TypedInput body, Type type)throws ConversionException{
+		StringBuffer result = new StringBuffer();
+		try{
+			InputStream is = body.in();
+			byte[] buffer = new byte[1024];
+			while(is.read(buffer)! = -1){
+				result.append(new String(buffer,"UTF-8"));
+			}
+		}catch(){
+
+		}
+
+		return result;
+	}
+
+	public TypedOutput toBody(Object object){
+		return null;
+	}
+}
+
+RestAdapter restAdapter = new RestAdapter.builder()
+	.setEndpoint("url");
+	.setConverter(new MyConverter())
+	.build();
