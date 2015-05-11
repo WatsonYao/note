@@ -10422,3 +10422,28 @@ RestAdapter restAdapter = new RestAdapter.builder()
 	.setEndpoint("url");
 	.setConverter(new MyConverter())
 	.build();
+
+
+// 关于webview里面获取cookies
+HttpResponse response = client.execute(post);
+
+if(response.getStatusLine().getStatusCode() == 200){
+	AbstractHttpClient absClient = (AbstractHttpClient).client;
+	List<Cookie> cookies = absClient.getCookieStore().getCookies();
+
+	for(Cookie cookie: cookies){
+		Message message = new Message();
+		message.obj = cookie;
+		handle.sendMessage(message);
+	}
+}
+
+public void handleMessage(Message msg){
+	CookieSyncManager.createInstance(MainActivity.this);
+	CookieManger cookieManger = CookieManger.getInstance();
+	cookieManger.setAcceptCookie(true);
+	cookieManger.setCookie("http://xxx:yyy/webs",msg.obj.toString());
+	CookieSyncManager.getInstance().sync();
+
+	webview.loadUrl("xxx");
+}
