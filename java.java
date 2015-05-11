@@ -10447,3 +10447,8 @@ public void handleMessage(Message msg){
 
 	webview.loadUrl("xxx");
 }
+
+// webview js方法 混淆
+-keep public class com.xxx.yyy{
+	public <methods>;
+}
