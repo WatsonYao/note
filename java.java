@@ -10452,3 +10452,81 @@ public void handleMessage(Message msg){
 -keep public class com.xxx.yyy{
 	public <methods>;
 }
+
+// gogole now 索引app
+<activity
+	android:name="com.xx.yyA"
+	android:label="@string/title_xxx">
+
+	<intent-filter android:label="@string/xxx">
+		<action android:name="android.intent.action.VIEW" />
+		<category android:name="android.intent.category.DEFAUTL" />
+		<category android:name="android.intent.category.BROWSABLE" />
+		<!-- accepts URIs that begin with "http://example.com/xxx"-->
+		<data 	android:scheme="http"
+				android:host="example.com"
+				android:pathPrefix="/gizoms" />
+	</intent-filter>
+
+</activity>
+
+public void onstart(){
+	AppIndex.AppIndexApi.view(client,this,APP_URI,TITLE,WEB_URL,outlinks);
+}
+
+public void onStop(){
+	AppIndex.AppIndexApi.viewEnd(client,this,APP_URI);
+}
+
+// 然后去play console 里面确认website
+<link rel="alternate" herf="android-app://com.exanple/http/example.com/gizmos" />
+// 协议 package scheme hostPath
+
+
+// socket 实时通讯
+private Socket mSocket;
+private boolean isStartRecieveMsg;
+
+private SocketHandler mHandler;
+
+protected BufferReader mReader;
+protected BufferWriter mWriter;
+
+private void initSocket(){
+	Thead thread = new Thread(new Runnable(){
+		public void run(){
+			String ip = xxx;
+			int port = xxx;
+			try{
+				mSocket = new Socket(ip,post);
+				mReader = new BufferReader(new InputStreamReader(mSocket.getInputStream(),"utf-8"));
+				mWriter = new BufferWriter(new OutputStreamWriter(mSocket.getOutputStream(),"utf-8"));
+
+				while(isStartRecieveMsg){
+					if(mReader.ready()){
+						String data = mReader.readLine();
+						mHandler.obtainMessage(0,data).sendToTarget();
+					}
+					Thread.sleep(200);
+				}
+				mWriter.close();
+				mReader.close();
+				mSocket.close();
+			}
+		}
+	});
+	thread.start();
+}
+
+protected void sendMsg(){
+	try{
+		String socketID = xx;
+		String msg = xxx;
+		JSONObject json = new JSONObject();
+		json.put("to",socketID);
+		json.put("msg",msg);
+		mWriter.write(json.toString()+"\n");
+		mWriter.flush();
+		
+	}
+}
