@@ -10527,6 +10527,168 @@ protected void sendMsg(){
 		json.put("msg",msg);
 		mWriter.write(json.toString()+"\n");
 		mWriter.flush();
-		
+
 	}
 }
+
+// 心跳请求
+/** 心跳请求包发送 */
+	public void XtMessage() throws IOException {
+
+		short pantSize = 4;
+		short pantCmd = 0x1003;
+		// short 转byte
+		byte pantSize2[] = FormatTransfer.shortToBytes(pantSize);
+		byte pantCmd2[] = FormatTransfer.shortToBytes(pantCmd);
+		byte sendByte2[] = new byte[4];
+		System.arraycopy(pantSize2, 0, sendByte2, 0, pantSize2.length);
+		System.arraycopy(pantCmd2, 0, sendByte2, 2, pantCmd2.length);
+		ByteBuffer pantBuff = ByteBuffer.wrap(sendByte2);
+		// log.i("sendByte = " + sendByte2);
+		// log.i("sendByte length = " + sendByte2.length);
+		if (JYConst.socketChannel == null) {
+			log.i("socketChannel == null");
+			// initialize();
+			init2();
+		} else {
+			if (JYConst.socketChannel.isConnected()) {
+				// log.i("心跳请求包 channel.isConnected");
+				try {
+					JYConst.socketChannel.write(pantBuff);
+					// //Log.i("log", "心跳请求包 channel.write");
+				} catch (Exception e) {
+					// TODO: handle exception
+					// //Log.i("log", "通道已断开");
+
+					init2();
+					// initialize();
+				}
+
+			} else {
+				running = false;
+			}
+		}
+	}
+
+
+
+private Selector selector;
+
+JYConst.socketChannel = null;
+selector = null;
+
+if ("simu".equals(logintype)) {// 连接模拟
+	JYConst.socketChannel = SocketChannel.open(new InetSocketAddress(JYConst.hostIp,
+			JYConst.hostListenningPort));
+} else if ("real".equals(logintype)) {// 连接真实
+	JYConst.socketChannel = SocketChannel.open(new InetSocketAddress(
+			JYConst.hostIp_real, JYConst.hostListenningPort_real));
+} else if ("simu_dasai".equals(logintype)) {// 模拟大赛
+	// 判断单双号
+	if (lastname12 == 1) {// 单号
+		log.i("init2 单号 7021");
+		JYConst.socketChannel = SocketChannel.open(new InetSocketAddress(
+				JYConst.hostIp_dasai, JYConst.hostListenningPort_dasai_1));
+	} else if ((lastname12 == 0)) {
+		log.i("init2 双号 7022");
+		JYConst.socketChannel = SocketChannel.open(new InetSocketAddress(
+				JYConst.hostIp_dasai, JYConst.hostListenningPort_dasai_2));
+	}
+
+}
+
+JYConst.socketChannel.configureBlocking(false);
+JYConst.socketChannel.socket().setSoTimeout(30000);
+selector = Selector.open();
+JYConst.socketChannel.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+
+// 初始化读取线程
+if (running) {
+
+	tcpcClientReadThread = new TCPClientReadThread(selector);
+	tcpThread = new Thread(tcpcClientReadThread, "TCPClientRead Thread");
+	tcpThread.start();
+
+	// log.i("new TCPClientReadThread run");
+}
+
+// 如果已经登录
+if (TradingJY.now_in_tabhost) {
+	// 通知重新登录
+	Intent intent2 = new Intent();
+	intent2.setAction("android.intent.action.JD_JY_relogin");// action与接收器相同
+	log.i("-------广播 socket断开需重新登录 --------");
+	sendBroadcast(intent2);
+}
+
+public class TCPClientReadThread implements Runnable {
+		private Selector selector;
+
+		public TCPClientReadThread(Selector selector) {
+			this.selector = selector;
+		}
+
+		public void run() {
+			try {
+				log.i("TCP buffer read run");
+
+				if (!TradingJY.now_in_tabhost) {
+					// 发送一个TcpService服务启动完毕的通知
+					Intent intent2 = new Intent();
+					intent2.setAction("android.intent.action.JD_JY_TCP_SERVICE");// action与接收器相同
+					log.i("-------广播 TCP服务已经启动完毕 --------");
+					sendBroadcast(intent2);
+				}
+
+				while (selector.select() > 0 && running) {
+					for (SelectionKey sk : selector.selectedKeys()) {
+						if (sk.isReadable()) {
+							// log.i("后台服务 isReadable()");
+							SocketChannel sc = (SocketChannel) sk.channel();
+							ByteBuffer buffer = ByteBuffer.allocate(JYConst.BUFFER_LENGTH);
+							sc.read(buffer);
+
+							int bufferremain = buffer.remaining();
+							int infosize = JYConst.BUFFER_LENGTH - bufferremain;
+							//Log.i("log","infosize = " + infosize);
+							log.i("一次读取buffer总长度 " + infosize);
+							buffer.flip();
+
+							while (buffer.remaining() > 3) {
+								int init_end = buffer.remaining();
+								log.i("No1 infosize = " + init_end);
+								short size = buffer.getShort();
+								//Log.i("log","size->" + size);
+								log.i("No1 size->" + size);
+								short cmd = buffer.getShort();
+								//Log.i("log","cmd->" + Integer.toHexString(cmd));
+								log.i("No1 cmd->" + Integer.toHexString(cmd));
+
+								if (cmd == 0x01002) {
+									fx_cmd1002(buffer);
+								}
+
+								if (cmd == 0x1008) {
+									fx_cmd1008(buffer);
+								}
+
+								if (cmd == 0x1036) {
+									fx_cmd1036(buffer);
+								}
+
+								if (cmd == 0x100E) {
+									fx_cmd100e_new(buffer);
+								}
+
+								if (cmd == 0x1020 || cmd == 0x1022) {
+									fx_cmd1020(buffer);
+								}
+
+							try {
+								sk.interestOps(SelectionKey.OP_READ);
+							} catch (Exception e) {
+								log.i("interestOps Exception");
+								stopSelf();
+							}
+						}
+						selector.selectedKeys().remove(sk);
