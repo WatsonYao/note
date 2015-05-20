@@ -10692,3 +10692,55 @@ public class TCPClientReadThread implements Runnable {
 							}
 						}
 						selector.selectedKeys().remove(sk);
+
+
+// Android webview 缓存可以分为
+//页面缓 --页面缓存是指加载一个网页时html、js、css等页面或者资源数据。
+//数据缓存 -- AppCache 和 Dom storage(Web storage)
+// AppCache 也是我们H5缓存，我们可以设置缓存目录
+// Dom Storage 具有Session Storage 和 Local Storage 两种，
+// 前者是会话级别的存储，页面关闭之后就消失了，后者是本地化存储。
+// webview为我们创建的app_webview 缓存目录
+
+public void initWebView(){
+	webView.getSettings().setJavaScriptEnable(true);
+	webView.getSettings().setRenderPriority(RenderPriority.HIGH);
+	// 有网络的话，使用LOAD_DEFAULT
+	// 无网络时，使用LOAD_CACHE_ELSE_NETWORK
+	webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);// 设置缓存模式
+	// 开启DOM storage
+	webview.getSettings().setDomStroageEnabled(true);
+	// 开启database storage 
+	webview.getSettings().setDatabaseEnabled(true);
+ 	String cacheDirPath = getFilesDir().getAbsolutePath() + APP_CACHE_DIRNAME;
+
+ 	// 设置数据库缓存路径
+    webview.getSettings().setDatabasePath(cacheDirPath); // API 19 deprecated
+    // 设置Application caches缓存目录
+    webview.getSettings().setAppCachePath(cacheDirPath);
+    // 开启Application Cache功能
+    webview.getSettings().setAppCacheEnabled(true);
+}
+
+public void clearWebViewCache() {
+    // 清理WebView缓存数据库
+    try {
+        deleteDatabase("webview.db");
+        deleteDatabase("webviewCache.db");
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    // WebView缓存文件
+    File appCacheDir = new File(getFilesDir().getAbsolutePath() + APP_CACHE_DIRNAME);
+    File webviewCacheDir = new File(getCacheDir().getAbsolutePath()+ "/webviewCache");
+
+    // 删除webView缓存目录
+    if (webviewCacheDir.exists()) {
+        deleteFile(webviewCacheDir);
+    }
+    // 删除webView缓存，缓存目录
+    if (appCacheDir.exists()) {
+        deleteFile(appCacheDir);
+    }
+}
