@@ -10744,3 +10744,61 @@ public void clearWebViewCache() {
         deleteFile(appCacheDir);
     }
 }
+
+// java 对象池模式
+// 单例模式是限制一个类只有一个实例，对象池是限制一个类实例的个数。
+// “连接池”类就可以控制连接数了
+// 对象池的基本原理的核心就是： 缓存 和 共享
+
+public abstract class ObjectPool<T>{
+
+        private long expirationTime;
+        private Hashtable<T,Long> locked,unlocked;
+
+        public ObjectPool(){
+            expirationTime = 30000;
+            locked = new Hashtable<T,Long>();
+            unlocked = new Hashtable<T,Long>();
+        }
+
+        protected abstract T create();
+
+        public abstract boolean validate(T o);
+        public abstract  void expire(T o);
+
+        public synchronized  T checkOut(){
+            long now = System.currentTimeMillis();
+            T t;
+            if(unlocked.size()>0){
+                Enumeration<T> e = unlocked.keys();
+                while(e.hasMoreElements()){
+                    t = e.nextElement();
+                    if((now - unlocked.get(t)) > expirationTime){
+                        unlocked.remove(t);
+                        expire(t);
+                        t = null;
+                    }else{
+                        if(validate(t)){
+                            unlocked.remove(t);
+                            locked.put(t,now);
+                            return (t);
+                        }else{
+                            unlocked.remove(t);
+                            expire(t);
+                            t = null;
+                        }
+                    }
+                }
+            }
+
+            t = create();
+            locked.put(t, now);
+            return (t);
+        }
+
+
+        public synchronized  void checkIn(T t){
+            locked.remove(t);
+            unlocked.put(t, System.currentTimeMillis());
+        }
+    }
