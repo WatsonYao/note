@@ -10802,3 +10802,20 @@ public abstract class ObjectPool<T>{
             unlocked.put(t, System.currentTimeMillis());
         }
     }
+
+
+// Dagger 依赖注入
+// 利用APT 在编译时生成辅助类，
+// 这些类继承特定父类或实现特定接口，
+// 程序在运行时Dagger加载这些辅助类，调用相应接口完成依赖生成和注入
+
+// 依赖注入
+// classB 是 class A 的 dependency
+// b的赋值不是写死在了类或构造函数中，而是通过构造函数或其他函数的参数传入。
+
+// AppModule 是一个自定义类，在Dagger中称为Module，通过@module注解标记
+// 让ObjectGraph知道哪些类对象需要被依赖注入，以及该怎么生成某些依赖。
+@Module(injects = MainActivity.class)
+public class AppModule{
+
+}
