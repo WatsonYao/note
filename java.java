@@ -10901,3 +10901,27 @@ public class AppModule{
         android:src="@drawable/ic_done"/>
 
 </android.support.design.widget.CoordinatorLayout>
+
+// web app
+<meta name="theme-color" content="#40bd9e" >
+
+// app install banner
+// Requirements
+// A manifest.json file
+// A service worker
+// Visit frequency heuristics
+
+<link rel="manifest" herf="manifest.json">
+
+{
+	"short_name":"PCalc",
+	"name":"Paper Calculator",
+	"icons":[
+	{"src":"/192.png","sizes":"192*192","type":"image/png"},
+	{"src":"/144.png","sizes":"144*144","type":"image/png"},
+	{"src":"/96.png","sizes":"96*96","type":"image/png"},
+	{"src":"/48.png","sizes":"48*48","type":"image/png"}
+	],
+	"start_url":"/demo.html?addToHome=true",
+	"display":"standalone"
+}
