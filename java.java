@@ -10925,3 +10925,48 @@ public class AppModule{
 	"start_url":"/demo.html?addToHome=true",
 	"display":"standalone"
 }
+
+
+// RxJava
+public class ApiManager{
+	private interface ApiManagerService{
+		@GET("/weather")
+		WeatherData getWeather(@Query("q")String place, @Query("units") String units);
+	}
+
+	private static final RestAdapter restAdapter = new RestAdapter.Builder()
+		.setServer("xxx").build();
+
+	private static final ApiManagerService apiManager = restAdapter.create(ApiManagerService.class);
+
+	public static Observable<WeatherData> getWeatherData(final String city){
+		return Observable.create(new Observable.OnSubscribeFunc<WeatherData>(){
+			@Override
+			public Subscription onSubscribe(Observer<? super WeatherData> observer){
+				try{
+					observer.onNext(apiManager.getWeather(city,"metric"));
+					observer.onCompleted();
+				}catch(Exception e){
+					observer.onError(e);
+				}
+
+				return Subscriptions.empty();
+			}
+		}).subscribeOn(Schedulers.threadPoolForIO());
+	}
+}
+
+Observable.from(cities).mapMany(new Func1<String, Observable<WeatherData>>(){
+	@Override
+	public Observable<WeatherData> call(String s){
+		return ApiManager.getWeatherData(s);
+	}
+})
+.subscribeOn(Schedulers.threadPoolForIO())
+.observeOn(AndroidSchedulers.mainThread())
+.subscibe(new Action1<WeatherData>(){
+	@Override
+	public void call(WeatherData weatherData){
+		// TODO
+	}
+});
