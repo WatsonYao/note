@@ -46,4 +46,13 @@
         android:onClick="submit"
         android:text="submit"/>
 
+    <ProgressBar
+        android:visibility="gone"
+        android:id="@+id/pb"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/submit"
+        style="@style/Base.Theme.AppCompat.Dialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
 </RelativeLayout>

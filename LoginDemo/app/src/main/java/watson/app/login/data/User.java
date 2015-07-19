@@ -9,13 +9,13 @@ public class User {
 
     public int checkField() {
         if ("".equals(name)) {
-            return 1;
+            return DataConst.USER_NAME_NULL;
         }
 
         if ("".equals(pswd)) {
-            return 2;
+            return DataConst.USER_PSWD_NULL;
         }
 
-        return 0;
+        return DataConst.USER_CHECK_OK;
     }
 }
