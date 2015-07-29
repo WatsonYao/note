@@ -1331,20 +1331,20 @@ android:foreground="?android:attr/selectableItemBackground"
 
 <?xml version="1.0" encoding="utf-8"?>
 <ripple android:color="@color/flat_pressed">
-    <item
-        android:id="@android:id/mask"
-        android:drawable="@drawable/btn_flat_normal"/>
+<item
+android:id="@android:id/mask"
+android:drawable="@drawable/btn_flat_normal"/>
 </ripple>
 
 <?xml version="1.0" encoding="utf-8"?>
 <selector 
-    android:exitFadeDuration="400"
-    android:enterFadeDuration="400">
+android:exitFadeDuration="400"
+android:enterFadeDuration="400">
 
-    <item android:drawable="@drawable/btn_flat_pressed"
-          android:state_pressed="true" />
+<item android:drawable="@drawable/btn_flat_pressed"
+android:state_pressed="true" />
 
-    <item android:drawable="@android:color/transparent" />
+<item android:drawable="@android:color/transparent" />
 
 </selector>
 
@@ -9664,93 +9664,91 @@ public class ProxyDemo {
 
 // 关于泛型
 // 利用反射，跳过编译器的泛型检查
-Class clazz = list.getClass();
-Method addMethod = clazz.getMethod("add",Object.class);
-addMethod.invoke(list,"xyz");
+    	Class clazz = list.getClass();
+    	Method addMethod = clazz.getMethod("add",Object.class);
+    	addMethod.invoke(list,"xyz");
 
 // 迭代器
-public static void main(String[] args){
-	ArrayList al = new ArrayList();
-	al.add("java01");
-	al.add("java02");
-	al.add("java03");
+    	public static void main(String[] args){
+    		ArrayList al = new ArrayList();
+    		al.add("java01");
+    		al.add("java02");
+    		al.add("java03");
 
-	ListIterator li = al.listIterator();
-	while(li.hasNext()){
-		Obejct obj = li.next();
-		if(obj.equals("java02")){
-			li.set("java006");
-		}
-	}
+    		ListIterator li = al.listIterator();
+    		while(li.hasNext()){
+    			Obejct obj = li.next();
+    			if(obj.equals("java02")){
+    				li.set("java006");
+    			}
+    		}
 
-	while(li.hasPrevious()){
+    		while(li.hasPrevious()){
 		// ...
-	}
-}
+    		}
+    	}
 
 // map按照键排序
-Map<String,String> map = new HashMap<String,String>();
-map.put("01","zhangsan1");
-map.put("02","zhangsan2");
-map.put("03","zhangsan3");
-map.put("04","zhangsan4");
+    	Map<String,String> map = new HashMap<String,String>();
+    	map.put("01","zhangsan1");
+    	map.put("02","zhangsan2");
+    	map.put("03","zhangsan3");
+    	map.put("04","zhangsan4");
 
-Set<Map.Entry<String,String>> entrySet = map.entrySet();
-Iterator<Map.Entry<Stirng,String>> it = entrySet.iterator();
-while(it.hasNext()){
-	Map.Entry<String,String> me = it.next();
-}
+    	Set<Map.Entry<String,String>> entrySet = map.entrySet();
+    	Iterator<Map.Entry<Stirng,String>> it = entrySet.iterator();
+    	while(it.hasNext()){
+    		Map.Entry<String,String> me = it.next();
+    	}
 
 // 线程池
-public class WorkQueue{
+    	public class WorkQueue{
 
-	private final int nThreads;
-	private final LinkedList queue;
+    		private final int nThreads;
+    		private final LinkedList queue;
 
-	public WorkQueue(int nThreads){
-		this.nThreads = nThreads;
-		queue = new LinkedList();
-		threads = new PoolWorker[nThreads];
-		for(int i=0; i<nThreads; i++){
-			threads[i] = new PoolWorker();
-			threads[i].start();
-		}
-	}
+    		public WorkQueue(int nThreads){
+    			this.nThreads = nThreads;
+    			queue = new LinkedList();
+    			threads = new PoolWorker[nThreads];
+    			for(int i=0; i<nThreads; i++){
+    				threads[i] = new PoolWorker();
+    				threads[i].start();
+    			}
+    		}
 
-	public void execute(Runnable r){
-		synchronized(queue){
-			queue.addLast(r);
-			queue.notify();
-		}
-	}
+    		public void execute(Runnable r){
+    			synchronized(queue){
+    				queue.addLast(r);
+    				queue.notify();
+    			}
+    		}
 
-	private class PoolWorker extends Thead{
-		public void run(){
-			Runnable r;
-			while(true){
-				synchronized(queue){
-					while(queue.isEmpty){
-						try{
-							queue.wait();
-						}catch(InterruptedException ignored){
+    		private class PoolWorker extends Thead{
+    			public void run(){
+    				Runnable r;
+    				while(true){
+    					synchronized(queue){
+    						while(queue.isEmpty){
+    							try{
+    								queue.wait();
+    							}catch(InterruptedException ignored){
 
-						}
-					}
+    							}
+    						}
 
-					r = (Runnable) queue.removeFirst();
-				}
+    						r = (Runnable) queue.removeFirst();
+    					}
 
-				try{
-					r.run();
-				}catch(RuntimeException e){
+    					try{
+    						r.run();
+    					}catch(RuntimeException e){
 
-				}
-			}
-		}
-	}
-}
-
-
+    					}
+    				}
+    			}
+    		}
+    	}
 
 
 
@@ -9760,138 +9758,140 @@ public class WorkQueue{
 
 
 
-public final class ThreadPool{
 
-	private static int worker_num = 5;
-	private WorkThread[] workThreads;
-	private static volatile int finished_task = 0;
-	private List<Runnable> taskQueue = new LinkedList<Runnable>();
-	private static ThreadPool threadPool;
 
-	private ThreadPool(){
-		this(5);
-	}
+    	public final class ThreadPool{
 
-	private ThreadPool(int worker_num){
-		ThreadPool.worker_num = worker_num;
-		workThreads = new WorkThread[worker_num];
-		for(int i=0; i<worker_num; i++){
-			workThreads[i] = new WorkThread();
-			workThreads[i].start();
-		}
-	}
+    		private static int worker_num = 5;
+    		private WorkThread[] workThreads;
+    		private static volatile int finished_task = 0;
+    		private List<Runnable> taskQueue = new LinkedList<Runnable>();
+    		private static ThreadPool threadPool;
 
-	public static ThreadPool getThreadPool(){
-		return getThreadPool(ThreadPool.worker_num);
-	}
+    		private ThreadPool(){
+    			this(5);
+    		}
 
-	public static ThreadPool getThreadPool(int worker_num){
-		if(worker_num <= 0){
-			worker_num = ThreadPool.worker_num;
-		}
-		if(threadPool == null){
-			threadPool = new ThreadPool(worker_num1);
-		}
+    		private ThreadPool(int worker_num){
+    			ThreadPool.worker_num = worker_num;
+    			workThreads = new WorkThread[worker_num];
+    			for(int i=0; i<worker_num; i++){
+    				workThreads[i] = new WorkThread();
+    				workThreads[i].start();
+    			}
+    		}
 
-		return threadPool;
-	}
+    		public static ThreadPool getThreadPool(){
+    			return getThreadPool(ThreadPool.worker_num);
+    		}
+
+    		public static ThreadPool getThreadPool(int worker_num){
+    			if(worker_num <= 0){
+    				worker_num = ThreadPool.worker_num;
+    			}
+    			if(threadPool == null){
+    				threadPool = new ThreadPool(worker_num1);
+    			}
+
+    			return threadPool;
+    		}
 
 	// 执行任务，就是把任务加到任务列队，什么时候执行由线程池管理决定
-	public void execute(Runnable task){
-		synchronized(taskQueue){
-			taskQueue.add(task);
-			taskQueue.notify();
-		}
-	}
+    		public void execute(Runnable task){
+    			synchronized(taskQueue){
+    				taskQueue.add(task);
+    				taskQueue.notify();
+    			}
+    		}
 
 	// 批量执行任务，其实就是把任务加入到任务列队，什么时候执行有线程池决定
-	public void execute(Runnable[] task){
-		synchronized(taskQueue){
-			for(Runnable t : task){
-				taskQueue.add(t)
-			}
-			taskQueue.notify();
-		}
-	}
+    		public void execute(Runnable[] task){
+    			synchronized(taskQueue){
+    				for(Runnable t : task){
+    					taskQueue.add(t)
+    				}
+    				taskQueue.notify();
+    			}
+    		}
 
-	public void execute(List<Runnable> task){
-		synchronized(taskQueue){
-			for(Runnable t : task){
-				taskQueue.add(t);
-			}
-			taskQueue.notify();
-		}
-	}
+    		public void execute(List<Runnable> task){
+    			synchronized(taskQueue){
+    				for(Runnable t : task){
+    					taskQueue.add(t);
+    				}
+    				taskQueue.notify();
+    			}
+    		}
 
-	public void destory(){
-		while(!taskQueue.isEmpty){
-			try{
-				Thread.sleep(10);
-			}catch(InterruptedException e){
-				e.printStackTrace;
-			}
-		}
+    		public void destory(){
+    			while(!taskQueue.isEmpty){
+    				try{
+    					Thread.sleep(10);
+    				}catch(InterruptedException e){
+    					e.printStackTrace;
+    				}
+    			}
 
-		for( int i = 0; i< worker_num; i++){
-			workThreads[i].stopWorker();
-			workThreads[i] = null;
-		}
+    			for( int i = 0; i< worker_num; i++){
+    				workThreads[i].stopWorker();
+    				workThreads[i] = null;
+    			}
 
-		threadPool = null;
-		taskQueue.clear();
-	}
+    			threadPool = null;
+    			taskQueue.clear();
+    		}
 
-	public int getWorkThreadNumber(){
-		return worker_num;
-	}
+    		public int getWorkThreadNumber(){
+    			return worker_num;
+    		}
 
-	public int getFinishedTasknumber(){
-		return finished_task;
-	}
+    		public int getFinishedTasknumber(){
+    			return finished_task;
+    		}
 
-	public int getWaitTaskNumber(){
-		return taskQueue.size();
-	}
+    		public int getWaitTaskNumber(){
+    			return taskQueue.size();
+    		}
 
-	public String toString(){
+    		public String toString(){
 		// return ... 
-	}
+    		}
 
-	private class WorkThread extends Thread{
+    		private class WorkThread extends Thread{
 
-		private boolean isRunning = true;
+    			private boolean isRunning = true;
 
-		public void stopWorker(){
-			isRunning = false;
-		}
+    			public void stopWorker(){
+    				isRunning = false;
+    			}
 
-		public void run(){
-			Runnable r = null;
-			while(isRunning){
-				synchronized(taskQueue){
-					while(isRunning && taskQueue.isEmpty()){
-						try{
-							taskQueue.wait(20);
-						}catch(){
+    			public void run(){
+    				Runnable r = null;
+    				while(isRunning){
+    					synchronized(taskQueue){
+    						while(isRunning && taskQueue.isEmpty()){
+    							try{
+    								taskQueue.wait(20);
+    							}catch(){
 
-						}
-					}
+    							}
+    						}
 
-					if(!taskQueue.isEmpty()){
-						r = taskQueue.remove(0);
-					}
+    						if(!taskQueue.isEmpty()){
+    							r = taskQueue.remove(0);
+    						}
 
-					if(r != null){
-						r.run();
-					}
+    						if(r != null){
+    							r.run();
+    						}
 
-					finished_task++;
-					r = null;
-				}
-			}
-		}
-	}
-}
+    						finished_task++;
+    						r = null;
+    					}
+    				}
+    			}
+    		}
+    	}
 
 // 手表处理
 // 当用户选择表盘时，穿戴设备会显示表盘，在必要时，并且调用他的service回调函数。
@@ -9902,401 +9902,401 @@ public final class ThreadPool{
 // Initialize the watch face elements in the Engine.onCreate() method.
 // Initialize the custom timer in the Engine.onVisibilityChanged() method.
 
-public class AnalogWatchFaceService extends CanvasWatchFaceService{
+    	public class AnalogWatchFaceService extends CanvasWatchFaceService{
 
-    @Override
-    public Engine onCreateEngine() {
-        /* provide your watch face implementation */
-        return new Engine();
-    }
+    		@Override
+    		public Engine onCreateEngine() {
+    			/* provide your watch face implementation */
+    			return new Engine();
+    		}
 
-    /* implement service callback methods */
-    private class Engine extends CanvasWatchFaceService.Engine {
+    		/* implement service callback methods */
+    		private class Engine extends CanvasWatchFaceService.Engine {
 
-        static final int MSG_UPDATE_TIME = 0;
-        Time mTime;
-        boolean mLowBitAmbient;
+    			static final int MSG_UPDATE_TIME = 0;
+    			Time mTime;
+    			boolean mLowBitAmbient;
 
-        Bitmap mBackgroundBitmap;
-        Bitmap mBackgroundScaledBitmap;
-        Paint mHourPaint;
-        Paint mMinutePaint;
+    			Bitmap mBackgroundBitmap;
+    			Bitmap mBackgroundScaledBitmap;
+    			Paint mHourPaint;
+    			Paint mMinutePaint;
 
-        final Handler mUpdateTimeHandler = new Handler(){
-            @Override
-            public void handleMessage(Message msg) {
+    			final Handler mUpdateTimeHandler = new Handler(){
+    				@Override
+    				public void handleMessage(Message msg) {
                 //super.handleMessage(msg);
-                switch (msg.what){
-                    case MSG_UPDATE_TIME:
-                        invalidate();
-                        if(shouldTimerBeRunning()){
-                            long timeMs = System.currentTimeMillis();
-                            long delayMs = INTERACTIVE_UPDATE_RATE_MS - (timeMs%INTERACTIVE_UPDATE_RATE_MS);
-                            mUpdateTimeHandler.sendEmptyMessageDelayed(MSG_UPDATE_TIME,delayMs);
-                        }
-                        break;
-                }
-            }
-        };
+    					switch (msg.what){
+    						case MSG_UPDATE_TIME:
+    						invalidate();
+    						if(shouldTimerBeRunning()){
+    							long timeMs = System.currentTimeMillis();
+    							long delayMs = INTERACTIVE_UPDATE_RATE_MS - (timeMs%INTERACTIVE_UPDATE_RATE_MS);
+    							mUpdateTimeHandler.sendEmptyMessageDelayed(MSG_UPDATE_TIME,delayMs);
+    						}
+    						break;
+    					}
+    				}
+    			};
 
-        final BroadcastReceiver mTimeZoneReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                mTime.clear(intent.getStringExtra("time-zone"));
-                mTime.setToNow();
-            }
-        };
+    			final BroadcastReceiver mTimeZoneReceiver = new BroadcastReceiver() {
+    				@Override
+    				public void onReceive(Context context, Intent intent) {
+    					mTime.clear(intent.getStringExtra("time-zone"));
+    					mTime.setToNow();
+    				}
+    			};
 
-        @Override
-        public void onCreate(SurfaceHolder holder) {
-            super.onCreate(holder);
-            /* initialize your watch face */
+    			@Override
+    			public void onCreate(SurfaceHolder holder) {
+    				super.onCreate(holder);
+    				/* initialize your watch face */
 
-            setWatchFaceStyle(new WatchFaceStyle.Builder(AnalogWatchFaceService.this)
-                .setCardPeekMode(WatchFaceStyle.PEEK_MODE_SHORT)
-                .setBackgroundVisibility(WatchFaceStyle.BACKGROUND_VISIBILITY_INTERRUPTIVE)
-                .setShowSystemUiTime(false).build()
-            );
+    				setWatchFaceStyle(new WatchFaceStyle.Builder(AnalogWatchFaceService.this)
+    					.setCardPeekMode(WatchFaceStyle.PEEK_MODE_SHORT)
+    					.setBackgroundVisibility(WatchFaceStyle.BACKGROUND_VISIBILITY_INTERRUPTIVE)
+    					.setShowSystemUiTime(false).build()
+    					);
 
-            Resources resources = AnalogWatchFaceService.this.getResources();
-            Drawable backgroundDrawable = resources.getDrawable(R.drawable.bg);
-            mBackgroundBitmap = ((BitmapDrawable)backgroundDrawable).getBitmap();
+    				Resources resources = AnalogWatchFaceService.this.getResources();
+    				Drawable backgroundDrawable = resources.getDrawable(R.drawable.bg);
+    				mBackgroundBitmap = ((BitmapDrawable)backgroundDrawable).getBitmap();
 
-            mHourPaint = new Paint();
-            mHourPaint.setARGB(255,200,200,200);
-            mHourPaint.setStrokeWidth(5.0f);
-            mHourPaint.setAntiAlias(true);
-            mHourPaint.setStrokeCap(Paint.Cap.ROUND);
+    				mHourPaint = new Paint();
+    				mHourPaint.setARGB(255,200,200,200);
+    				mHourPaint.setStrokeWidth(5.0f);
+    				mHourPaint.setAntiAlias(true);
+    				mHourPaint.setStrokeCap(Paint.Cap.ROUND);
 
-            mTime = new Time();
-        }
+    				mTime = new Time();
+    			}
 
-        @Override
-        public void onPropertiesChanged(Bundle properties) {
-            super.onPropertiesChanged(properties);
-            /* get device features (burn-in, low-bit ambient) */
-            mLowBitAmbient = properties.getBoolean(PROPERTY_LOW_BIT_AMBIENT,false);
-            mBurnInProtection = properties.getBoolean(PROPERTY_BURN_IN_PROTECTION,false);
-        }
+    			@Override
+    			public void onPropertiesChanged(Bundle properties) {
+    				super.onPropertiesChanged(properties);
+    				/* get device features (burn-in, low-bit ambient) */
+    				mLowBitAmbient = properties.getBoolean(PROPERTY_LOW_BIT_AMBIENT,false);
+    				mBurnInProtection = properties.getBoolean(PROPERTY_BURN_IN_PROTECTION,false);
+    			}
 
-        @Override
-        public void onTimeTick() {
-            super.onTimeTick();
-            /* the time changed */
+    			@Override
+    			public void onTimeTick() {
+    				super.onTimeTick();
+    				/* the time changed */
 
-            invalidate();
-        }
+    				invalidate();
+    			}
 
-        @Override
-        public void onAmbientModeChanged(boolean inAmbientMode) {
-            super.onAmbientModeChanged(inAmbientMode);
-            /* the wearable switched between modes */
-            if(mLowBitAmbient){
-                boolean antiAlias = !inAmbientMode;
-                mHourPaint.setAntiAlias(antiAlias);
-                mMinutePaint.setAntiAlias(antiAlias);
-                mSecondPaint.setAntiAlias(antiAlias);
-                mTickPaint.setAntiAlias(antiAlias);
-            }
+    			@Override
+    			public void onAmbientModeChanged(boolean inAmbientMode) {
+    				super.onAmbientModeChanged(inAmbientMode);
+    				/* the wearable switched between modes */
+    				if(mLowBitAmbient){
+    					boolean antiAlias = !inAmbientMode;
+    					mHourPaint.setAntiAlias(antiAlias);
+    					mMinutePaint.setAntiAlias(antiAlias);
+    					mSecondPaint.setAntiAlias(antiAlias);
+    					mTickPaint.setAntiAlias(antiAlias);
+    				}
 
-            invalidate();
-            updateTimer();
-        }
+    				invalidate();
+    				updateTimer();
+    			}
 
-        @Override
-        public void onDraw(Canvas canvas, Rect bounds) {
-            /* draw your watch face */
-            mTime.setToNow();
+    			@Override
+    			public void onDraw(Canvas canvas, Rect bounds) {
+    				/* draw your watch face */
+    				mTime.setToNow();
 
-            int width = bounds.width();
-            int height = bounds.height();
+    				int width = bounds.width();
+    				int height = bounds.height();
 
-            if(mBackgroundScaledBitmap == null
-                    || mBackgroundScaledBitmap.getWidth()!= width
-                    || mBackgroundScaledBitmap.getHeight() != height){
-                mBackgroundScaledBitmap = Bitmap.createScaledBitmap(mBackgroundBitmap,width,height,true);
-            }
+    				if(mBackgroundScaledBitmap == null
+    					|| mBackgroundScaledBitmap.getWidth()!= width
+    					|| mBackgroundScaledBitmap.getHeight() != height){
+    					mBackgroundScaledBitmap = Bitmap.createScaledBitmap(mBackgroundBitmap,width,height,true);
+    			}
 
-            canvas.drawBitmap(mBackgroundScaledBitmap,0,0,null);
+    			canvas.drawBitmap(mBackgroundScaledBitmap,0,0,null);
 
-            float centerX = width/2f;
-            float centerY = height/2f;
+    			float centerX = width/2f;
+    			float centerY = height/2f;
 
-            float secRot = mTime.second/30f*(float)Math.PI;
-            int minutes = mTime.minute;
-            float minRot = minutes/30f*(float)Math.PI;
-            float hrRot = ((mTime.hour + (minutes/60f))/6f)*(float)Math.PI;
+    			float secRot = mTime.second/30f*(float)Math.PI;
+    			int minutes = mTime.minute;
+    			float minRot = minutes/30f*(float)Math.PI;
+    			float hrRot = ((mTime.hour + (minutes/60f))/6f)*(float)Math.PI;
 
-            float secLength = centerX - 20;
-            float minLength = centerX - 40;
-            float hrLength = centerX - 80;
+    			float secLength = centerX - 20;
+    			float minLength = centerX - 40;
+    			float hrLength = centerX - 80;
 
-            if(!isInAmbientMode()){
-                float secX = (float)Math.sin(secRot)*secLength;
-                float secY = (float)-Math.cos(secRot)*secLength;
-                canvas.drawLine(centerX,centerY,centerX+secX,centerY+secY,mSecondPaint);
-            }
+    			if(!isInAmbientMode()){
+    				float secX = (float)Math.sin(secRot)*secLength;
+    				float secY = (float)-Math.cos(secRot)*secLength;
+    				canvas.drawLine(centerX,centerY,centerX+secX,centerY+secY,mSecondPaint);
+    			}
 
-            float minX = (float)Math.sin(minRot)*minLength;
-            float minY = (float)-Math.cos(minRot)*minLength;
-            canvas.drawLine(centerX,centerY,centerX+minX,centerY+minY,mMinutePaint);
+    			float minX = (float)Math.sin(minRot)*minLength;
+    			float minY = (float)-Math.cos(minRot)*minLength;
+    			canvas.drawLine(centerX,centerY,centerX+minX,centerY+minY,mMinutePaint);
 
-            float hrX = (float)Math.sin(hrRot)*hrLength;
-            float hrY = (float)-Math.cos(hrRot)*hrLength;
-            canvas.drawLine(centerX,centerY,centerX+hrX,centerY+hrY,mHourPaint);
+    			float hrX = (float)Math.sin(hrRot)*hrLength;
+    			float hrY = (float)-Math.cos(hrRot)*hrLength;
+    			canvas.drawLine(centerX,centerY,centerX+hrX,centerY+hrY,mHourPaint);
 
 
-        }
+    		}
 
-        @Override
-        public void onVisibilityChanged(boolean visible) {
-            super.onVisibilityChanged(visible);
-            /* the watch face became visible or invisible */
-            if(visible){
+    		@Override
+    		public void onVisibilityChanged(boolean visible) {
+    			super.onVisibilityChanged(visible);
+    			/* the watch face became visible or invisible */
+    			if(visible){
                 // registerReceiver();
 
-                mTime.clear(TimeZone.getDefault().getID());
-                mTime.setToNow();
-            }else{
+    				mTime.clear(TimeZone.getDefault().getID());
+    				mTime.setToNow();
+    			}else{
                 // unregisterReceiver();
-            }
+    			}
 
-            updateTimer();
-        }
+    			updateTimer();
+    		}
 
 
-        private void updateTimer(){
-            mUpdateTimeHandler.removeMessages(MSG_UPDATE_TIME);
-            if(shouldTimerBeRunning()){
-                mUpdateTimeHandler.sendEmptyMessage(MSG_UPDATE_TIME);
-            }
-        }
+    		private void updateTimer(){
+    			mUpdateTimeHandler.removeMessages(MSG_UPDATE_TIME);
+    			if(shouldTimerBeRunning()){
+    				mUpdateTimeHandler.sendEmptyMessage(MSG_UPDATE_TIME);
+    			}
+    		}
 
-        private boolean shouldTimerBeRunning(){
-            return isVisible() && !isInAmbientMode();
-        }
+    		private boolean shouldTimerBeRunning(){
+    			return isVisible() && !isInAmbientMode();
+    		}
 
-        private void registerReceiver(){
-            if(mRegisteredTimeZoneReceiver){
-                return;
-            }
-            mRegisteredTimeZoneReceiver = true;
-            IntentFilter filter = new IntentFilter(Intent.ACTION_TIMEZONE_CHANGED);
-            AnalogWatchFaceService.this.registerReceiver(mTimeZoneReceiver,filter);
-        }
+    		private void registerReceiver(){
+    			if(mRegisteredTimeZoneReceiver){
+    				return;
+    			}
+    			mRegisteredTimeZoneReceiver = true;
+    			IntentFilter filter = new IntentFilter(Intent.ACTION_TIMEZONE_CHANGED);
+    			AnalogWatchFaceService.this.registerReceiver(mTimeZoneReceiver,filter);
+    		}
 
-        private void unregisterReceiver(){
-            if(!mRegisteredTimeZoneRecevier){
-                return;
-            }
+    		private void unregisterReceiver(){
+    			if(!mRegisteredTimeZoneRecevier){
+    				return;
+    			}
 
-            mRegisteredTimeZoneReceiver = false;
-            AnalogWatchFaceService.this.unregisterReceiver(mTimeZoneReceiver);
-        }
+    			mRegisteredTimeZoneReceiver = false;
+    			AnalogWatchFaceService.this.unregisterReceiver(mTimeZoneReceiver);
+    		}
+    	}
     }
-}
 
 // 关于z轴高度
-float raisedElevation = getContext().getResources().getDimension(R.dimen.raised_elevation);
-myImageView.setOnTouchListener(new View.OnTouchListener(){
-	public boolean onTouch(View view,MotionEvent motionEvent){
-		int action = motionEvent.getActionMasked();
+    float raisedElevation = getContext().getResources().getDimension(R.dimen.raised_elevation);
+    myImageView.setOnTouchListener(new View.OnTouchListener(){
+    	public boolean onTouch(View view,MotionEvent motionEvent){
+    		int action = motionEvent.getActionMasked();
 
-		switch(action){
-			case MotionEvent.ACTION_DOWN:
-				view.animate().setDuration(100).translationZ(raisedElevation);
-				return true;
-			case MotionEvent.ACTION_UP:
-				view.animate().setDuration(100).translationZ(0);
-				return true;
-		}
-		return false;
-	}
-});
+    		switch(action){
+    			case MotionEvent.ACTION_DOWN:
+    			view.animate().setDuration(100).translationZ(raisedElevation);
+    			return true;
+    			case MotionEvent.ACTION_UP:
+    			view.animate().setDuration(100).translationZ(0);
+    			return true;
+    		}
+    		return false;
+    	}
+    });
 
 // StateListAnimator
-<ImageView
-	android:elevation="2dp"
-	android:stateListAnimator="@anim/my_state_list_animator"/>
+    <ImageView
+    android:elevation="2dp"
+    android:stateListAnimator="@anim/my_state_list_animator"/>
 
-<selector>
-	<item 
-		android:state_pressed="true"
-		android:state_enabled="true">
-			<objectAnimator
-				android:propertyName="translationZ"
-				android:valueTo="6dp"
-				android:valueType="floatType" />
-	</item>
-	<item>
-		<objectAnimator 
-			android:propertyName="translationZ"
-			android:valueTo="0"
-			android:valueType="floatType" />
-	</item>
-<selector>
+    <selector>
+    <item 
+    android:state_pressed="true"
+    android:state_enabled="true">
+    <objectAnimator
+    android:propertyName="translationZ"
+    android:valueTo="6dp"
+    android:valueType="floatType" />
+    </item>
+    <item>
+    <objectAnimator 
+    android:propertyName="translationZ"
+    android:valueTo="0"
+    android:valueType="floatType" />
+    </item>
+    <selector>
 
 // 共享移动
-<ImageView
-	android:transitionName="@transition/my_transition"/>
+    <ImageView
+    android:transitionName="@transition/my_transition"/>
 	// 也可以用代码
-	ViewCompat.setTransitionName(mHeaderImageView,VIEW_NAME_HEADER_IMAGE);
-ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this,mHeaderImageView,VIEW_NAME_HEADER_IMAGE);
-startActvity(intent,options.toBundle());
+    ViewCompat.setTransitionName(mHeaderImageView,VIEW_NAME_HEADER_IMAGE);
+    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this,mHeaderImageView,VIEW_NAME_HEADER_IMAGE);
+    startActvity(intent,options.toBundle());
 
 // 关于xml预览的一些技巧
-xmlns:tools="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools"
 
-tools:text="I am a title"
+    tools:text="I am a title"
 
-tools:context="com.android.example.MainActivity"
+    tools:context="com.android.example.MainActivity"
 
 // 在listview等布局中
-tools:listheader="@layout/list_header"
-tools:listitem="@layout/list_item"
-tools:listfooter="@layout/list_footer"
+    tools:listheader="@layout/list_header"
+    tools:listitem="@layout/list_item"
+    tools:listfooter="@layout/list_footer"
 
 // 在merge布局中使用 可以现实整合后的布局
-tools:showIn="@layout/activity_main"
+    tools:showIn="@layout/activity_main"
 
 // 自定义控件
-protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
-	setMeasureDimension(
-		getDefaultSize(getSuggestedMinimumWidth(),widthMeasureSpec),
-		getDefaultSize(getSuggestedMinimumHeight(),heightMeasureSpec)
-	);
-}
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
+    	setMeasureDimension(
+    		getDefaultSize(getSuggestedMinimumWidth(),widthMeasureSpec),
+    		getDefaultSize(getSuggestedMinimumHeight(),heightMeasureSpec)
+    		);
+    }
 
 
 // 调用ViewGroup类中测量子类的方法
-measureChilren(widthMeasureSpec,heightMeasureSpec);
-protected void measureChildren(int widthMeasureSpec, int heightMeasureSpec){
-	final int size = mChildrenCount;
-	final View[] children = mChildren;
-	for(int i=0; i<size; ++i){
-		final View child = children[i];
-		if((child.mViewFlags & VISIBLE_MASK) != GONE){
-			measureChild(child,widthMeasureSpec,heightMeasureSpec);
-		}
-	}
-}
+    measureChilren(widthMeasureSpec,heightMeasureSpec);
+    protected void measureChildren(int widthMeasureSpec, int heightMeasureSpec){
+    	final int size = mChildrenCount;
+    	final View[] children = mChildren;
+    	for(int i=0; i<size; ++i){
+    		final View child = children[i];
+    		if((child.mViewFlags & VISIBLE_MASK) != GONE){
+    			measureChild(child,widthMeasureSpec,heightMeasureSpec);
+    		}
+    	}
+    }
 
-protected void measureChild(View child, int parentWidthMeasureSpec,int parentHeightMeasureSpec){
+    protected void measureChild(View child, int parentWidthMeasureSpec,int parentHeightMeasureSpec){
 	// 获得子视图的布局参数
-	final LayoutParams lp = child.getLayoutParams();
+    	final LayoutParams lp = child.getLayoutParams();
 
 	// getChildMeasureSpec 获得最终的宽高详细测量值
-	final int childWidthMeasureSpec = getChildMeasureSpec(parentWidthMeasureSpec,mPaddingLeft + mPaddingRight, lp.width);
-	final int childHeightMeasureSpec = getChildMeasureSpec(parentHeightMeasureSpec,mPaddingTop + mPaddingBottom, lp.height);
+    	final int childWidthMeasureSpec = getChildMeasureSpec(parentWidthMeasureSpec,mPaddingLeft + mPaddingRight, lp.width);
+    	final int childHeightMeasureSpec = getChildMeasureSpec(parentHeightMeasureSpec,mPaddingTop + mPaddingBottom, lp.height);
 
-	child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
-}
+    	child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
+    }
 
 // 子view的确切大小由两方面共同决定：
 // 1.父view的MeasureSpec 
 // 2.子view的LayoutParams属性
 
-public class MyScrollView extends ScrollView{
+    public class MyScrollView extends ScrollView{
 
-	int columns = 0;
+    	int columns = 0;
 
-	public MyScrollView(Context context){
-		super(context);
-	}
+    	public MyScrollView(Context context){
+    		super(context);
+    	}
 
-	public MyScrollView(Context context, AttributeSet attrs){
-		super(context, attrs);
-		TypedArray typedArray = context.obtainStyledAttributes(attrs,R.styleable.MyScrollView);
-		columns = typedArray.getInteger(R.styleable.MyScrollView_columns,0);
-		typedArray.recycle();
+    	public MyScrollView(Context context, AttributeSet attrs){
+    		super(context, attrs);
+    		TypedArray typedArray = context.obtainStyledAttributes(attrs,R.styleable.MyScrollView);
+    		columns = typedArray.getInteger(R.styleable.MyScrollView_columns,0);
+    		typedArray.recycle();
 
-		initView(columns);
+    		initView(columns);
 
-	}
+    	}
 
-	private void initView(int columns){
-		LinearLayout linearLayout = new LinearLayout(getContext());
-		linearLayout.setOrientation(LinearLayout.VERTICAL);
+    	private void initView(int columns){
+    		LinearLayout linearLayout = new LinearLayout(getContext());
+    		linearLayout.setOrientation(LinearLayout.VERTICAL);
 
-		linearLayout.addView(new AutoCardLayout(getContext(),columns));
-		addView(linearLayout,new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
-	}
-}
+    		linearLayout.addView(new AutoCardLayout(getContext(),columns));
+    		addView(linearLayout,new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.MATCH_PARENT));
+    	}
+    }
 
-public class AutoCardLayout extends ViewGroup{
+    public class AutoCardLayout extends ViewGroup{
 
-	int column = 0;
-	int margin = 20;
+    	int column = 0;
+    	int margin = 20;
 
-	public AutoCardLayout(Context context,int columns){
-		super(context);
-		this.column = columns;
-		View v1 = LayoutInflater.from(context).inflate(R.layout.card_layout1,null);
+    	public AutoCardLayout(Context context,int columns){
+    		super(context);
+    		this.column = columns;
+    		View v1 = LayoutInflater.from(context).inflate(R.layout.card_layout1,null);
 		// v2345
-		addView(v1, new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
-	}
+    		addView(v1, new LayoutParams(LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT));
+    	}
 
-	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
+    	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
 
-		int width = MeasureSpec.getSize(widthMeasureSpec);
-	}
-}
+    		int width = MeasureSpec.getSize(widthMeasureSpec);
+    	}
+    }
 
-public class SmartImageView extends ImageView{
+    public class SmartImageView extends ImageView{
 
-	public SmartImageView(Context context, AttributeSet attrs,  
-            int defStyleAttr, int defStyleRes) {  
-        super(context, attrs, defStyleAttr, defStyleRes);  
-    }  
-  
-    public SmartImageView(Context context, AttributeSet attrs, int defStyle) {  
-        super(context, attrs, defStyle);  
-    }  
-  
-    public SmartImageView(Context context, AttributeSet attrs) {  
-        super(context, attrs);  
-    }  
-  
-    public SmartImageView(Context context) {  
-        super(context);  
-    }  
-  
+    	public SmartImageView(Context context, AttributeSet attrs,  
+    		int defStyleAttr, int defStyleRes) {  
+    		super(context, attrs, defStyleAttr, defStyleRes);  
+    	}  
 
-  	private float ratio = 2.43f;
+    	public SmartImageView(Context context, AttributeSet attrs, int defStyle) {  
+    		super(context, attrs, defStyle);  
+    	}  
 
-  	public void setRatio(float ratio){
-  		this.ratio = ratio;
-  	}
+    	public SmartImageView(Context context, AttributeSet attrs) {  
+    		super(context, attrs);  
+    	}  
 
-  	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
+    	public SmartImageView(Context context) {  
+    		super(context);  
+    	}  
 
-  		int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-  		int heightMode = MeasureSpec.getMode(heightMeasureSpec);
 
-  		int width = MeasureSpec.getSize(widthMeasureSpec) - getPaddingLeft() - getPaddingRight();
-  		int height = MeasureSpec.getSize(heightMeasureSpec) - getPaddingTop() - getPaddingBottom();
+    	private float ratio = 2.43f;
 
-  		if(widthMode == MeasureSpec.EXACTLY && heightMode != MeasureSpec.EXACTLY && ratio != 0.0f){
-  			height = (int) ( width / ratio + 0.5f);
-  			heightMeasureSpec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY);
-  		}else if( widthMode != MeasureSpec.EXACTLY && heightMode == MeasureSpec.EXACTLY && ratio != 0.0f){
-  			width = (int) (height*ratio + 0.5f);
-  			widthMeasureSpec = MeasureSpec.makeMeasureSpec(width,MeasureSpec.EXAXTLY);
-  		}
+    	public void setRatio(float ratio){
+    		this.ratio = ratio;
+    	}
 
-  		super.onMeasure(widthMeasureSpec,heightMeasureSpec);
-  	}
-}
+    	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
+
+    		int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+    		int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+
+    		int width = MeasureSpec.getSize(widthMeasureSpec) - getPaddingLeft() - getPaddingRight();
+    		int height = MeasureSpec.getSize(heightMeasureSpec) - getPaddingTop() - getPaddingBottom();
+
+    		if(widthMode == MeasureSpec.EXACTLY && heightMode != MeasureSpec.EXACTLY && ratio != 0.0f){
+    			height = (int) ( width / ratio + 0.5f);
+    			heightMeasureSpec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY);
+    		}else if( widthMode != MeasureSpec.EXACTLY && heightMode == MeasureSpec.EXACTLY && ratio != 0.0f){
+    			width = (int) (height*ratio + 0.5f);
+    			widthMeasureSpec = MeasureSpec.makeMeasureSpec(width,MeasureSpec.EXAXTLY);
+    		}
+
+    		super.onMeasure(widthMeasureSpec,heightMeasureSpec);
+    	}
+    }
 
 // retrofit的用法
-{
-  "code": 200,
-  "error_message": null,
-  "data":
-  {
-      "text": "Hey ! This is a text message :)",
-      "value": 4242
-  }
+    {
+    	"code": 200,
+    	"error_message": null,
+    	"data":
+    	{
+    		"text": "Hey ! This is a text message :)",
+"value": 4242
+}
 }
 
 public class ItemTypeAdapterFactory implements TypeAdapterFactory{
@@ -10335,15 +10335,15 @@ public class RestClient{
 
 	public RestClient(){
 		Gson gson = new GsonBuilder()
-			.registerTypeAdapterFactory(new ItemTypeAdapterFactory())
-			.setDateFormat()
-			.create();
+		.registerTypeAdapterFactory(new ItemTypeAdapterFactory())
+		.setDateFormat()
+		.create();
 
 		RestAdapter restAdapter = new RestAdapter.Builder()
-			.setEndpoint()
-			.setConverter(new GsonConverter(gson))
-			.setRequestInterceptor(new SessionRequestInterceptor())
-			.build();
+		.setEndpoint()
+		.setConverter(new GsonConverter(gson))
+		.setRequestInterceptor(new SessionRequestInterceptor())
+		.build();
 
 		apiService = restAdapter.create(ApiService.class);
 	}
@@ -10419,9 +10419,9 @@ public class MyConverter implements Converter{
 }
 
 RestAdapter restAdapter = new RestAdapter.builder()
-	.setEndpoint("url");
-	.setConverter(new MyConverter())
-	.build();
+.setEndpoint("url");
+.setConverter(new MyConverter())
+.build();
 
 
 // 关于webview里面获取cookies
@@ -10455,18 +10455,18 @@ public void handleMessage(Message msg){
 
 // gogole now 索引app
 <activity
-	android:name="com.xx.yyA"
-	android:label="@string/title_xxx">
+android:name="com.xx.yyA"
+android:label="@string/title_xxx">
 
-	<intent-filter android:label="@string/xxx">
-		<action android:name="android.intent.action.VIEW" />
-		<category android:name="android.intent.category.DEFAUTL" />
-		<category android:name="android.intent.category.BROWSABLE" />
-		<!-- accepts URIs that begin with "http://example.com/xxx"-->
-		<data 	android:scheme="http"
-				android:host="example.com"
-				android:pathPrefix="/gizoms" />
-	</intent-filter>
+<intent-filter android:label="@string/xxx">
+<action android:name="android.intent.action.VIEW" />
+<category android:name="android.intent.category.DEFAUTL" />
+<category android:name="android.intent.category.BROWSABLE" />
+<!-- accepts URIs that begin with "http://example.com/xxx"-->
+<data 	android:scheme="http"
+android:host="example.com"
+android:pathPrefix="/gizoms" />
+</intent-filter>
 
 </activity>
 
@@ -10533,42 +10533,42 @@ protected void sendMsg(){
 
 // 心跳请求
 /** 心跳请求包发送 */
-	public void XtMessage() throws IOException {
+public void XtMessage() throws IOException {
 
-		short pantSize = 4;
-		short pantCmd = 0x1003;
+	short pantSize = 4;
+	short pantCmd = 0x1003;
 		// short 转byte
-		byte pantSize2[] = FormatTransfer.shortToBytes(pantSize);
-		byte pantCmd2[] = FormatTransfer.shortToBytes(pantCmd);
-		byte sendByte2[] = new byte[4];
-		System.arraycopy(pantSize2, 0, sendByte2, 0, pantSize2.length);
-		System.arraycopy(pantCmd2, 0, sendByte2, 2, pantCmd2.length);
-		ByteBuffer pantBuff = ByteBuffer.wrap(sendByte2);
+	byte pantSize2[] = FormatTransfer.shortToBytes(pantSize);
+	byte pantCmd2[] = FormatTransfer.shortToBytes(pantCmd);
+	byte sendByte2[] = new byte[4];
+	System.arraycopy(pantSize2, 0, sendByte2, 0, pantSize2.length);
+	System.arraycopy(pantCmd2, 0, sendByte2, 2, pantCmd2.length);
+	ByteBuffer pantBuff = ByteBuffer.wrap(sendByte2);
 		// log.i("sendByte = " + sendByte2);
 		// log.i("sendByte length = " + sendByte2.length);
-		if (JYConst.socketChannel == null) {
-			log.i("socketChannel == null");
+	if (JYConst.socketChannel == null) {
+		log.i("socketChannel == null");
 			// initialize();
-			init2();
-		} else {
-			if (JYConst.socketChannel.isConnected()) {
+		init2();
+	} else {
+		if (JYConst.socketChannel.isConnected()) {
 				// log.i("心跳请求包 channel.isConnected");
-				try {
-					JYConst.socketChannel.write(pantBuff);
+			try {
+				JYConst.socketChannel.write(pantBuff);
 					// //Log.i("log", "心跳请求包 channel.write");
-				} catch (Exception e) {
+			} catch (Exception e) {
 					// TODO: handle exception
 					// //Log.i("log", "通道已断开");
 
-					init2();
+				init2();
 					// initialize();
-				}
-
-			} else {
-				running = false;
 			}
+
+		} else {
+			running = false;
 		}
 	}
+}
 
 
 
@@ -10579,20 +10579,20 @@ selector = null;
 
 if ("simu".equals(logintype)) {// 连接模拟
 	JYConst.socketChannel = SocketChannel.open(new InetSocketAddress(JYConst.hostIp,
-			JYConst.hostListenningPort));
+		JYConst.hostListenningPort));
 } else if ("real".equals(logintype)) {// 连接真实
 	JYConst.socketChannel = SocketChannel.open(new InetSocketAddress(
-			JYConst.hostIp_real, JYConst.hostListenningPort_real));
+		JYConst.hostIp_real, JYConst.hostListenningPort_real));
 } else if ("simu_dasai".equals(logintype)) {// 模拟大赛
 	// 判断单双号
 	if (lastname12 == 1) {// 单号
 		log.i("init2 单号 7021");
 		JYConst.socketChannel = SocketChannel.open(new InetSocketAddress(
-				JYConst.hostIp_dasai, JYConst.hostListenningPort_dasai_1));
+			JYConst.hostIp_dasai, JYConst.hostListenningPort_dasai_1));
 	} else if ((lastname12 == 0)) {
 		log.i("init2 双号 7022");
 		JYConst.socketChannel = SocketChannel.open(new InetSocketAddress(
-				JYConst.hostIp_dasai, JYConst.hostListenningPort_dasai_2));
+			JYConst.hostIp_dasai, JYConst.hostListenningPort_dasai_2));
 	}
 
 }
@@ -10622,19 +10622,19 @@ if (TradingJY.now_in_tabhost) {
 }
 
 public class TCPClientReadThread implements Runnable {
-		private Selector selector;
+	private Selector selector;
 
-		public TCPClientReadThread(Selector selector) {
-			this.selector = selector;
-		}
+	public TCPClientReadThread(Selector selector) {
+		this.selector = selector;
+	}
 
-		public void run() {
-			try {
-				log.i("TCP buffer read run");
+	public void run() {
+		try {
+			log.i("TCP buffer read run");
 
-				if (!TradingJY.now_in_tabhost) {
+			if (!TradingJY.now_in_tabhost) {
 					// 发送一个TcpService服务启动完毕的通知
-					Intent intent2 = new Intent();
+				Intent intent2 = new Intent();
 					intent2.setAction("android.intent.action.JD_JY_TCP_SERVICE");// action与接收器相同
 					log.i("-------广播 TCP服务已经启动完毕 --------");
 					sendBroadcast(intent2);
@@ -10684,14 +10684,14 @@ public class TCPClientReadThread implements Runnable {
 									fx_cmd1020(buffer);
 								}
 
-							try {
-								sk.interestOps(SelectionKey.OP_READ);
-							} catch (Exception e) {
-								log.i("interestOps Exception");
-								stopSelf();
+								try {
+									sk.interestOps(SelectionKey.OP_READ);
+								} catch (Exception e) {
+									log.i("interestOps Exception");
+									stopSelf();
+								}
 							}
-						}
-						selector.selectedKeys().remove(sk);
+							selector.selectedKeys().remove(sk);
 
 
 // Android webview 缓存可以分为
@@ -10702,9 +10702,9 @@ public class TCPClientReadThread implements Runnable {
 // 前者是会话级别的存储，页面关闭之后就消失了，后者是本地化存储。
 // webview为我们创建的app_webview 缓存目录
 
-public void initWebView(){
-	webView.getSettings().setJavaScriptEnable(true);
-	webView.getSettings().setRenderPriority(RenderPriority.HIGH);
+							public void initWebView(){
+								webView.getSettings().setJavaScriptEnable(true);
+								webView.getSettings().setRenderPriority(RenderPriority.HIGH);
 	// 有网络的话，使用LOAD_DEFAULT
 	// 无网络时，使用LOAD_CACHE_ELSE_NETWORK
 	webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);// 设置缓存模式
@@ -10712,7 +10712,7 @@ public void initWebView(){
 	webview.getSettings().setDomStroageEnabled(true);
 	// 开启database storage 
 	webview.getSettings().setDatabaseEnabled(true);
- 	String cacheDirPath = getFilesDir().getAbsolutePath() + APP_CACHE_DIRNAME;
+	String cacheDirPath = getFilesDir().getAbsolutePath() + APP_CACHE_DIRNAME;
 
  	// 设置数据库缓存路径
     webview.getSettings().setDatabasePath(cacheDirPath); // API 19 deprecated
@@ -10724,25 +10724,25 @@ public void initWebView(){
 
 public void clearWebViewCache() {
     // 清理WebView缓存数据库
-    try {
-        deleteDatabase("webview.db");
-        deleteDatabase("webviewCache.db");
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
+	try {
+		deleteDatabase("webview.db");
+		deleteDatabase("webviewCache.db");
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
 
     // WebView缓存文件
-    File appCacheDir = new File(getFilesDir().getAbsolutePath() + APP_CACHE_DIRNAME);
-    File webviewCacheDir = new File(getCacheDir().getAbsolutePath()+ "/webviewCache");
+	File appCacheDir = new File(getFilesDir().getAbsolutePath() + APP_CACHE_DIRNAME);
+	File webviewCacheDir = new File(getCacheDir().getAbsolutePath()+ "/webviewCache");
 
     // 删除webView缓存目录
-    if (webviewCacheDir.exists()) {
-        deleteFile(webviewCacheDir);
-    }
+	if (webviewCacheDir.exists()) {
+		deleteFile(webviewCacheDir);
+	}
     // 删除webView缓存，缓存目录
-    if (appCacheDir.exists()) {
-        deleteFile(appCacheDir);
-    }
+	if (appCacheDir.exists()) {
+		deleteFile(appCacheDir);
+	}
 }
 
 // java 对象池模式
@@ -10752,56 +10752,56 @@ public void clearWebViewCache() {
 
 public abstract class ObjectPool<T>{
 
-        private long expirationTime;
-        private Hashtable<T,Long> locked,unlocked;
+	private long expirationTime;
+	private Hashtable<T,Long> locked,unlocked;
 
-        public ObjectPool(){
-            expirationTime = 30000;
-            locked = new Hashtable<T,Long>();
-            unlocked = new Hashtable<T,Long>();
-        }
+	public ObjectPool(){
+		expirationTime = 30000;
+		locked = new Hashtable<T,Long>();
+		unlocked = new Hashtable<T,Long>();
+	}
 
-        protected abstract T create();
+	protected abstract T create();
 
-        public abstract boolean validate(T o);
-        public abstract  void expire(T o);
+	public abstract boolean validate(T o);
+	public abstract  void expire(T o);
 
-        public synchronized  T checkOut(){
-            long now = System.currentTimeMillis();
-            T t;
-            if(unlocked.size()>0){
-                Enumeration<T> e = unlocked.keys();
-                while(e.hasMoreElements()){
-                    t = e.nextElement();
-                    if((now - unlocked.get(t)) > expirationTime){
-                        unlocked.remove(t);
-                        expire(t);
-                        t = null;
-                    }else{
-                        if(validate(t)){
-                            unlocked.remove(t);
-                            locked.put(t,now);
-                            return (t);
-                        }else{
-                            unlocked.remove(t);
-                            expire(t);
-                            t = null;
-                        }
-                    }
-                }
-            }
+	public synchronized  T checkOut(){
+		long now = System.currentTimeMillis();
+		T t;
+		if(unlocked.size()>0){
+			Enumeration<T> e = unlocked.keys();
+			while(e.hasMoreElements()){
+				t = e.nextElement();
+				if((now - unlocked.get(t)) > expirationTime){
+					unlocked.remove(t);
+					expire(t);
+					t = null;
+				}else{
+					if(validate(t)){
+						unlocked.remove(t);
+						locked.put(t,now);
+						return (t);
+					}else{
+						unlocked.remove(t);
+						expire(t);
+						t = null;
+					}
+				}
+			}
+		}
 
-            t = create();
-            locked.put(t, now);
-            return (t);
-        }
+		t = create();
+		locked.put(t, now);
+		return (t);
+	}
 
 
-        public synchronized  void checkIn(T t){
-            locked.remove(t);
-            unlocked.put(t, System.currentTimeMillis());
-        }
-    }
+	public synchronized  void checkIn(T t){
+		locked.remove(t);
+		unlocked.put(t, System.currentTimeMillis());
+	}
+}
 
 
 // Dagger 依赖注入
@@ -10824,12 +10824,12 @@ public class AppModule{
 // android design lib
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright (C) 2015 The Android Open Source Project
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
+~ Copyright (C) 2015 The Android Open Source Project
+~
+~ Licensed under the Apache License, Version 2.0 (the "License");
+~ you may not use this file except in compliance with the License.
+~ You may obtain a copy of the License at
+~
   ~      http://www.apache.org/licenses/LICENSE-2.0
   ~
   ~ Unless required by applicable law or agreed to in writing, software
@@ -10839,71 +10839,71 @@ public class AppModule{
   ~ limitations under the License.
   -->
 
-<android.support.design.widget.CoordinatorLayout
-    android:id="@+id/main_content"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+  <android.support.design.widget.CoordinatorLayout
+  android:id="@+id/main_content"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/detail_backdrop_height"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+  <android.support.design.widget.AppBarLayout
+  android:id="@+id/appbar"
+  android:layout_width="match_parent"
+  android:layout_height="@dimen/detail_backdrop_height"
+  android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/collapsing_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:contentScrim="?attr/colorPrimary"
-            app:expandedTitleMarginEnd="64dp"
-            app:expandedTitleMarginStart="48dp"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+  <android.support.design.widget.CollapsingToolbarLayout
+  android:id="@+id/collapsing_toolbar"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  app:contentScrim="?attr/colorPrimary"
+  app:expandedTitleMarginEnd="64dp"
+  app:expandedTitleMarginStart="48dp"
+  app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <ImageView
-                android:id="@+id/backdrop"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                app:layout_collapseMode="parallax"/>
+  <ImageView
+  android:id="@+id/backdrop"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:scaleType="centerCrop"
+  app:layout_collapseMode="parallax"/>
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="none"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+  <android.support.v7.widget.Toolbar
+  android:id="@+id/toolbar"
+  android:layout_width="match_parent"
+  android:layout_height="?attr/actionBarSize"
+  app:layout_collapseMode="none"
+  app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
-            <android.support.design.widget.TabLayout
-                android:layout_gravity="bottom"
-                android:layout_marginTop="?attr/actionBarSize"
-                android:id="@+id/tabs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+  <android.support.design.widget.TabLayout
+  android:layout_gravity="bottom"
+  android:layout_marginTop="?attr/actionBarSize"
+  android:id="@+id/tabs"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"/>
 
-        </android.support.design.widget.CollapsingToolbarLayout>
-    </android.support.design.widget.AppBarLayout>
+  </android.support.design.widget.CollapsingToolbarLayout>
+  </android.support.design.widget.AppBarLayout>
 
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewpager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+  <android.support.v4.view.ViewPager
+  android:id="@+id/viewpager"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_done"/>
+  <android.support.design.widget.FloatingActionButton
+  android:id="@+id/fab"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content"
+  android:layout_gravity="end|bottom"
+  android:layout_margin="@dimen/fab_margin"
+  android:src="@drawable/ic_done"/>
 
-</android.support.design.widget.CoordinatorLayout>
+  </android.support.design.widget.CoordinatorLayout>
 
 // web app
-<meta name="theme-color" content="#40bd9e" >
+  <meta name="theme-color" content="#40bd9e" >
 
 // app install banner
 // Requirements
@@ -10911,62 +10911,441 @@ public class AppModule{
 // A service worker
 // Visit frequency heuristics
 
-<link rel="manifest" herf="manifest.json">
+  <link rel="manifest" herf="manifest.json">
 
-{
-	"short_name":"PCalc",
-	"name":"Paper Calculator",
-	"icons":[
-	{"src":"/192.png","sizes":"192*192","type":"image/png"},
-	{"src":"/144.png","sizes":"144*144","type":"image/png"},
-	{"src":"/96.png","sizes":"96*96","type":"image/png"},
-	{"src":"/48.png","sizes":"48*48","type":"image/png"}
-	],
-	"start_url":"/demo.html?addToHome=true",
-	"display":"standalone"
-}
+  {
+  	"short_name":"PCalc",
+  	"name":"Paper Calculator",
+  	"icons":[
+  	{"src":"/192.png","sizes":"192*192","type":"image/png"},
+  	{"src":"/144.png","sizes":"144*144","type":"image/png"},
+  	{"src":"/96.png","sizes":"96*96","type":"image/png"},
+  	{"src":"/48.png","sizes":"48*48","type":"image/png"}
+  	],
+  	"start_url":"/demo.html?addToHome=true",
+  	"display":"standalone"
+  }
 
 
 // RxJava
-public class ApiManager{
-	private interface ApiManagerService{
-		@GET("/weather")
-		WeatherData getWeather(@Query("q")String place, @Query("units") String units);
-	}
+  public class ApiManager{
+  	private interface ApiManagerService{
+  		@GET("/weather")
+  		WeatherData getWeather(@Query("q")String place, @Query("units") String units);
+  	}
 
-	private static final RestAdapter restAdapter = new RestAdapter.Builder()
-		.setServer("xxx").build();
+  	private static final RestAdapter restAdapter = new RestAdapter.Builder()
+  	.setServer("xxx").build();
 
-	private static final ApiManagerService apiManager = restAdapter.create(ApiManagerService.class);
+  	private static final ApiManagerService apiManager = restAdapter.create(ApiManagerService.class);
 
-	public static Observable<WeatherData> getWeatherData(final String city){
-		return Observable.create(new Observable.OnSubscribeFunc<WeatherData>(){
-			@Override
-			public Subscription onSubscribe(Observer<? super WeatherData> observer){
-				try{
-					observer.onNext(apiManager.getWeather(city,"metric"));
-					observer.onCompleted();
-				}catch(Exception e){
-					observer.onError(e);
-				}
+  	public static Observable<WeatherData> getWeatherData(final String city){
+  		return Observable.create(new Observable.OnSubscribeFunc<WeatherData>(){
+  			@Override
+  			public Subscription onSubscribe(Observer<? super WeatherData> observer){
+  				try{
+  					observer.onNext(apiManager.getWeather(city,"metric"));
+  					observer.onCompleted();
+  				}catch(Exception e){
+  					observer.onError(e);
+  				}
 
-				return Subscriptions.empty();
-			}
-		}).subscribeOn(Schedulers.threadPoolForIO());
+  				return Subscriptions.empty();
+  			}
+  		}).subscribeOn(Schedulers.threadPoolForIO());
+  	}
+  }
+
+  Observable.from(cities).mapMany(new Func1<String, Observable<WeatherData>>(){
+  	@Override
+  	public Observable<WeatherData> call(String s){
+  		return ApiManager.getWeatherData(s);
+  	}
+  })
+  .subscribeOn(Schedulers.threadPoolForIO())
+  .observeOn(AndroidSchedulers.mainThread())
+  .subscibe(new Action1<WeatherData>(){
+  	@Override
+  	public void call(WeatherData weatherData){
+		// TODO
+  	}
+  });
+
+// Loader
+  public static class AppListLoader extends AsyncTaskLoader<List<AppEntry>>{
+
+  	final InterestingConfigChanges mLastConfig = new InterestingConfigChanges();
+  	final PackageManager mPm;
+
+  	List<AppEntry> mApps;
+  	PackageIntentReceiver mPackageObserver;
+
+  	public AppListLoader(Context context){
+  		super(context);
+  		mPm = getContext().getPackageManager();
+  	}
+
+  	public List<AppEntry> loadInBackground(){
+  		List<ApplicationInfo> apps = mPm.getInstalledApplications(PackageManager.GET_UNINSTALLED_PACKAGES|PackageManager.GET_DISABLED_COMPONENTS);
+
+  		if(apps == null){
+  			apps = new ArrayList<ApplicationiInfo>();
+  		}
+
+  		final Context context = getContext();
+
+  		List<AppEntry> entries = new ArrayList<AppEntry>(apps.size());
+  		for(int i=0; i< apps.size(); i++){
+  			AppEntry entry = new AppEntry(this, apps.get(i));
+  			entry.loadLabel(context);
+  			entries.add(entry);
+  		}
+
+  		Collections.sort(entries, ALPHA_COMPARATOR);
+
+  		return entries;
+  	}
+
+
+  	public void deliveResult(List<AppEntry> apps){
+  		if(isRest()){
+  			if(apps!= null){
+  				onReleaseResources(apps);
+  			}
+  		}
+
+  		List<AppEntry> oldApps = apps;
+  		mApps = apps;
+
+  		if(isStarted()){
+  			super.deliverResult(apps);
+  		}
+
+  		if(oldApps != null){
+  			onReleaseResources(oldApps);
+  		}
+  	}
+
+  	protected void onStartLoading(){
+  		if(mApps != null){
+  			deliverResult(mApps);
+  		}
+
+  		if(mPackageObserver == null){
+  			mPackageObserver = new PackageIntentReceiver(this);
+  		}
+
+  		boolean configChange = mLastConfig.applyNewConfig(getContext().getResources());
+
+  		if(takeContentchanged() || mApps == null || configChange){
+  			forceLoad();
+  		}
+  	}
+
+  	protected void onStopLoading(){
+  		cancelLoad();
+  	}
+
+  	public void onCanceled(List<AppEntry> apps){
+  		super.onCanceled(apps);
+
+  		onReleaseResources(apps);
+  	}
+
+  	protected void onRest(){
+  		super.onReset();
+
+  		onStopLoading();
+
+  		if(mApps != null){
+  			onReleaseResources(mApps);
+  			mApps = null;
+  		}
+
+  		if(mPackageObserver != null){
+  			getContext().unregisterReceiver(mPackageObserver);
+  			mPackageObserver = null;
+  		}
+  	}
+
+  	protected void onReleaseResources(List<AppEntry> apps){
+
+  	}
+  }
+
+  public static class CursorLoaderListFragment extends ListFragment implements OnQueryTextListener, OnCloseListener,LoaderManager.LoaderCallbacks<Cursor> {
+  	
+  	SimpleCursorAdapter mAdapter;
+  	SearchView mSearchView;
+    // If non-null, this is the current filter the user has provided.
+  	String mCurFilter;
+
+  	@Override 
+  	public void onActivityCreated(Bundle savedInstanceState) {
+  		super.onActivityCreated(savedInstanceState);
+
+        // Give some text to display if there is no data.  In a real
+        // application this would come from a resource.
+  		setEmptyText("No phone numbers");
+
+        // We have a menu item to show in action bar.
+  		setHasOptionsMenu(true);
+
+        // Create an empty adapter we will use to display the loaded data.
+  		mAdapter = new SimpleCursorAdapter(getActivity(),
+  			android.R.layout.simple_list_item_2, null,
+  			new String[] { Contacts.DISPLAY_NAME, Contacts.CONTACT_STATUS },
+  			new int[] { android.R.id.text1, android.R.id.text2 }, 0);
+  		setListAdapter(mAdapter);
+
+        // Start out with a progress indicator.
+  		setListShown(false);
+
+        // Prepare the loader.  Either re-connect with an existing one,
+        // or start a new one.
+  		getLoaderManager().initLoader(0, null, this);
+  	}
+
+  	public static class MySearchView extends SearchView {
+  		public MySearchView(Context context) {
+  			super(context);
+  		}
+
+        // The normal SearchView doesn't clear its search text when
+        // collapsed, so we will do this for it.
+  		@Override
+  		public void onActionViewCollapsed() {
+  			setQuery("", false);
+  			super.onActionViewCollapsed();
+  		}
+  	}
+
+  	@Override 
+  	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Place an action bar item for searching.
+  		MenuItem item = menu.add("Search");
+  		item.setIcon(android.R.drawable.ic_menu_search);
+  		item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+  		
+  		mSearchView = new MySearchView(getActivity());
+  		mSearchView.setOnQueryTextListener(this);
+  		mSearchView.setOnCloseListener(this);
+  		mSearchView.setIconifiedByDefault(true);
+  		item.setActionView(mSearchView);
+  	}
+
+  	public boolean onQueryTextChange(String newText) {
+        // Called when the action bar search text has changed.  Update
+        // the search filter, and restart the loader to do a new query
+        // with this filter.
+  		String newFilter = !TextUtils.isEmpty(newText) ? newText : null;
+        // Don't do anything if the filter hasn't actually changed.
+        // Prevents restarting the loader when restoring state.
+  		if (mCurFilter == null && newFilter == null) {
+  			return true;
+  		}
+  		if (mCurFilter != null && mCurFilter.equals(newFilter)) {
+  			return true;
+  		}
+  		mCurFilter = newFilter;
+  		getLoaderManager().restartLoader(0, null, this);
+  		return true;
+  	}
+
+  	@Override public boolean onQueryTextSubmit(String query) {
+        // Don't care about this.
+  		return true;
+  	}
+
+  	@Override
+  	public boolean onClose() {
+  		if (!TextUtils.isEmpty(mSearchView.getQuery())) {
+  			mSearchView.setQuery(null, true);
+  		}
+  		return true;
+  	}
+
+  	@Override 
+  	public void onListItemClick(ListView l, View v, int position, long id) {
+        // Insert desired behavior here.
+  		Log.i("FragmentComplexList", "Item clicked: " + id);
+  	}
+
+    // These are the Contacts rows that we will retrieve.
+  	static final String[] CONTACTS_SUMMARY_PROJECTION = new String[] {
+  		Contacts._ID,
+  		Contacts.DISPLAY_NAME,
+  		Contacts.CONTACT_STATUS,
+  		Contacts.CONTACT_PRESENCE,
+  		Contacts.PHOTO_ID,
+  		Contacts.LOOKUP_KEY,
+  	};
+
+  	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        // This is called when a new Loader needs to be created.  This
+        // sample only has one Loader, so we don't care about the ID.
+        // First, pick the base URI to use depending on whether we are
+        // currently filtering.
+  		Uri baseUri;
+  		if (mCurFilter != null) {
+  			baseUri = Uri.withAppendedPath(Contacts.CONTENT_FILTER_URI,
+  				Uri.encode(mCurFilter));
+  		} else {
+  			baseUri = Contacts.CONTENT_URI;
+  		}
+
+        // Now create and return a CursorLoader that will take care of
+        // creating a Cursor for the data being displayed.
+  		String select = "((" + Contacts.DISPLAY_NAME + " NOTNULL) AND ("
+  			+ Contacts.HAS_PHONE_NUMBER + "=1) AND ("
+  			+ Contacts.DISPLAY_NAME + " != '' ))";
+
+return new CursorLoader(getActivity(), baseUri,CONTACTS_SUMMARY_PROJECTION, select, null,Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC");
+}
+
+public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+	        // Swap the new cursor in.  (The framework will take care of closing the
+	        // old cursor once we return.)
+	mAdapter.swapCursor(data);
+
+	        // The list should now be shown.
+	if (isResumed()) {
+		setListShown(true);
+	} else {
+		setListShownNoAnimation(true);
 	}
 }
 
-Observable.from(cities).mapMany(new Func1<String, Observable<WeatherData>>(){
-	@Override
-	public Observable<WeatherData> call(String s){
-		return ApiManager.getWeatherData(s);
+public void onLoaderReset(Loader<Cursor> loader) {
+	        // This is called when the last Cursor provided to onLoadFinished()
+	        // above is about to be closed.  We need to make sure we are no
+	        // longer using it.
+	mAdapter.swapCursor(null);
+}
+}
+
+public abstract class SQLiteCursorLoader extends AsyncTaskLoader<Cursor> {
+	private Cursor mCursor;
+
+	public SQLiteCursorLoader(Context context) {
+		super(context);
 	}
-})
-.subscribeOn(Schedulers.threadPoolForIO())
-.observeOn(AndroidSchedulers.mainThread())
-.subscibe(new Action1<WeatherData>(){
+//定义抽象方法，子类可以利用此方法定义Cursor加载。
+	protected abstract Cursor loadCursor();
+
 	@Override
-	public void call(WeatherData weatherData){
-		// TODO
+	public Cursor loadInBackground() {
+		Cursor cursor = loadCursor();
+		if (cursor != null) {
+            // ensure that the content window is filled
+            //通过调用一个方法预加载内容。
+			cursor.getCount();
+		}
+		return cursor;
 	}
-});
+    //数据更新时
+	@Override
+	public void deliverResult(Cursor data) {
+        Cursor oldCursor = mCursor;//保存旧的cursor引用。
+        mCursor = data;
+
+        if (isStarted()) {
+        	super.deliverResult(data);
+        }
+        //为防止cursor缓存，所以检测新旧cursor引用的一致性。然后判断是否关闭旧的cursor
+        if (oldCursor != null && oldCursor != data && !oldCursor.isClosed()) {
+        	oldCursor.close();
+        }
+    }
+    @Override
+    protected void onStartLoading() {
+    	if (mCursor != null) {
+    		deliverResult(mCursor);
+    	}
+    	if (takeContentChanged() || mCursor == null) {
+    		forceLoad();
+    	}
+    }
+    @Override
+    protected void onStopLoading() {
+        // Attempt to cancel the current load task if possible.
+    	cancelLoad();
+    }
+    @Override
+    public void onCanceled(Cursor cursor) {
+    	if (cursor != null && !cursor.isClosed()) {
+    		cursor.close();
+    	}
+    }
+    @Override
+    protected void onReset() {
+    	super.onReset();
+        // Ensure the loader is stopped
+    	onStopLoading();
+    	if (mCursor != null && !mCursor.isClosed()) {
+    		mCursor.close();
+    	}
+    	mCursor = null;
+    }
+}
+
+public class MyRssCursorLoader  extends SQLiteCursorLoader {
+	private final SQLiteOpenHelper helper;
+	public MyRssCursorLoader(Context context) {
+		super(context);
+		helper = RssUtils.getInstance().getSQLiteOpenHelper();
+	}
+	
+	@Override
+	protected Cursor loadCursor() {
+        // query the list of runs
+		SQLiteDatabase db=helper.getWritableDatabase();
+		RSSModelDao dao=RssUtils.getInstance().getRssDao(db);
+		return db.query(dao.getTablename(),dao.getAllColumns(),null,null,null,null,"_id ASC");
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
