@@ -1664,29 +1664,27 @@ toolbar.setNavigationOnClickListener(new View.OnClickListener(){
 //ViewGroup里的onTouchEvent默认值是false。
 //View里的onTouchEvent返回默认值是true.这样才能执行多次touch事件。
 
-/**
-每个事件都是以 ACTION_DOWN 开始 和 ACTION_UP 结束
-对事件的处理包括三类：
-1. dispatchTouchEvent() 传递
-2. onInterceptTouchEvent() 拦截
-3. onTouchEvent() OnTouchListener 消费
+// 每个事件都是以 ACTION_DOWN 开始 和 ACTION_UP 结束
+// 对事件的处理包括三类：
+// 1. dispatchTouchEvent() 传递
+// 2. onInterceptTouchEvent() 拦截
+// 3. onTouchEvent() OnTouchListener 消费
 
-传递流程：
-1. 事件从activity.dispatchTouchEvent() 开始传递，
-只要没有被停止或拦截，从最上层的ViewGroup开始一直往下传递。
-下层的view可以用过onTouchEvent()对事件进行处理
+// 传递流程：
+// 1. 事件从activity.dispatchTouchEvent() 开始传递，
+// 只要没有被停止或拦截，从最上层的ViewGroup开始一直往下传递。
+// 下层的view可以用过onTouchEvent()对事件进行处理
 
-2. 事件由父ViewGroup传递给子view，ViewGroup可以通过onInterceptTouchEvent对事件做拦截，停止其往下传递
+// 2. 事件由父ViewGroup传递给子view，ViewGroup可以通过onInterceptTouchEvent对事件做拦截，停止其往下传递
 
-3. 如果事件从上往下传递过程中一直没有被停止，且最底层子View没有消费事件，事件会反向往上传递，
-这时父ViewGroup可以进行消费，如果还是没有被消费的话，最后会到activity的onTouchEvent()函数
+// 3. 如果事件从上往下传递过程中一直没有被停止，且最底层子View没有消费事件，事件会反向往上传递，
+// 这时父ViewGroup可以进行消费，如果还是没有被消费的话，最后会到activity的onTouchEvent()函数
 
-4. 如果View没有对ACTION_DOWN进行消费，之后的其他事件也不会传递过来
+// 4. 如果View没有对ACTION_DOWN进行消费，之后的其他事件也不会传递过来
 
-5. OnTouchListener优先于onTouchEvent()对事件进行消费
+// 5. OnTouchListener优先于onTouchEvent()对事件进行消费
 
-消费即表示相应函数返回值为true
-**/
+// 消费即表示相应函数返回值为true
 
 
 // 绘图过程
@@ -11305,34 +11303,609 @@ public class MyRssCursorLoader  extends SQLiteCursorLoader {
 	}
 }
 
+    // Thor is awesome. He has a hammer!
+public class Thor extends Avenger {
+	private final AvengerWeapon myAmazingHammer;
+
+	public Thor (AvengerWeapon anAmazingHammer) {
+		myAmazingHammer = anAmazingHammer;
+	}
+
+	public void doAmazingThorWork () {
+		myAmazingHammer.hitSomeone();
+	}
+}
+
+public class Thor extends Avenger{
+	@Inject AvengerWeapon myAmazingHammer;
+
+	public void doAmazingThorWork(){
+		myAmazingHammer.hitSomeOne();
+	}
+}
+
+public class ThorHammer extends AvengerWeapon(){
+	@Inject public AvengerWeapon(){
+		initGodHammer();
+	}
+}
+
+// @Inject
+// @Module Moduls类里面的方法专门提供依赖
+// @Provide 在Module中，我们定义的方法是用整个注解
+// @Component 注入器，是inject 和 Module 的桥梁
+// @Scope 通过自定义注解限定注解作用域。
+// @Qualifier 不足以鉴别依赖类型
 
 
 
+@Singleton // Constraints this component to one-per-application or unscoped bindings.
+@Component(modules = ApplicationModule.class)
+public interface ApplicationComponent {
+	void inject(BaseActivity baseActivity);
+
+  //Exposed to sub-graphs.
+	Context context();
+	ThreadExecutor threadExecutor();
+	PostExecutionThread postExecutionThread();
+	UserRepository userRepository();
+}
+
+@Module
+public class ApplicationModule {
+	private final AndroidApplication application;
+
+	public ApplicationModule(AndroidApplication application) {
+		this.application = application;
+	}
+
+	@Provides @Singleton 
+	Context provideApplicationContext() {
+		return this.application;
+	}
+
+	@Provides @Singleton 
+	Navigator provideNavigator() {
+		return new Navigator();
+	}
+
+	@Provides @Singleton 
+	ThreadExecutor provideThreadExecutor(JobExecutor jobExecutor) {
+		return jobExecutor;
+	}
+
+	@Provides @Singleton 
+	PostExecutionThread providePostExecutionThread(UIThread uiThread) {
+		return uiThread;
+	}
+
+	@Provides @Singleton 
+	UserCache provideUserCache(UserCacheImpl userCache) {
+		return userCache;
+	}
+
+	@Provides @Singleton 
+	UserRepository provideUserRepository(UserDataRepository userDataRepository) {
+		return userDataRepository;
+	}
+}
+
+@PerActivity
+@Component(dependencies = ApplicationComponent.class, modules = ActivityModule.class)
+public interface ActivityComponent {
+  //Exposed to sub-graphs.
+	Activity activity();
+}
+
+@Module
+public class ActivityModule {
+	private final Activity activity;
+
+	public ActivityModule(Activity activity) {
+		this.activity = activity;
+	}
+
+	@Provides @PerActivity 
+	Activity activity() {
+		return this.activity;
+	}
+}
+
+@PerActivity
+@Component(dependencies = ApplicationComponent.class, modules = {ActivityModule.class, UserModule.class})
+public interface UserComponent extends ActivityComponent {
+	void inject(UserListFragment userListFragment);
+	void inject(UserDetailsFragment userDetailsFragment);
+}
+// User Module: 提供跟用户相关的实例。基于我们的例子，它可以提供用户用例。
+
+@Module
+public class UserModule {
+	@Provides @PerActivity 
+	GetUserListUseCase provideGetUserListUseCase(GetUserListUseCaseImpl getUserListUseCase) {
+		return getUserListUseCase;
+	}
+
+	@Provides @PerActivity 
+	GetUserDetailsUseCase provideGetUserDetailsUseCase(GetUserDetailsUseCaseImpl getUserDetailsUseCase) {
+		return getUserDetailsUseCase;
+	}
+}
+
+// RxJava
+query("Hello, world!")
+.flatMap(urls -> Observable.from(urls))
+.flatMap(url -> getTitle(url))
+.filter(title -> title != null)
+.take(5)
+.doOnNext(title -> saveTitle(title))
+.subscribe(title -> System.out.println(title));
+
+// 将异常处理交给订阅者来做，Observerable的操作符调用链中一旦有一个抛出了异常，就会直接执行onError()方法。
+
+// 使用subscribeOn()指定观察者代码运行的线程，
+// 使用observerOn()指定订阅者运行的线程：
+
+myObservableServices.retrieveImage(url)
+.subscribeOn(Schedulers.io())
+.observeOn(AndroidSchedulers.mainThread())
+.subscribe(bitmap -> myImageView.setImageBitmap(bitmap));
+
+
+ubscription subscription = Observable.just("Hello, World!")
+.subscribe(s -> System.out.println(s));
+// 你可以在后面使用这个Subscription对象来操作被观察者和订阅者之间的联系.
+
+subscription.unsubscribe();
+System.out.println("Unsubscribed=" + subscription.isUnsubscribed());
+// Outputs "Unsubscribed=true"
+
+// 与Handle
+new Thread(new Runnable() {
+	@Override
+	public void run() {
+        final Handler handler = new Handler(); // bound to this thread
+        Observable.just("one", "two", "three", "four", "five")
+        .subscribeOn(Schedulers.newThread())
+        .observeOn(HandlerScheduler.from(handler))
+        .subscribe(/* an Observer */)
+
+        // perform work, ...
+    }
+}, "custom-thread-1").start();
+
+// RxAndroid
+// More specifically, it provides a Scheduler that schedules on the main UI thread or any given Handler.
+
+private Subscription subscription;
+
+protected void onCreate(Bundle savedInstanceState) {
+	this.subscription = observable.subscribe(this);
+}
+
+protected void onDestroy() {
+	this.subscription.unsubscribe();
+	super.onDestroy();
+}
+
+Observable.from(cities)
+//mapMany()方法将会把前者提供的每一个字符串都转化为observable对象
+.mapMany(new Func1<String, Observable<WeatherData>>() {
+	@Override
+	public Observable<WeatherData> call(String s) {
+		return ApiManager.getWeatherData(s);
+	}
+})
+.subscribeOn(Schedulers.threadPoolForIO())
+.observeOn(AndroidSchedulers.mainThread())
+.subscribe(weatherData -> handle(weatherData));
+
+/**
+     * 采用lambda写法创建Observable
+     * @param city
+     */
+private void observableAsLambda(String city){
+	subscription = Observable.create(
+		subscriber->{
+			if(subscriber.isUnsubscribed()) return;
+			try {
+				String weatherXml = getWeather(city);
+				Weather weather = parseWeather(weatherXml);
+				subscriber.onNext(weather);
+				subscriber.onCompleted();
+			} catch(Exception e){
+				subscriber.onError(e);
+			}
+		})
+	.subscribeOn(Schedulers.newThread()).observeOn(AndroidSchedulers.mainThread()) 
+	.subscribe(weather->{if(weather != null)weatherTV.setText(weather.toString());},e->{Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();});
+}
+//
+
+Observable.timer(2, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
+.map(l->{
+	startActivity(new Intent(this, MainActivity.class));
+	finish();
+	return null;
+}).subscribe();
+
+Observable.mergeDelayError(
+//在新线程中加载本地缓存图片
+	loadBitmapFromLocal().subscribeOn(Schedulers.io()),
+//在新线程中加载网络图片
+	loadBitmapFromNet().subscribeOn(Schedulers.newThread()),
+	Observable.timer(3,TimeUnit.SECONDS).map(c->null))
+//每隔2秒获取加载数据
+.sample(2, TimeUnit.SECONDS, AndroidSchedulers.mainThread())
+.flatMap(r->{
+//如果没有获取到图片，直接跳转到主页面
+	if(r==null){
+		return Observable.empty();
+	} else { //如果获取到图片，则停留2秒再跳转到主页面
+		view.setImageDrawable(r);
+		return Observable.timer(2, TimeUnit.SECONDS);
+	}
+}).subscribe(
+r->{},
+e->{
+	startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
+	finish();
+},
+()->{
+	startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
+	finish();
+}
+);
+
+// mergeDelayError，它的意思是合并几个不同的Observable；
+// sample的意思是每隔一段时间就进行采样，在时间间隔范围内获取最后一个发布的Observable; 
+// flatMap的意思是把某一个Observable转换成另一个Observable。
+
+
+// 创建操作符
+.create()
+.just()
+.from()
+
+// 转换操作符
+.map()
+.flatMap()
+.buffer()
+
+// 过滤操作符
+.filter()
+.sample()
+.take()
+
+// 组合操作符
+.join()
+.merge()
+.combineLatest()
+
+// 错误处理操作符
+.onErrorResumeNext()
+.retry()
+
+// 功能性操作符
+.subscribeOn()
+.observeOn()
+.delay()
+
+// 条件操作符
+amb()
+contains()
+skipUntil()
+
+// 数学运算及聚合操作符
+count()
+reduce()
+concat()
+
+// 其他
+toList()
+connect()
+publish()
+
+Observable.create(new Observable.OnSubscribe<Integer>(){
+	public void call(Subscriber<? super Integer> observer){
+		try{
+			if(!observer.isUnsubscribed()){
+				for(int i=1; i<5; i++){
+					observer.onNext(i);
+				}
+				observer.onCompleted();
+			}
+		}catch(Exception e){
+			observer.onError(e);
+		}
+	}
+})
+.subscribe(new Subscriber<Integer item>{
+	public void onNext(Integer item){
+		log.i();
+	}
+
+	public void onError(Throwable error){
+		log.e();
+	}
+
+	public void onCompleted(){
+		log.d();
+	}
+})
+
+Integer[] items = { 0, 1, 2, 3, 4, 5 };
+Observable myObservable = Observable.from(items);
+
+myObservable.subscribe(new Actiona<Integer>(){
+	public void call(Integer item){
+
+	}
+},new Action1<Throwable>(){
+	public void call(Throwable error){
+
+	}
+},new Action0(){
+	public void call(){
+
+	}
+});
+
+// just操作符也是把其他类型的对象和数据类型转化成Observable，
+// 它和from操作符很像，只是方法的参数有所差别，
+Observable.just(1, 2, 3)
+.subscribe(new Subscriber<Integer>() {
+	@Override
+	public void onNext(Integer item) {
+		System.out.println("Next: " + item);
+	}
+
+	@Override
+	public void onError(Throwable error) {
+		System.err.println("Error: " + error.getMessage());
+	}
+
+	@Override
+	public void onCompleted() {
+		System.out.println("Sequence complete.");
+	}
+});
+
+// defer操作符是直到有订阅者订阅时，才通过Observable的工厂方法创建Observable并执行，
+// defer操作符能够保证Observable的状态是最新的，
+i=10;
+Observable justObservable = Observable.just(i);
+i=12;
+Observable deferObservable = Observable.defer(new Func0<Observable<Object>>() {
+	@Override
+	public Observable<Object> call() {
+		return Observable.just(i);
+	}
+});
+i=15;
+
+justObservable.subscribe(new Subscriber() {
+	@Override
+	public void onCompleted() {
+
+	}
+
+	@Override
+	public void onError(Throwable e) {
+
+	}
+
+	@Override
+	public void onNext(Object o) {
+		System.out.println("just result:" + o.toString());
+	}
+});
+
+deferObservable.subscribe(new Subscriber() {
+	@Override
+	public void onCompleted() {
+
+	}
+
+	@Override
+	public void onError(Throwable e) {
+
+	}
+
+	@Override
+	public void onNext(Object o) {
+		System.out.println("defer result:" + o.toString());
+	}
+});
+}
+
+// timer操作符是创建一串连续的数字，产生这些数字的时间间隔是一定的；
+  //每隔两秒产生一个数字
+Observable.timer(2, 2, TimeUnit.SECONDS).subscribe(new Subscriber<Long>() {
+	@Override
+	public void onCompleted() {
+		System.out.println("Sequence complete.");
+	}
+
+	@Override
+	public void onError(Throwable e) {
+		System.out.println("error:" + e.getMessage());
+	}
+
+	@Override
+	public void onNext(Long aLong) {
+		System.out.println("Next:" + aLong.toString());
+	}
+});
+
+//产生从3开始，个数为10个的连续数字
+Observable.range(3,10).subscribe(new Subscriber<Integer>() {
+	@Override
+	public void onCompleted() {
+		System.out.println("Sequence complete.");
+	}
+
+	@Override
+	public void onError(Throwable e) {
+		System.out.println("error:" + e.getMessage());
+	}
+
+	@Override
+	public void onNext(Integer i) {
+		System.out.println("Next:" + i.toString());
+	}
+});
+
+Observable.range(3,3).repeat(2).subscribe(new Subscriber<Integer>() {
+	@Override
+	public void onCompleted() {
+		System.out.println("Sequence complete.");
+	}
+
+	@Override
+	public void onError(Throwable e) {
+		System.out.println("error:" + e.getMessage());
+	}
+
+	@Override
+	public void onNext(Integer i) {
+		System.out.println("Next:" + i.toString());
+	}
+});
+
+Observable.just(1,2,3).repeatWhen(new Func1<Observable<? extends Void>, Observable<?>>() {
+	@Override
+	public Observable<?> call(Observable<? extends Void> observable) {
+                //重复3次
+		return observable.zipWith(Observable.range(1, 3), new Func2<Void, Integer, Integer>() {
+			@Override
+			public Integer call(Void aVoid, Integer integer) {
+				return integer;
+			}
+		}).flatMap(new Func1<Integer, Observable<?>>() {
+			@Override
+			public Observable<?> call(Integer integer) {
+				System.out.println("delay repeat the " + integer + " count");
+                        //1秒钟重复一次
+				return Observable.timer(1, TimeUnit.SECONDS);
+			}
+		});
+	}
+}).subscribe(new Subscriber<Integer>() {
+	@Override
+	public void onCompleted() {
+		System.out.println("Sequence complete.");
+	}
+
+	@Override
+	public void onError(Throwable e) {
+		System.err.println("Error: " + e.getMessage());
+	}
+
+	@Override
+	public void onNext(Integer value) {
+		System.out.println("Next:" + value);
+	}
+});
+
+// buffer操作符周期性地收集源Observable产生的结果到列表中，并把这个列表提交给订阅者，订阅者处理后，清空buffer列表，
+// 同时接收下一次收集的结果并提交给订阅者，周而复始。
+
+//定义邮件内容
+final String[] mails = new String[]{"Here is an email!", "Another email!", "Yet another email!"};
+//每隔1秒就随机发布一封邮件
+Observable<String> endlessMail = Observable.create(new Observable.OnSubscribe<String>() {
+	@Override
+	public void call(Subscriber<? super String> subscriber) {
+		try {
+			if (subscriber.isUnsubscribed()) return;
+
+			Random random = new Random();
+			while (true) {
+				String mail = mails[random.nextInt(mails.length)];
+				subscriber.onNext(mail);
+				Thread.sleep(1000);
+			}
+		} catch (Exception ex) {
+			subscriber.onError(ex);
+		}
+	}
+}).subscribeOn(Schedulers.io());
+//把上面产生的邮件内容缓存到列表中，并每隔3秒通知订阅者
+endlessMail.buffer(3, TimeUnit.SECONDS).subscribe(new Action1<List<String>>() {
+	@Override
+	public void call(List<String> list) {
+
+		System.out.println(String.format("You've got %d new messages!  Here they are!", list.size()));
+		for (int i = 0; i < list.size(); i++)
+			System.out.println("**" + list.get(i).toString());
+	}
+});
 
 
 
+private Observable<File> listFiles(File f){
+	if(f.isDirectory()){
+		return Observable.from(f.listFiles()).flatMap(new Func1<File, Observable<File>>() {
+			@Override
+			public Observable<File> call(File file) {
+				return listFiles(f);
+			}
+		});
+	} else {
+		return Observable.just(f);
+	}
+}
 
 
+@Override
+public void onClick(View v) {
+	Observable.just(getApplicationContext().getExternalCacheDir())
+	.flatMap(new Func1<File, Observable<File>>() {
+		@Override
+		public Observable<File> call(File file) {
+//参数file是just操作符产生的结果，这里判断file是不是目录文件，如果是目录文件，则递归查找其子文件flatMap操作符神奇的地方在于，返回的结果还是一个Observable，而这个Observable其实是包含多个文件的Observable的，输出应该是ExternalCacheDir下的所有文件
+			return listFiles(file);
+		}
+	})
+	.subscribe(new Action1<File>() {
+		@Override
+		public void call(File file) {
+			System.out.println(file.getAbsolutePath());
+		}
+	});
+}
 
+// concatMap操作符在处理产生的Observable时，采用的是“连接(concat)”的方式，而不是“合并(merge)”的方式，这就能保证产生结果的顺序性，
+// 也就是说提交给订阅者的结果是按照顺序提交的，不会存在交叉的情况。
 
+// 与flatMap操作符不同的是，switchMap操作符会保存最新的Observable产生的结果而舍弃旧的结果
 
+// groupBy操作符是对源Observable产生的结果进行分组，形成一个类型为GroupedObservable的结果集，
+// GroupedObservable中存在一个方法为getKey()，可以通过该方法获取结果集的Key值（类似于HashMap的key)。
 
+Observable.just(1,2,3,4,5,6)
+.map(new Func1<Integer, Integer>() {
+	@Override
+	public Integer call(Integer integer) {
+//对源Observable产生的结果，都统一乘以3处理
+		return integer*3;
+	}
+}).subscribe(new Action1<Integer>() {
+	@Override
+	public void call(Integer integer) {
+		System.out.println("next:" + integer);
+	}
+});
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Observable.just(1,2,3,4,5,6)
+.cast(Integer.class)
+.subscribe(new Action1<Integer>() {
+	@Override
+	public void call(Integer value) {
+		System.out.println("next:"+value);
+	}
+});
 
 
 
