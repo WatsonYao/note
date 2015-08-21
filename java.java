@@ -11907,7 +11907,24 @@ Observable.just(1,2,3,4,5,6)
 	}
 });
 
+// 关于RxJava的重用
+<T> Transformer<T, T> applySchedulers() {  
+	return observable -> observable.subscribeOn(Schedulers.io())
+	.observeOn(AndroidSchedulers.mainThread());
+}
 
+Observable.from(someSource)
+.map(new Func1<Data, Data>() {
+	@Override public Data call(Data data) {
+		return manipulate(data);
+	}
+})
+.compose(this.<YourType>applySchedulers())
+.subscribe(new Action1<Data>() {
+	@Override public void call(Data data) {
+		doSomething(data);
+	}
+});
 
 
 
