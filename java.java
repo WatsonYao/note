@@ -11926,6 +11926,121 @@ Observable.from(someSource)
 	}
 });
 
+// create(OnSubscribe)
+Observable.create(new Observable.onSubscribe<Integer>(){
+	public void call(Subscriber<? super Integer> observer){
+		try{
+			if(!observer.isUnsubscribed()){
+				for(int i=1; i<5; i++){
+					observer.onNext(i);
+				}
+				observer.onCompleted();
+			}catch(Exception e){
+				observer.onError(e);
+			}
+		}
+	}
+}).subscribe(new Subscriber<Integer>(){
+	public void onNext(Integer item){
+
+	}
+
+	public void onError(Throwable error){
+
+	}
+
+	public void onCompleted(){
+
+	}
+})
+
+// defer
+// 在某些情况下，等待直到最后一分钟（就是知道订阅发生时）才生成Observable可以确保Observable包含最新的数据。
+// 这个操作符接受一个你选择的Observable工厂函数作为单个参数。这个函数没有参数，返回一个Observable。
+
+// from
+// from方法有一个可接受两个可选参数的版本，分别指定超时时长和时间单位。
+//如果过了指定的时长Future还没有返回一个值，这个Observable会发射错误通知并终止。
+
+// RxJava将这个操作符实现为interval方法。它接受一个表示时间间隔的参数和一个表示时间单位的参数。
+// Javadoc: interval(long,TimeUnit))
+// Javadoc: interval(long,TimeUnit,Scheduler))
+
+
+// And/Then/When操作符组合的行为类似于zip，但是它们使用一个中间数据结构。
+// 接受两个或多个Observable，一次一个将它们的发射物合并到Pattern对象，然后操作那个Pattern对象，变换为一个Plan。
+// 随后将这些Plan变换为Observable的发射物。
+
+// 大神的示例代码
+public class MainActivity extends Activity {
+    private static final String TAG = "RxAndroidSamples";
+
+    private Handler backgroundHandler;
+
+    @Override protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.main_activity);
+
+        BackgroundThread backgroundThread = new BackgroundThread();
+        backgroundThread.start();
+        backgroundHandler = new Handler(backgroundThread.getLooper());
+
+        findViewById(R.id.scheduler_example).setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                onRunSchedulerExampleButtonClicked();
+            }
+        });
+    }
+
+    void onRunSchedulerExampleButtonClicked() {
+        sampleObservable()
+                // Run on a background thread
+                .subscribeOn(HandlerScheduler.from(backgroundHandler))
+                // Be notified on the main thread
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<String>() {
+                    @Override public void onCompleted() {
+                        Log.d(TAG, "onCompleted()");
+                    }
+
+                    @Override public void onError(Throwable e) {
+                        Log.e(TAG, "onError()", e);
+                    }
+
+                    @Override public void onNext(String string) {
+                        Log.d(TAG, "onNext(" + string + ")");
+                    }
+                });
+    }
+
+    static Observable<String> sampleObservable() {
+        return Observable.defer(new Func0<Observable<String>>() {
+            @Override public Observable<String> call() {
+                try {
+                    // Do some long running operation
+                    Thread.sleep(TimeUnit.SECONDS.toMillis(5));
+                } catch (InterruptedException e) {
+                    throw OnErrorThrowable.from(e);
+                }
+                return Observable.just("one", "two", "three", "four", "five");
+            }
+        });
+    }
+
+    static class BackgroundThread extends HandlerThread {
+        BackgroundThread() {
+            super("SchedulerSample-BackgroundThread", THREAD_PRIORITY_BACKGROUND);
+        }
+    }
+}
+
+
+
+
+
+
+
 
 
 
