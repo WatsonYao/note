@@ -11973,67 +11973,380 @@ Observable.create(new Observable.onSubscribe<Integer>(){
 
 // 大神的示例代码
 public class MainActivity extends Activity {
-    private static final String TAG = "RxAndroidSamples";
+	private static final String TAG = "RxAndroidSamples";
 
-    private Handler backgroundHandler;
+	private Handler backgroundHandler;
 
-    @Override protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	@Override protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.main_activity);
+		setContentView(R.layout.main_activity);
 
-        BackgroundThread backgroundThread = new BackgroundThread();
-        backgroundThread.start();
-        backgroundHandler = new Handler(backgroundThread.getLooper());
+		BackgroundThread backgroundThread = new BackgroundThread();
+		backgroundThread.start();
+		backgroundHandler = new Handler(backgroundThread.getLooper());
 
-        findViewById(R.id.scheduler_example).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                onRunSchedulerExampleButtonClicked();
-            }
-        });
-    }
+		findViewById(R.id.scheduler_example).setOnClickListener(new View.OnClickListener() {
+			@Override public void onClick(View v) {
+				onRunSchedulerExampleButtonClicked();
+			}
+		});
+	}
 
-    void onRunSchedulerExampleButtonClicked() {
-        sampleObservable()
+	void onRunSchedulerExampleButtonClicked() {
+		sampleObservable()
                 // Run on a background thread
-                .subscribeOn(HandlerScheduler.from(backgroundHandler))
+		.subscribeOn(HandlerScheduler.from(backgroundHandler))
                 // Be notified on the main thread
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String>() {
-                    @Override public void onCompleted() {
-                        Log.d(TAG, "onCompleted()");
-                    }
+		.observeOn(AndroidSchedulers.mainThread())
+		.subscribe(new Subscriber<String>() {
+			@Override public void onCompleted() {
+				Log.d(TAG, "onCompleted()");
+			}
 
-                    @Override public void onError(Throwable e) {
-                        Log.e(TAG, "onError()", e);
-                    }
+			@Override public void onError(Throwable e) {
+				Log.e(TAG, "onError()", e);
+			}
 
-                    @Override public void onNext(String string) {
-                        Log.d(TAG, "onNext(" + string + ")");
-                    }
-                });
-    }
+			@Override public void onNext(String string) {
+				Log.d(TAG, "onNext(" + string + ")");
+			}
+		});
+	}
 
-    static Observable<String> sampleObservable() {
-        return Observable.defer(new Func0<Observable<String>>() {
-            @Override public Observable<String> call() {
-                try {
+	static Observable<String> sampleObservable() {
+		return Observable.defer(new Func0<Observable<String>>() {
+			@Override public Observable<String> call() {
+				try {
                     // Do some long running operation
-                    Thread.sleep(TimeUnit.SECONDS.toMillis(5));
-                } catch (InterruptedException e) {
-                    throw OnErrorThrowable.from(e);
-                }
-                return Observable.just("one", "two", "three", "four", "five");
-            }
-        });
-    }
+					Thread.sleep(TimeUnit.SECONDS.toMillis(5));
+				} catch (InterruptedException e) {
+					throw OnErrorThrowable.from(e);
+				}
+				return Observable.just("one", "two", "three", "four", "five");
+			}
+		});
+	}
 
-    static class BackgroundThread extends HandlerThread {
-        BackgroundThread() {
-            super("SchedulerSample-BackgroundThread", THREAD_PRIORITY_BACKGROUND);
-        }
-    }
+	static class BackgroundThread extends HandlerThread {
+		BackgroundThread() {
+			super("SchedulerSample-BackgroundThread", THREAD_PRIORITY_BACKGROUND);
+		}
+	}
 }
+
+// Fragment使用
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+	super.onCreate(savedInstanceState);
+
+	if (savedInstanceState == null) {
+		getSupportFragmentManager().beginTransaction()
+		.replace(android.R.id.content, new MainFragment(), this.toString())
+		.commit();
+	}
+}
+
+@OnClick(R.id.btn_demo_buffer)
+public void demoBuffer() {
+	getActivity().getSupportFragmentManager()
+	.beginTransaction()
+	.addToBackStack(BufferDemoFragment.class.toString())
+	.replace(android.R.id.content,new BufferDemoFragment(),BufferDemoFragment.class.toString())
+	.commit();
+}
+
+// RxJava with Android
+_subscription = AppObservable.bindSupportFragment(this, _getObservable())      // Observable
+.subscribeOn(Schedulers.io())
+.observeOn(AndroidSchedulers.mainThread())
+.subscribe(_getObserver());                             // Observer
+
+private Observable<Boolean> _getObservable() {
+	return Observable.just(true).map(new Func1<Boolean, Boolean>() {
+		@Override
+		public Boolean call(Boolean aBoolean) {
+			_log("Within Observable");
+			_doSomeLongOperation_thatBlocksCurrentThread();
+			return aBoolean;
+		}
+	});
+}
+
+/**
+* Observer that handles the result through the 3 important actions:
+* <p/>
+* 1. onCompleted
+* 2. onError
+* 3. onNext
+*/
+private Observer<Boolean> _getObserver() {
+	return new Observer<Boolean>() {
+
+		@Override
+		public void onCompleted() {
+			_log("On complete");
+			_progress.setVisibility(View.INVISIBLE);
+		}
+
+		@Override
+		public void onError(Throwable e) {
+			Timber.e(e, "Error in RxJava Demo concurrency");
+			_log(String.format("Boo! Error %s", e.getMessage()));
+			_progress.setVisibility(View.INVISIBLE);
+		}
+
+		@Override
+		public void onNext(Boolean bool) {
+			_log(String.format("onNext with return value \"%b\"", bool));
+		}
+	};
+}
+
+// checkButton 监听
+Observable<Boolean> needCheckObservable = 
+WidgetObservable.input(checkButton, true)
+.map(new Func1<OnCheckedChangeEvent, Boolean>() {
+	@Override
+	public Boolean call(OnCheckedChangeEvent onCheckedChangeEvent) {
+		return onCheckedChangeEvent.value();
+	}
+});
+
+// EditText 监听
+Observable<OnTextChangeEvent> editTextObservable = 
+WidgetObservable.text(mEditText, true);
+
+Observable.combineLatest(needCheckObservable, editTextObservable, 
+	new Func2<Boolean, OnTextChangeEvent, Boolean>() {
+		@Override
+		public Boolean call(Boolean aBoolean, OnTextChangeEvent onTextChangeEvent) {
+			return aBoolean ? !TextUtils.isEmpty(onTextChangeEvent.text()) : true;
+		}
+	}).observeOn(AndroidSchedulers.mainThread())
+.subscribe(new Action1<Boolean>() {
+	@Override
+	public void call(Boolean aBoolean) {
+		okBtn.setEnabled(aBoolean);
+	}
+});
+
+// Button监听
+ViewObservable.clicks(okBtn)
+.observeOn(AndroidSchedulers.mainThread())
+.subscribe(new Action1<OnClickEvent>() {
+	@Override
+	public void call(OnClickEvent onClickEvent) {
+		Toast.makeText(MainActivity.this, mEditText.getText().toString(), Toast.LENGTH_SHORT).show();
+	}
+});
+
+// 创建observer,重写oncall方法
+// 创建subscriber，重写onNext，onCompleted，onError方法
+Observable observable= 
+Observable.create(new Observable.OnSubscribe<String>() {
+	@Override
+	public void call(Subscriber<? super String> subscriber) {
+		subscriber.onNext("Hello RxAndroid !!");
+		subscriber.onCompleted();
+	}
+})
+
+// flatMap 演示
+private CompositeSubscription _subscriptions = new CompositeSubscription();
+@Override
+public void onResume() {
+	super.onResume();
+	_subscriptions = RxUtils.getNewCompositeSubIfUnsubscribed(_subscriptions);
+}
+
+@Override
+public void onPause() {
+	super.onPause();
+
+	RxUtils.unsubscribeIfNotNull(_subscriptions);
+}
+
+_subscriptions.add(_api.contributors(_username.getText().toString(),_repo.getText().toString())
+	.flatMap(contributors -> Observable.from(contributors))
+	.flatMap(new Func1<Contributor, Observable<Pair<User, Contributor>>>() {
+		@Override
+		public Observable<Pair<User, Contributor>> call(Contributor contributor) {
+			Observable<User> _userObservable = _api.user(contributor.login)
+			.filter(new Func1<User, Boolean>() {
+				@Override
+				public Boolean call(User user) {
+					return !isNullOrEmpty(user.name) && !isNullOrEmpty(user.email);
+				}
+			});
+
+			return Observable
+			.zip(_userObservable,Observable.just(contributor),
+				new Func2<User, Contributor, Pair<User, Contributor>>() {
+					@Override
+					public Pair<User, Contributor> call(User user,
+						Contributor contributor) {
+						return new Pair<>(user, contributor);
+					}
+				});
+		}
+	})
+	.subscribeOn(Schedulers.newThread())
+	.observeOn(AndroidSchedulers.mainThread())
+	.subscribe(new Observer<Pair<User, Contributor>>() {
+		@Override
+		public void onCompleted() {
+			Timber.d("Retrofit call 2 completed ");
+		}
+
+		@Override
+		public void onError(Throwable e) {
+			Timber.e(e,
+				"error while getting the list of contributors along with full names");
+		}
+
+		@Override
+		public void onNext(Pair<User, Contributor> pair) {
+			User user = pair.first;
+			Contributor contributor = pair.second;
+
+			_adapter.add(format("%s(%s) has made %d contributions to %s",
+				user.name,
+				user.email,
+				contributor.contributions,
+				_repo.getText().toString()));
+
+			_adapter.notifyDataSetChanged();
+
+			Timber.d("%s(%s) has made %d contributions to %s",
+				user.name,
+				user.email,
+				contributor.contributions,
+				_repo.getText().toString());
+		}
+	}));
+
+
+Observable.combineLatest(
+	observable1, 
+	observable2, 
+	new Func2<Long, Long, Long>() {
+		@Override
+		public Long call(Long aLong, Long aLong2) {
+			return aLong+aLong2;
+		}
+	})
+
+// join方法的用法如下： 
+// observableA.join(observableB, 
+// observableA产生结果生命周期控制函数， 
+// observableB产生结果生命周期控制函数， 
+// observableA产生的结果与observableB产生的结果的合并规则）
+observable1
+.join(
+	observable2,
+	new Func1<Long, Observable<Long>>() {
+		@Override
+		public Observable<Long> call(Long aLong) {
+                //使Observable延迟600毫秒执行
+			return Observable.just(aLong).delay(600, TimeUnit.MILLISECONDS);
+		}
+	}, new Func1<Long, Observable<Long>>() {
+		@Override
+		public Observable<Long> call(Long aLong) {
+                //使Observable延迟600毫秒执行
+			return Observable.just(aLong).delay(600, TimeUnit.MILLISECONDS);
+		}
+	}, new Func2<Long, Long, Long>() {
+		@Override
+		public Long call(Long aLong, Long aLong2) {
+			return aLong + aLong2;
+		}
+	})
+
+// zip操作符是把两个observable提交的结果，严格按照顺序进行合并
+Observable<Integer> observable1 = Observable.just(10,20,30);
+Observable<Integer> observable2 = Observable.just(4, 8, 12, 16);
+
+Observable.zip(observable1, observable2, new Func2<Integer, Integer, Integer>() {
+	@Override
+	public Integer call(Integer integer, Integer integer2) {
+		return integer + integer2;
+	}
+}).subscribe(new Subscriber<Integer>() {
+	@Override
+	public void onCompleted() {
+		System.out.println("Sequence complete.");
+	}
+
+	@Override
+	public void onError(Throwable e) {
+		System.err.println("Error: " + e.getMessage());
+	}
+
+	@Override
+	public void onNext(Integer value) {
+		System.out.println("Next:" + value);
+	}
+});
+
+// 双向绑定
+Subscription _subscription;
+PublishSubject<Float> _resultEmitterSubject;
+
+@Override
+public View onCreateView(LayoutInflater inflater,
+	@Nullable ViewGroup container,
+	@Nullable Bundle savedInstanceState) {
+	View layout = inflater.inflate(R.layout.fragment_double_binding_textview, container, false);
+	ButterKnife.inject(this, layout);
+
+	_resultEmitterSubject = PublishSubject.create();
+	_subscription = _resultEmitterSubject.asObservable().subscribe(new Action1<Float>() {
+		@Override
+		public void call(Float aFloat) {
+			_result.setText(String.valueOf(aFloat));
+		}
+	});
+
+	onNumberChanged();
+	_number2.requestFocus();
+
+	return layout;
+}
+
+@OnTextChanged({ R.id.double_binding_num1, R.id.double_binding_num2 })
+public void onNumberChanged() {
+	float num1 = 0;
+	float num2 = 0;
+
+	if (!Strings.isNullOrEmpty(_number1.getText().toString())) {
+		num1 = Float.parseFloat(_number1.getText().toString());
+	}
+
+	if (!Strings.isNullOrEmpty(_number2.getText().toString())) {
+		num2 = Float.parseFloat(_number2.getText().toString());
+	}
+
+	_resultEmitterSubject.onNext(num1 + num2);
+}
+
+@Override
+public void onDestroyView() {
+	super.onDestroyView();
+	if (_subscription != null) {
+		_subscription.unsubscribe();
+	}
+}
+
+
+
+
+
+
+
+
+
 
 
 
