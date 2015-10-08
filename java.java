@@ -12052,7 +12052,47 @@ public interface ActivityComponent{
 	void inject(MainActivity activity);
 }
 
+// 第三方登录
+// 友盟登录集成
+public void onClick(View v){
+	mController = UMServicceFactory.getUMSocialService("com.umeng.login");
+	mController.doOauthVerify(ThirdPartyLandingActivity.this,SHARE_MEDIA.QQ,new UMAuthListener(){
+		public void onStart(SHARE_MEDIA platform){
+		}
 
+		public void onError(SocializeException e,SHARE_MEDIA platform){
+
+		}
+
+		public void onComplete(Bundle value,SHARE_MEDIA platform){
+			if(value != null && !TextUtils.isEmpty(value.getString("uid"))){
+				mController.getPlatformInfo(ThirdPartyLandingActivity.this,SHARE_MEDIA.QQ,new UMDataListener(){
+					public void onStart(){
+
+					}
+
+					public void onComplete(int status,Map<String,Object> info){
+						if(status == 200 && info != null){
+							StringBuilder sb = new StringBuilder();
+							Set<String> keys = info.keySet();
+							for(String key:keys){
+								sb.append(key+="" + info.get(key).toString()+"\r\n");
+							}
+						}
+					}
+
+					public onCancel(SHARE_MEDIA platform){
+
+					}
+				})
+			}
+		}
+
+		public void onCancel(SHARE_MEDIA platform){
+
+		}
+	});
+}
 
 
 
