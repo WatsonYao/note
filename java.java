@@ -12053,7 +12053,7 @@ public interface ActivityComponent{
 }
 
 // 第三方登录
-// 友盟登录集成
+// 友盟登录集成 http://dev.umeng.com/social/android/login-page
 public void onClick(View v){
 	mController = UMServicceFactory.getUMSocialService("com.umeng.login");
 	mController.doOauthVerify(ThirdPartyLandingActivity.this,SHARE_MEDIA.QQ,new UMAuthListener(){
