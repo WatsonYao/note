@@ -12094,14 +12094,64 @@ public void onClick(View v){
 	});
 }
 
+// SQLBrite
+SqlBrite sqlBrite = SqlBrite.create();
+BriteDatabase db = sqlBrite.wrapDatabaseHelper(openHelper);
+
+Observable<Query> users = db.createQuery("user","SELECT * FROM user");
+users.subscribe(new Action1<Query>(){
+	public void call(Query query){
+		Cursor cursor = query.run();
+	}
+});
+
+final AtomicInteger count = new AtomicInteger();
+users.subscribe(new Action1<Query>(){
+	public void call(Query query){
+		count.getAndIncrement();
+	}
+});
+
+//Dagger
+class Thermosiphon implments Pump{
+	private final Heater heater;
+
+	@Inject
+	Thermosiphon(Heater heater){
+		this.heater = heater;
+	}
+}
+
+class CoffeeMaker{
+	@Inject Heater heater;
+	@Inject Pump pump;
+}
+
+@Provides 
+Heater provideHeater(){
+	return new ElectricHeater();
+}
+
+@Provides
+Pump providerPump(Thermosiphon pump){
+	return pump;
+}
+
+@Module
+clss DripCoffeeModule{
+	@Provides
+	Heater provideHeater(){
+		return new ElectricHeater();
+	}
+
+	@Provides
+	Pump providePump(Thermosiphon pump){
+		return pump;
+	}
+}
 
 
-
-
-
-
-
-
+ObjectGraph objectGraph = ObjectGraph.create(new DripCoffeeModule());
 
 
 
