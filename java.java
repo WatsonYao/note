@@ -12154,11 +12154,59 @@ clss DripCoffeeModule{
 ObjectGraph objectGraph = ObjectGraph.create(new DripCoffeeModule());
 
 
+// Fragment 最佳事件
+ListsFragment.newInstance();
 
+public final class ListsFragment extends Fragment{
+	static ListsFragment newInstance(){
+		return new ListsFragment();
+	}
+}
 
+ItemsFragment.newInstance(id)
+public static ItemsFragment newInstance(long listId) {
+	Bundle arguments = new Bundle();
+	arguments.putLong(KEY_LIST_ID, listId);
 
+	ItemsFragment fragment = new ItemsFragment();
+	fragment.setArguments(arguments);
+	return fragment;
+}
 
+// ava
+public class GetCharacterComicsUsecase implments Usecase<List<Comit>>{
+	
+	private final Repository mRepository;
+	private int mCharacterId;
+	private List<Comic> mComics;
 
+	@Inject
+	public GetCharacterComicsUsecase(int characterId,Repository repository){
+		mCharacterId = characterId;
+		mRepository = repository;
+	}
+
+	public Observable<Comic> filterByYear(String year){
+		if(mComics != null){
+			return Observable.from(mComics).filter(comic ->{
+				for(ComicDate comicDate : comic.getDates()){
+					if(comicDate.getDate().startsWith(year)){
+						return true;
+					}
+				}
+				return false;
+			}
+		}
+		return null;
+	}
+
+	public Observable<List<Comic>> execute(){
+		return mRepository.getCharacterComics(mCharacterId)
+			.subscribeOn(Schedulers.io())
+			.observeOn(AndroidSchedulers.mainThread())
+			.map(comics -> mComics = comics);
+	}
+}
 
 
 
