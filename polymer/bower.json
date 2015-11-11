@@ -1,0 +1,26 @@
+{
+  "name": "watson",
+  "homepage": "https://github.com/WatsonYao/note",
+  "authors": [
+    "watson"
+  ],
+  "description": "watson",
+  "main": "watson",
+  "moduleType": [
+    "amd"
+  ],
+  "keywords": [
+    "watson"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.2.0"
+  }
+}
