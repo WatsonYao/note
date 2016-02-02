@@ -899,15 +899,123 @@ var 可以用 mapVar
 
 
 函数说明
+fun double(x: Int): Int{
+    //...
+}
 
+参数/默认参数/命名参数
+fun read(b: Array<Byte>, off: Int = 0, len: Int = b.size()){
+    //...
+}
+默认值可以通过在 type 类型后使用 = 号进行赋值
 
+命名参数语法不能够用户调用 Java 函数中，
+因为Java 的字节码不能确保方法参数命名的不变性
 
+单表达式函数
+fun double(x: Int): Int = x*2
 
+变长参数
+函数的参数可以用 vararg 修饰符进行标记
+fun asList<T>(vararg ts: T): List<T>{
+    val result = ArrayList<T>()
+    for(t in ts)
+        result.add(t)
+    return result
+}
+当调用变长参数的函数时，
+我们可以一个一个的传递参数，
+或者我们要传递一个array 的内容给函数
+我们可以用 * 前缀操作符
+val a = array(1,2,3,4)
+val list = asList(-1,0,*a,4)
 
+函数范围
+kotlin 可以在文件顶级 声明函数，
+这就意味着你不用像Java等创建一个类来持有函数。
+除了顶级函数，Kotlin 函数可以声明为局部的，作为成员函数或扩展函数
 
+支持局部函数，比如一个函数包含另一个函数
+fun dfs(graohL Graph){
+    fun dfs(current: Vertext, vistied: Set<Vertext>){
+        if(!visited.add(current)) return
+        for ( v in current.neighbors){
+            dfs(v,visited)
+        }
+    }
+    dfs(graoh,vertices[0],HashSet())
+}
 
+局部函数可以访问外部函数的局部变量（比如闭包）
+局部函数甚至可以返回到外部函数
 
+成员函数
+定义在一个类或对象里面
+class Smaple(){
+    fun foo(){
+        print("Foo")
+    }
+}
 
+泛型函数
+函数可以有泛型参数，样式是在函数后跟上尖括号
+fun sigletoArray<T>(item: T) Array<T>{
+    return Array<T>(1,{item})
+}
+
+内联/扩展/高阶函数 和 lambda 表达式
+尾递归函数
+
+高阶函数 与 lambda 表达式
+高阶函数就是可以接受函数作为参数并返回一个函数的函数。
+fun lock<T>(lock: Lock, body: () ->T): T{
+    lock.lock()
+    try{
+        return body()
+    }
+    finally{
+        lock.unlock()
+    }
+}
+
+内联函数
+可以用内联函数提高高阶函数的性能
+
+字面函数和函数表达式
+就是一个”匿名函数“
+也就是没有声明的函数
+但立即作为表达式传递下去
+max(strings,{a,b -> a.length < b.length})
+max 函数是一个高阶函数，
+它接受函数作为第二个参数，即字面函数
+
+函数文本语法
+val sum = {x: Int, y: Int -> x + y}
+函数文本总是在大括号里包裹着，
+在完全语法中参数声明是在括号内，
+类型注解是可选的，函数体是在 -> 之后
+
+函数表达式
+fun(x: Int, y: Int): Int = x +ｙ 
+fun(x: Int, y: Int): Int{
+    return x + y
+}
+
+ints.filter(fun(item) = item>0)
+
+闭包
+一个字面函数或者表达式函数可以访问闭包，
+即反问自身范围外的声明变量
+var sum = 0
+ins filter {
+it > 0} 
+forEach {
+    sum += it
+}
+print(sum)
+
+函数表达式扩展
+内联函数
 
 
 
