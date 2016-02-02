@@ -1017,5 +1017,78 @@ print(sum)
 函数表达式扩展
 内联函数
 
+注解声明
+注解是一种将元数据附加到代码中的方法
+声明注解需要在类前面使用 annotation 关键字
+annotation class fancy
+@fancy class Foo{'
+    @fancy fun baz(@fancy.foo: Int): Int{
+        return (@fancy 1)
+    }
+}
+
+在多数情况下，＠标识是可选的
+只有在注解表达式或本地声明中才必须
+fancy class Foo{
+    fancy fun baz(fancy foo: Int): Int{
+        @fancy fun bar(){ ... }
+        return (@fancy 1)
+    }
+}
+
+如果要给构造函数注解
+就需要在构造函数声明时添加 constructor 关键字
+并且需要在前面添加注解
+class Foo @inject constructor (dependency: MyDependency)
+
+也可以注解访问者
+class Foo{
+    var x: MyDependency ?= null
+        @inject set
+}
+
+注解可以有带参数的构造函数
+annotation class special(val why: String)
+special("example") class Foo {}
+
+java注解在kotlin中是完全兼容的
+java注解也可以通过在导入时重命名实现像修改者那样
+
+因为java中 注解参数顺序是没有定义的
+不能通过传入参数的方法调用普通函数
+需要使用命名参数语法
+//java
+public @interface Ann{
+    int intValue();
+    String stringValue();
+}
+
+// kotlin
+Ann(intValue = 1, stringValue = "abc") class C 
+
+函数引用
+当有一个像下面这样的函数声明时
+fun isOdd(x: Int) = x % 2 != 0
+
+我们可以通过isOdd(5）轻松调用，
+同样我们也可以把它作为一个值传递给其他函数，使用：：操作符
+val numbers = listOf(1,2,3)
+println(numbers.filter(::isOdd)
+这里：：isOdd 是一个函数类型的值 (Int) -> Boolean
+
+在kotlin中调用java 代码
+基本所有的Java代码都可以运行
+
+空的返回
+如果java 方法返回空，则在Kotlin 调用中返回 Unit
+
+
+
+
+
+
+
+
+
 
 
