@@ -803,7 +803,7 @@ println(e.p)
 e.p = "new"
 
 代理属性的要求
-只读属性 val，代理必须提供一个名字为get的方法并接如参数
+只读属性 val，代理必须提供一个名字为get的方法并接如参数 
 接受者-必须是相同的，或者是属性拥有者的子类型
 元数据-必须是 PropertyMetadata 或 其子类型
 
@@ -818,9 +818,87 @@ e.p = "new"
 kotlin.properties.Delegates 对象是标准提供的一个工厂方法
 并提供了很有用的代理
 
+延迟代理
+Delegate.lazy() 是一个接受 lamdba 并返回一个实现延迟属性的代理
+第一次调用 get 执行 lamdba 并传递 lazy 并记录下结果
+随后调用 get 并简单返回之前记下的结果
+import kotlin.properties.Delegates
+
+val lazy: String by Delegates.lazy{
+    println("computed")
+    "hello"
+}
+
+fun main(args: Array<String>{
+    println(lazy)
+    println(lazy)
+}
+
+如果你想要线程安全，使用 blockingLazy，
+它还是按照同样的方式工作，
+但保证了它的值只会在一个线程中计算，
+并且所有的线程都获得同一个值
+
+观察者
+Delegates.observable() 
+需要两个参数
+一个初始值
+一个修改者的 handler
+每次我们分配属性时都会调用 handler
+它有三个参数：一个分配的属性，旧值，新值
+class User{
+    var name: String by Delegates.observable("<no name>"){
+        d.old,new -> println("$old -> $new")
+    }
+}
+
+fun main(args: Array<String>){
+    val user = User()
+    user.name = "first"
+    user.name = "second"
+}
+如果想能够截取它的分配并取消它
+用 vetoable 代替 observable
+
+非空
+有时我们有一个非空的 var，
+但我们在构造函数中没有一个合适的值
+比如它稍后再分配
+问题是你不能持有一个未初始化并且是非抽象的属性
+class Foo{
+    var bar: Bat // error，必须初始化
+}
+可以用null 初始化它，但不用每次访问时都检查它
+Delegates.notNull() 可以解决这个问题
+class Foo{
+    var bar: Bar by Delegates.notNull()
+}
+如果这个属性在第一次写之前读，
+它会抛出一个异常，只有分配之后才会正常
+
+在Map 中存储属性
+Delegates.mapVal() 拥有一个map 实例并返回一个可以从 map 中读
+其中属性的代理。
+在应用中有很多这样的例子，
+比如解析 JSON 或者做其它的一些 动态的事情
+class User(val map: Map<String, Any?>){
+    val name: String by Delegates.mapVal(map)
+    val age: Int by Delegates.mapVal(map)
+}
+
+val user = User(mapOf(
+    "name: to "John Doe",
+    "age" to 25
+))
+
+代理从这个map 中取值 通过属性的名字
+println(user.name)
+println(user.age)
+
+var 可以用 mapVar
 
 
-
+函数说明
 
 
 
