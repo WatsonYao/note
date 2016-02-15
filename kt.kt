@@ -1082,8 +1082,156 @@ println(numbers.filter(::isOdd)
 空的返回
 如果java 方法返回空，则在Kotlin 调用中返回 Unit
 
+多亏使用了属性委托，我们可以使用非常简单的方式来处理 preferences。
+我们可以创建一个委托，
+当 get 被调用时取查询
+当 set 被调用时去执行保存操作
+在 DelegatesExtensions.kt 中，实现一个新的类：
+class LongPreference(val context: Context, val name: String, val default: Long)
+    : ReadWriteProperty<Any?, Long>{
 
+    val prefs by lazy{
+        context.getSharePreferences("default", Context.MODE_PRIVATE)
+    }
+    
+    override fun getValue(thisRef: Any?, property: KProperty<*>: Long{
+        return prefs.getLong(name, default)
+    }
+    
+    override fun setValue(thisRef: Any?, property: KProperty<*>, value: Long){
+        prefs.edit().putLong(name,value).apply()
+    }
+}
 
+我们可以在 DelegatesExt 中定义一个新的委托，这样我们访问时就简单的很多
+object DelegatesExt{
+    ...
+    fun longPreference(context: Context, name: String, default: Long) = 
+        LongPreference(context,name,default)
+}
+
+使用时
+companion object{
+    val ZIP_CODE = "zipCode"
+    val DEFALUT_ZIP = 94043L
+}
+
+var zipCode: Long by DelegatesExt.longPreference(this,ZIP_CODE,DEFAULT_ZIP)
+
+创建一个 Preference 委托
+class Preference<T>(val context: Context, val name: String, val default: T)
+    : ReadWriteProperty<Any, T>{
+    
+    val prefs by lazy{
+        context.getSharePreferences("default",Context.MODE_PRIVATE)
+    }
+    
+    override fun getValue(thisRef: Any?, property: KProperty<*>): T{
+        return findPreference(name, default)
+    }
+    
+    override fun setValue(thisRef: Any?, property: KProperty<*>): T){
+        put Preference(name, value)
+    }
+    
+    private fun <T> findPreference(name: String, default: T): T = with(prefs){
+        val res: Any = when(default){
+            is Long -> getLong(name, default)
+            is String -> getString(name, default)
+            is Int -> getInt(name, default)
+            is Boolean -> getBoolean(name,default)
+            if Float -> getFlaot(name, default)
+            else -> throw IllegalArgumentException("This type can not be saved into Preferences")
+        }
+        
+        res as T
+    }
+    
+    private fun <U> putPreference(name: String, value: U) = with(prefs.edit()){
+        when(value){
+            is Long -> putLong(name,value)
+            is String -> putString(name, value)
+            is Int -> putInt(name, value)
+            is Boolean -> putBoolean(name, value)
+            is Float -> putFloat(name, value)
+            else -> throw IllegaArgumentException("This type can be saved into Preferences")
+        }.apply()
+    }
+}
+可以修改 DelegateExt
+object DelegatesExt{
+    ...
+    fun preference<T : Any>(context: Context, name: String, default: T) 
+        = Preference(context, name, default)
+}
+
+内部类
+如果是一个普通的类
+class Outer{
+    private val bar: Int = 1
+    class Nested{
+        fun foo() = 2
+    }
+}
+
+val demo = Outer.Nested().foo()
+
+如果需要去访问外部类的成员，需要用inner 声明这个类
+class Outer{
+    private val bar: Int = 1
+    inner class Inner{
+        fun foo() = bar
+    }
+}
+
+val demo = Outer().Inner().foo()
+
+Kotlin 也提供了枚举 enmus 的实现：
+enum class Day{
+    SUNDAY,...
+}
+
+枚举也可以带有参数
+enum class Icon(val res: Int){
+    UP(R.drawable.ic_up),
+    SEARCH(R.drawable.ic_search),
+    CAST(R.drawable.ic_cast)
+}
+
+val searchIconRes = Icon.SEARCH.res
+
+枚举可以通过 String 匹配名字来获取
+我们也可以获取包含所有枚举的 Array
+val search: Icon = Icon.valueOf("SEARCH")
+val iconList: Array<Icon> = Icon.values()
+
+而且每一个枚举都有一些函数来获取它的名字、声明的位置
+val searchName: String = Icon.SEARCH.name()
+val searchPosition: Int = Icon.SEARCH.ordinal()
+
+枚举根据它的顺序实现了 comparable 接口
+所以可以很方便地把它们进行排序
+
+Sealed 密封类，子类的数量是固定的
+当你想在一个密封类的子类中寻找一个制定的类的时候，
+你可以事先知道所有的子类。
+不同之处在于枚举的实例是唯一的，而密封类可以有很多实例，它们有不同的状态
+
+我们可以实现Scala中的 Option 类，
+这种类型可以防止 null 的使用，
+当对象包含一个值返回 Some 类，当对象为空时 则返回 None
+
+sealed class Option<out T>{
+    class Some<out T>: Option<T>()
+    object None: Option<Nothing>()
+}
+
+有一件关于密封类很不错的事情就是当我们使用 when 表达式时，
+可以不用 else 分支
+val result = when(option){
+    is Option.Some<*> -> "Contains a value"
+    is Option.None -> "Empty"
+}
 
 
 
