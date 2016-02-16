@@ -1233,10 +1233,76 @@ val result = when(option){
     is Option.None -> "Empty"
 }
 
+复制一个数据类
+val f1 = Forecast(Date(), 27.5f, "Shiny day")
+val f2 = f1.copy(temperature = 30f)
 
+// 映射对象到变量中
+映射对象的每一个属性到一个变量中，这个过程就是我们知道到声明。
+val f1 = Forecast(Date(), 27.5f, "shiny day")
+val (date, temperature, details) = f1
 
+允许迭代时使用key 和 value
+for( (key,value) in map){
+    Log.d("map","key:$key, value:$value")
+}
 
+// 类
+拥有一个 primary constructor and one or more secondary constructors
+class Person constructor(firstName: String){
+}
 
+if the primary constructor does not have any annotations or visibility modifiers,
+the constructor keyword can be omitted:
+class Person(firstName: String){
+}
+
+the primary constructor can not contain any code.
+Initialization code can be placed in initializer blocks,
+which are prefixed with the init keyword:
+
+class Customer(name: String){
+    init{
+        ...
+    }
+}
+
+In fact, for declaring properties and initializing them from the primary constructor,
+Kotlin has a concise syntax:
+class Person(val firstName: String, val lastName: String, var age: Int){
+}
+
+If the contructor has annotations or visibility modifiers, the constructor keyword is required,
+and the modifiers go before it:
+class Customer public @Inject constructor(name: String){
+    //...
+}
+
+Secondary Constructors
+class Person{
+    constructor(parent: Person){
+        parent.children.add(this)
+    }
+}
+
+If the class has a primary constructor, each secondary constructor needs to delegate to the 
+primary constructor, either directly or indirectly through another secondary constructors.
+Delegation to another constructor of the same class is done using the this keyword:
+
+class Person(val name: String){
+    constructor(name: String, parent: Person): this(name){
+        parent.children.add(this)
+    }
+}
+
+If a non-abstract class does not declare any constructors,
+it will have a generated primary constructor with no arguments.
+the visibility of the constructor will be public.
+If you do not want your class to have a public constructor,
+you need to declare an empty primary constructor with non-defalut visibilty:
+
+class DontCreateme private constructor(){
+}
 
 
 
