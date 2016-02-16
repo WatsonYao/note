@@ -1304,5 +1304,91 @@ you need to declare an empty primary constructor with non-defalut visibilty:
 class DontCreateme private constructor(){
 }
 
+If the class has a primary constructor,
+the base type can( and must) be initialized right there,
+using the parameters of the primary constructor.
 
+If the class has no primary constructor,
+then each secondary constructor has to initialize the base type using the super keyword,
+or to delegate to another constructor which does that. 
+Note that in this case different secondary constructor can call different constructors
+of the base type:
 
+class MyView : View{
+    constructor(ctx: Context) : super(ctx){
+    }
+    
+    constructor(ctx: Conctext, attrs: AttributeSet) : super(ctx, attrs){
+    }
+}
+
+In Kotlin, unlike Java or C#, classes do not have static methods.
+In most cases, it's recommended to simply use packagelevel functions instead.
+
+If you need to write a function that can be called without having a class instance 
+but needs access to the internals of a class,
+you can write it as member of an object declaration inside that class.
+
+Note that we do not need to annotate an abstract or function with open - it goes without saying.
+we can override a non-abstract open member with an abstract one
+
+open class Base{
+    open fun f(){}
+}
+
+abstract class Derived: Base(){
+    override abstract fun f()
+}
+
+Sealed classes
+They are, in a sense, an extension of enum classes:
+the set of values for an enum type is also restricted,
+but each enum constant exists only as a single instance,
+where as a subclass of a sealed class can have multiple instances which can contain state.
+
+sealed class Expr{
+    class Const(val number: Double) : Expr()
+    class Sum(val e1: Expr, val e2: Expr) : Expr()
+    object NotANumber: Expr()
+}
+
+Properties and Fields
+
+Classes in Kotlin cannot have fields.
+
+Backing Properties
+If you want to do something that does not fit into this "implicit backing field" scheme,
+you can always fall back to having a backing property:
+
+private var _table: Map<String, Int>? = null
+public val table: Map<String, Int>
+    get(){
+        if(_table == null)
+            _table = HashMap()
+        return _table?: throw AssertionErro("Set to null by another thread")
+    }
+
+Late-Initialized Properties:
+use lateinit modifier:
+The modifier can only be used on var properties inside the body of a class,
+and only when the property does not hava a custom get/set.
+The type of the property must be non-null,
+and it must not be a primitive type.
+
+public class MyTest{
+    lateinit var subject: TestSubject
+    
+    @SetUp fun setup(){
+        subject = TestSubject()
+    }
+    
+    @Test fun test(){
+        subject.method()
+    }
+}
+
+Interfaces
+Interfaces in Kotlin are very similar to Java 8.
+They can contain declararions of abstract methods,as well as method implementations.
+What makes them different from abstract classes is that interfaces cannot store state.
+They can have properties but there need to be abstract or to provide accessor implementations.
