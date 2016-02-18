@@ -1392,3 +1392,7 @@ Interfaces in Kotlin are very similar to Java 8.
 They can contain declararions of abstract methods,as well as method implementations.
 What makes them different from abstract classes is that interfaces cannot store state.
 They can have properties but there need to be abstract or to provide accessor implementations.
+
+fun addNumbers(vararg numbers: Int): Int{
+    return numbers.sum()
+}
