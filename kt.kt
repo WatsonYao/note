@@ -1396,3 +1396,10 @@ They can have properties but there need to be abstract or to provide accessor im
 fun addNumbers(vararg numbers: Int): Int{
     return numbers.sum()
 }
+
+for循环 loop
+for( arg in args)
+    print(arg)
+    
+for ( i in args.indices)
+    print(args[i])
