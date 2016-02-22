@@ -1403,3 +1403,9 @@ for( arg in args)
     
 for ( i in args.indices)
     print(args[i])
+    
+    
+字符串特殊符号
+"""
+${'$'}9.99
+"""
