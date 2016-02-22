@@ -1419,3 +1419,15 @@ you can also use it to import other declarations
 - top-level functions and properties
 - functions and properties declared in object declarations;
 - enum constants
+
+Data copy
+val jack = User(name="jack", age = 1)
+val olderJack = jack.copy(age = 2)
+
+val jane = User("jane", 35)
+val (name,age) = jane
+println("$name, $age years of age")
+
+The standard library provides Pair and Triple.
+In most cases,though,named data classes are a better design choice,
+becase they make the code more readable by providing meaningful names for properties.
