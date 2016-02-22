@@ -1404,6 +1404,10 @@ for( arg in args)
 for ( i in args.indices)
     print(args[i])
     
+for( (index,value) in array.withIndex()){
+    print("the element at $index is $value"
+}
+    
     
 字符串特殊符号
 """
