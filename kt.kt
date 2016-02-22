@@ -1431,3 +1431,80 @@ println("$name, $age years of age")
 The standard library provides Pair and Triple.
 In most cases,though,named data classes are a better design choice,
 becase they make the code more readable by providing meaningful names for properties.
+
+Generics 
+class Box<T> (t: T) {
+    var value = t
+}
+
+In general,to create an instance of such a class,we need to provide the type arguments:
+val box: Box<Int> = Box<Int>(1)
+
+But if the parameters maybe inferred,e.g. from the constructor arguments or by some other means,
+one is allowed to omit the type arguments:
+val box = Box(1)
+
+Variance 差异
+One of the most tricky parts of Java's type system is wildcard types.
+And Kotlin doesn't have any.
+Instead,it has two other things: declaration-site variance and type projections.
+
+First,let's think about why Java needs those mysterious wildcards.
+The problem is explained in Effective Java.
+Use bounded wildcards to increase API flexbility.
+First,generic types in Java are invariant,meaning that List<String> is not a subtype of List<Object>
+Why so? If List was not invariant, it would have been no better than java's arrays,
+since the following code would have compiled and caused an exception at runtime:
+List<String> strs = new ArrayLsit<String>();
+List<Obejct> objs = strs; // The cause of the upcoming problem sits here,Java prohibits this!
+objs.add(1) // Here we put an Integer into a list of Strings
+String s = strs.get(0)
+// ClassCastException: can not cast Integer to String.
+
+So Java prohibits such things in order to guarantee run-time safety.
+But this has some implications.For example,consider the addAll() method from Collection interface.
+What's the signature of this method? Intuitively, we'd put it this way:
+
+interface Collection<E> ...{
+    void addAll( Collection<E> items);
+}
+
+interface Collection<E> ...{
+    void addAll(Colleciton<? extends E> items);
+}
+
+abstract class Source<out T>{
+    abstract fun nextT(): T
+}
+
+fun demo(strs: Source<String>){
+    val objects: Source<Any> = strs
+}
+
+abstract class Comparabel<in T>{
+    abstract fun compareTo(other: T): Int
+}
+
+fun demo(x: Comparabel<Number>){
+    x.compareTo(1.0)
+    val y: Comparable<Double> = x
+}
+
+Type projections
+Use-site variance: Type projections
+it is very convenient to declare a type parameter T as out and have no trouble with subtyping 
+on the use site.Yes,it is,when the class in question can actually be restricted to only return T's,
+but what if it cann't? A good example of this is Array:
+
+class Array<T>( val size: Int){
+    fun get(index: Int): T { ... }
+    fun set(index: Int, value: T) { ... }
+}
+
+
+
+
+
+
+
+
