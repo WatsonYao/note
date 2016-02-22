@@ -1409,3 +1409,9 @@ for ( i in args.indices)
 """
 ${'$'}9.99
 """
+
+The import keyword is not restricted to importing classes;
+you can also use it to import other declarations
+- top-level functions and properties
+- functions and properties declared in object declarations;
+- enum constants
