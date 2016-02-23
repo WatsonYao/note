@@ -12209,6 +12209,365 @@ public class GetCharacterComicsUsecase implments Usecase<List<Comit>>{
 }
 
 
+通配符 范型
+class Fruit{}
+class Apple extends Fruit{}
+class Jonathan extends Apple{}
+class Orange extends Fruit{}
+
+public class CovariantArrays{
+	public static void main(String[] args){
+		Fruit[] fruit = new Apple[10];
+		fruit[0] = new Apple();	//OK
+		fruit[1] = new Jonathan();	//OK
+		// Runtime type is Apple[], not Fruit[] or Orange[]
+		try{
+			// Compiler allows you to add Fruit:
+			fruit[0] = new Fruit();	// ArrayStoreException
+		}
+
+		try{
+			// Compiler allows you to add Oranges:
+			fruit[0] = new Orange();	// ArrayStoreException
+		}
+	}
+}
+
+/** 
+The first line in main() creates an array of Apple and assigns it to a reference to an array of Fruit.
+This makes sense- an Apple is a kind of Fruit, so an array of Apple should also be an array of Fruit.
+
+However,if the actual array type is Apple[],you should only be able to place an Apple or a subtype of Apple
+into the array,which in fact works at both compile time and run time.But notice that the compiler allows you
+to place a Fruit object into the array.This makes sense to the compiler,because it has a Fruit[] reference-
+why shouldn't it allow a Fruit object,or anything descended from Fruit,such as Orange,to be placed into the array?
+So at compile time,this is allowed.The runtime array mechanism,however,knows that it's dealing with an Apple[]
+and throws an exception when a foreign type is placed into the array.
+
+"Upcast" is actually rather a misnomer here.What you're really doing is assigning one array to anther.
+The array behavior is that holds other objects,but because we are able to upcast,
+it's clear that the array objects can preserve the rules about the type of objects they contain.
+It's as if the arrays are conscious of what they are holding,so between the compile-time checks
+and the runtime checks,you can't abuse them.
+
+This arrangement for arrays is not so terrible,because you do find out at run time that you've
+inserted an improper type.But one of the primary goals of generics is to move such error detection
+to compile time.So what happens when we try to use generic containers instead of arrays?
+
+**/
+public class NonCovariantGenerics{
+	List<Fruit> flist = new ArrayList<Apple>();
+	// Compile Error: imcompatible types:
+}
+
+/*
+Although you may at first read this as saying,"You can't assign a container of Apple to a container of Fruit,"
+remember that generics are not just about containers.What it's really saying is,
+"You can't assign a generic involving Apples to a generic involving Fruit"
+If,as in the case of arrays,the compiler knew enough about the code to determine that containers were involved,
+perhaps it could give some leeway.But it does't know anything like that,so it refuses to allow the "upcast."
+But it really isn't an upcast anyway- a List of Apple is not a List of Fruit.A List of Apple will hold Apples
+and subtypes of Apple,and a List of Fruit will hold any kind of Fruit.Yes,including Apples,but that doesn't 
+make it a List of Apple;it's still a List of Fruit.A List of Apple is not type-equivalent to a List of Fruit,
+even if an Apple is a type of Fruit.
+
+The real issue is that we are talking about the type of the container,rather than the type that the container is holding.
+Unlike arrays,genericcs do not have built-in covariance.This is because arrays are completely defined in the language
+and can thus have both compile-time and runtime checks built in,but with generics,the compiler and tuntime system cannot
+know what you want to do with your types and what the rules should be.
+
+Sometimes,however,you'd like to establish some kind of upcasting relationship between the two.
+This is what wildcards allow.
+*/
+
+List<? extends Fruit> flist = new ArrayList<Apple>();
+// compile Error: can't add any type of object:
+
+/*
+This doesn't actually mean that the List will hold any type of Fruit,however.
+The wildcard refers to a definite type,so it means "some specific type which the flist reference doesn't specify."
+So the List that's assigned has to be holding some specified type such as Fruit or Apple,
+but in order to upcast to flist,that type is a "Don't actually care."
+
+If the only constraint is that the List hold a specific Fruit or subtype of Fruit,
+but you don't actually care what it is,then what can you do with such a List?
+If you don't know what type the List is holding,how can you safely add an object?
+Just as with the upcast array in CovariantArray.java,your can't,except that the
+compiler prevents it from happening rather than the runtime system.
+You discover the problem sooner.
+
+Your might argue that things have gone a bit overboard,because now you can't even add an Apple to a List 
+that you just said would hold Apples.Yes,but the compiler doesn't know that.
+A List<? extends Fruit> could legally point to a List<Orange>.
+Once you do this kind of upcast,you lose the ability to pass anything in,even an Obejct.
+
+On the other hand,if you call a method that returns Fruit,that's safe because you konw that anything in the List
+must at least be of type Fruit,so the compiler allows it.
+
+Now,you might guess that you are prevented from calling any methods that take arguments,but consider this:
+*/
+
+List<? extends Fruit> flist = Arrays.asList(new Apple());
+Apple a = (Apple)flist.get(0); // No warning.
+flist.contains(new Apple()); // Argumnet is 'object'
+flist.indexof(new Apple())	// Argument is 'object'
+
+/**
+范型数组列表
+ArrayList 是一个采用类型参数 type parameter 的范型类
+为了指定数组列表保存的元素对象类型，需要用一对尖括号将类名括起来加在后面，
+**/
+
+public static <T> T getMiddle(T[] a){
+	return a[a.length/2];
+}
+
+/**
+ 类型变量放在修饰符 如public static 的后面，返回类型的前面。
+ 可以定义在范型类中过，也可以定义在普通类中
+ 当调用一个范型方法时，在方法名的尖括号中放入具体的类型
+
+ <T extends Bounding Type>
+ 表示T 应该是绑定类型的子类型subtype
+ T和绑定类型可以是类，也可以是接口，选择extends的原因是更接近子类的概念
+
+ 一个类型变量或通配符可以有多个限定,限定类型用 & 分隔，而逗号用来分隔类型变量
+ T extends Comparable & Serializable
+
+ 虚拟机没有范型类型对象－所有对象都属于普通类。
+ 无论何时定义一个范型类型，都自动提供了一个相应的原始类型 raw type
+ 原始类型的名字就是删去类型参数后的范型类型名
+ 擦出 erased 类型变量，并替换为限定类型（无限定的变量用Object
+
+ 原始类型用第一个限定的类型变量来替换，
+ 如果没有给定限定就用object替换
+
+翻译范型表达式：
+ 当程序调用范型方法时，如果擦出返回类型，编译器插入强制类型转换
+ 编译器把这个方法调用翻译为两条虚拟机指令：
+ － 对原始方法Pair.getFirst 的调用
+ － 将返回的Obejct类型强制转换为Employee类型
+
+翻译范型方法：
+类型擦除也会出现在范型方法中。
+public static <T extends Comparable> T min(T[] a)
+擦除类型之后，只剩下一个方法
+public static Comparable min(Comparable[] a)
+类型参数T已经被擦除，只留下了限定类型 Comparable
+**/
+
+class DateInterval extends Pair<Date>{
+	public void setSecond(Date second){
+		if(second.compareTo(getFirst()) >= 0){
+			super.setSecond(second)
+		}
+	}
+}
+/**
+这个类擦除后变成
+**/
+class DateInterval extends Pair{
+	public void setSecond(Date second){
+		//...
+	}
+}
+// 存在另一个从Pair 继承的setSecond方法
+public void setSecond(Object second)
+
+// 问题在于类型擦除与多态发生了冲突，需要编译器在类中生成一个桥方法 bridge method
+public void setSecond(Object second){
+	setSecond((Date) second);
+}
+
+/**
+虚拟机用pair 引用的对象调用这个方法，这个对象是DateInterval类型的，
+因而会调用DateInterval.setSecond(Object)方法。
+这个方法是合成的桥方法。它调用DateInterval.setSecond(Date) 
+这是我们所期望的操作效果
+桥方法可能会变得十分奇怪，假设DateInterval方法也覆盖了getSecond方法
+**/
+class Dateinterval extends Pair<Date>{
+	public Date getSecond(){
+		return (Date)super.getSecond().clone();
+	}
+}
+//在擦除的类型中，有两个 getSecond 方法
+Date getSecond();
+Object getSecond();
+// 具有相同参数类型的两个方法是不合法的。
+// 它们都没有参数，但是在虚拟机中，用参数类型和返回类型确定一个方法。
+
+/**
+总之，需要记住有关Java 范型转换的事实：
+－ 虚拟机中没有范型，只有普通的类核方法
+－ 所有的类型参数都用它们的限定类型替换
+－ 桥方法被合称来保持多态
+－ 为保持类型安全性，必要时插入强制类型转换
+
+擦除之后，Pair类含有Object类型的域，而Obejct不能存储double值
+**/
+
+// 运行时类型查询只适用于原始类型
+/**
+虚拟机中的对象总有一个特定的非范型类型。
+因此，所有的类型查询只产生原始类型
+
+不能抛出也不能捕获范型类实例
+范型类扩展Throwable 都不合法
+
+参数化类型的数组不合法，不能声明参数化类型的数组
+Pair<String>[] table = new Pair<String>[10] // ERROR
+擦除之后，table的类型是 Pair[]，可以将其转换为 Obejct[]
+数组能够记住它的元素类型 component type
+如果试图存入一个错误类型的元素，就会抛出 ArrayStoreException 异常
+
+不能实例化类型变量
+不能使用像new T(...),new T[...]或 T.class 这样的表达式重点类型变量
+**/
+public static <T> Pair<T> makePair(Claa<T> c1){
+	try{
+		return new Pair<T>(c1.newInstance(),c1.newInstance())
+	}catch(Exception ex){
+		return null;
+	}
+}
+// 调用
+Pair<String> p = Pair.makePair(String.class);
+//String.class 是一个 Class<String>的实例
+
+/**
+范型类的静态上下文中类型变量无效
+不能在静态域或方法中引用类型变量
+
+无论S 与 T 有什么联系，通常Pair<S> 与 Pair<T> 没有什么联系
+永远可依将参数化类型转换为一个原始类型
+范型类可依扩展或实现其他的范型类，这一点与普通类没有什么区别
+ArrayList<T>类 实现 List<T> 接口
+意味着 一个ArrayList<Manager> 可以被转换为一个List<Manager>
+**/
+
+/**
+通配符类型
+**/
+Pair<? extends Employee>
+// 表示任何范型Pair 类型，它的类型参数是Employee 的子类
+// Pair<Manager> 是 Pair<? extends Employee> 的子类
+/**
+使用 getFirst 的返回值赋给一个Employee 的引用完全合法
+setFirst 编译器只知道某个 Employee 的子类型，
+但不知道具体是什么类型，它拒绝传递任何特定的类型。毕竟，？不能用来匹配。
+
+通配符的超类型限定
+通配符限定与类型变量限定十分类似，但是，还有一个附加的能力，
+即可以指定一个 超类型限定 supertype bound 
+？ super Manager
+这个通配符限制为Manager 的所有超类型
+可以为方法提供参数，但不能使用返回值
+void setFirst(? super Manager)
+编译器不知道setFirst方法的确切类型，但是可以用任意Manager对象（或子类型，例如，Executive）调用它，
+而不能用 Employee 对象调用。
+
+直观的讲，带有超类型限定的通配符可以向范型对象写入，
+带有子类型限定的通配符可以从范型对象读取。
+**/
+
+
+/**
+Java 范型的核心概念：告诉编译器想使用什么类型，然后编译器帮你处理一切细节
+
+元祖 tuple，它是将一组对象直接打包存储于其中的一个单一对象。
+这个容器对象允许读取其中元素，但是不允许向其中存放新的对象，
+这个概念也称为数据传送对象或信使
+
+范型也可以应用于接口。
+
+基本类型无法作为类型参数
+
+**/
+public interface Generator<T> {
+	T next();
+}
+
+public class CoffeeGenerator implements Generator<Coffee>,Iterable<Coffee>{
+	private Class[] types = {
+		Latte.class,Mocha.class,Cappuccino.class,Americano.class,Breve.class
+	}
+
+	private static Random rand = new Random(47);
+
+	public CoffeeGenerator(){}
+
+	private int size = 0;
+
+	public CoffeeGenerator(int sz){
+		size = sz;
+	}
+
+	public Coffee next(){
+		try{
+			types[rand.nextInt(types.length)].newInstance();
+		}catch(Exception e){
+
+		}
+	}
+
+	class CoffeeIterator implements Iterator<Coffee>{
+		int count = size;
+		public boolean hasNext(){
+			return count > 0;
+		}
+
+		public Coffee next(){
+			count--;
+			return CoffeeGenerator.this.next();
+		}
+
+		public void remove(){
+
+		}
+
+		public Iterator<Coffee> iterator(){
+			return new CoffeeIterator();
+		}
+
+		public static void main(String[] args){
+			CoffeeGenerator gen = new CoffeeGenerator();
+			for(int i = 0; i< 5; i++){
+				print()
+			}
+			for(Coffee c: new CoffeeGenerator(5)){
+				print()
+			}	
+		}
+	}
+}
+
+ /**
+范型方法使得该方法能够独立于类而产生变化。
+无论何时，只要你能做到，
+你就应该尽量使用范型方法。
+也就是说，如果食用范型方法可以取代将整个类范型化，那么久应该只适用范型方法
+因为它可以使事情更清楚明白。
+另外，对于一个static 的方法而言，无法访问范型类的类型参数，
+所以，如果static方法需要使用范型能力，就必须使其成为范型方法。
+ **/
+public class GenericMethods{
+	public <T> void f(T x){
+		x.getClass().getName()
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
