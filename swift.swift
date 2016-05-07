@@ -188,3 +188,44 @@ func tableView(tableView:UITableView!, cellForRowAtIndexPath indexPath:NSIndexPa
 func tableView(tableView:UITableView!, didSelectRowAtIndexPath indexPath:NSIndexPath!){
 	
 }
+
+// 通过扩展添加的实例方法也可以修改该实例本身
+// 结构体和枚举类型中修改 self 或其属性的方法必须将 实例方法标注为mutating，正如来自原始实现的方法一样。
+
+extension Double{
+    mutating func square(){
+        let pi = 3.14
+        self = pi * self * self
+    }
+}
+
+// 扩展可以向一个已有类型添加新下标
+extension Int{
+    subscript( multtable: Int) -> Int{
+        var no1 = 1
+        while multtable > 0{
+            nol *= 10
+            -- multtable
+        }
+        return (self / no1) % 10
+    }
+}
+
+// 扩展可以向已有的类、结构体和枚举添加新的嵌套类型：
+
+// 协议用于指定特定的实例属性或类属性，而不用指定存储属性或计算型属性。
+// 此外还必须指明是只读的还是可读可写的。
+// 协议中通常用 var 来声明变量属性，在类型声明后加上 ｛set get｝来表示属性是可读可写的，只读用 ｛get｝来表示
+
+// 你可以在遵循该协议的类中实现构造器，并指定其为类的指定构造器或者便利构造器。在这两种情况下，你都必须给构造器实现上"required"修饰符：
+// 你可以在协议的继承列表中,通过添加class关键字,限制协议只能适配到类（class）类型。
+
+func show(celebrator: protocol<Stname, Stage>) {
+    print("\(celebrator.name) is \(celebrator.age) years old")
+}
+
+//你可以使用is和as操作符来检查是否遵循某一协议或强制转化为某一类型。
+//is操作符用来检查实例是否遵循了某个协议。
+//    as?返回一个可选值，当实例遵循协议时，返回该协议类型;否则返回nil。
+//as用以强制向下转型，如果强转失败，会引起运行时错误。
+
