@@ -131,8 +131,14 @@ var MyComponent = React.createClass({
 });
 
 
+(function (){
+	var temp = x;
+	// ...
+}());
 
-
+{
+	let temp = x;	
+}
 
 
 
