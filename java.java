@@ -12557,6 +12557,25 @@ public class GenericMethods{
 	}
 }
 
+private void sth(){
+	ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length * 4);
+	vbb.order(ByteOrder.nativeOrider());
+	vertexBuffer = vbb.asFloatBuffer();
+	vertexBuffer.put(vertices);
+	vertexBuffer.position(0);
+}
+
+// Buffer 特点
+// 允许以 内存缓冲区 buffer 的方式来管理一个Buffer数组，可以整块整块的读写内存区域，
+// 并可以用 指定Byte order （大头或是小头）
+// 提供了在指定位置读写各种基本数据类型的简便方法如 putInt、putLong等。
+// 可以充分利用JVM提供的各种优化方法以到达和 使用Native Code类型的读写性能。
+// 可以直接从 OS 的内存分配空间，这部分空间可以不受Java的GC控制。称为Direct buffer。
+
+// buffer 定义了三个状态变量： position、limit、capacity
+// capacity：buffer 的容量，表示可以存放的最大字节数，内存分配之后其值保持不变。
+// position 类似于文件指针，表示下一个可以读写的字节的缺省位置，可以使用函数来重新设置当前的position
+// limit: 可以控制当前可以读写的区域，你只可以读写从 0到 limit-1 范围内的数组控件，超出范围抛出异常。
 
 
 
